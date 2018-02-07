@@ -1,0 +1,24 @@
+/*
+ * Copyright (c) 2018 Sciforce Solutions. All rights reserved.
+ */
+apply plugin: 'org.springframework.boot'
+
+configurations {
+    providedRuntime
+}
+
+bootRepackage {
+    classifier = executableClassifier
+}
+
+// have Gradle expand properties when copying resource files
+processResources {
+    filesMatching( '**/application.yml' ) {
+        expand( project.properties )
+    }
+}
+
+dependencies {
+    compile('org.springframework.boot:spring-boot-starter-web')
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+}

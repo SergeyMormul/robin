@@ -1,0 +1,55 @@
+/*
+ * Copyright (c) 2018 Sciforce Solutions. All rights reserved.
+ */
+
+apply plugin: 'groovy'
+
+dependencies {
+    compile "org.codehaus.groovy:groovy-all:${groovyVersion}:indy"
+}
+
+compileGroovy {
+    groovyOptions.configurationScript = file( "$rootDir/gradle/groovyCompilerConfiguration.groovy" )
+}
+
+compileGroovy.groovyOptions.optimizationOptions['indy'] = true
+compileTestGroovy.groovyOptions.optimizationOptions['indy'] = true
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+compileGroovy.options*.compilerArgs = ['-Xlint:deprecation','-encoding', 'UTF-8']
+compileTestGroovy.options*.compilerArgs = ['-Xlint:deprecation','-encoding', 'UTF-8']
+
+ext.sharedManifest = manifest {
+    attributes( 'Implementation-Title': project.name, 'Implementation-Version': project.version )
+}
+
+jar {
+    manifest = project.manifest {
+        from sharedManifest
+    }
+
+    from( buildDir ) {
+        include 'build-info.properties'
+    }
+}
+jar.dependsOn 'createBuildInformationFile'
+
+test {
+    useJUnit {
+        scanForTestClasses = false
+        includes = ['**/*ApplicationTests.class'] // todo make it better
+//        excludes = ['**/*ApplicationTest.class']
+        maxParallelForks = Runtime.runtime.availableProcessors()
+    }
+    testLogging {
+        showStandardStreams = false
+        exceptionFormat = 'full'
+    }
+    reports.html.destination = file( "$buildDir/reports/unitTests" )
+
+   // set heap size for the test JVM(s)
+   minHeapSize = "128m"
+   maxHeapSize = "512m"
+}

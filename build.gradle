@@ -1,0 +1,25 @@
+/*
+ * Copyright (c) 2018 Sciforce Solutions. All rights reserved.
+ */
+
+buildscript {
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath "io.spring.gradle:dependency-management-plugin:${dependencyPluginVersion}"
+		classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+	}
+}
+
+group = 'com.sciforce'
+
+apply from: "$rootDir/gradle/version.gradle"
+apply from: "$rootDir/gradle/groovy.gradle"
+apply from: "$rootDir/gradle/spring.gradle"
+apply from: "$rootDir/gradle/spock.gradle"
+
+repositories {
+	mavenCentral()
+}
+

@@ -1,0 +1,13 @@
+/*
+ * Copyright (c) 2018 Sciforce Solutions. All rights reserved.
+ */
+dependencies {
+    testCompile( "org.spockframework:spock-spring:${spockVersion}" ) {
+        exclude module: 'groovy-all'
+    }
+    // Usual solution do not work in this particular case,
+    // that's why we added the core Spock module by hand.
+    testCompile( "org.spockframework:spock-core:${spockVersion}" )  {
+        exclude module: 'groovy-all'
+    }
+}
