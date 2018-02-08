@@ -3,7 +3,7 @@ package com.sciforce.robin
 import org.junit.Test
 import spock.lang.Specification
 
-class RobinApplicationTests extends Specification {
+class ApplicationTests extends Specification {
 
 	@Test
 	void contextLoads() {

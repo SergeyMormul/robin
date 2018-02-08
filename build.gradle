@@ -23,3 +23,9 @@ repositories {
 	mavenCentral()
 }
 
+dependencies {
+	compile "com.itextpdf:itextpdf:${itextVersion}"
+}
+
+defaultTasks << 'clean'
+defaultTasks << 'build'
