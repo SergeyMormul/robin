@@ -25,6 +25,7 @@ repositories {
 
 dependencies {
 	compile "com.itextpdf:itextpdf:${itextVersion}"
+	compile "org.xhtmlrenderer:flying-saucer-pdf-itext5:${flyingSaucerVersion}"
 }
 
 defaultTasks << 'clean'

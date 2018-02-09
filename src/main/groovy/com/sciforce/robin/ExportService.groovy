@@ -1,5 +1,8 @@
 package com.sciforce.robin
 
+import com.itextpdf.text.Document
+import com.itextpdf.text.PageSize
+import com.itextpdf.text.pdf.PdfWriter
 import java.awt.Image
 import javax.servlet.ServletException
 import javax.servlet.annotation.WebServlet
@@ -8,6 +11,7 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 import javax.xml.parsers.ParserConfigurationException
 import javax.xml.parsers.SAXParserFactory
+import org.xhtmlrenderer.pdf.ITextRenderer
 import org.xml.sax.InputSource
 import org.xml.sax.SAXException
 import org.xml.sax.XMLReader
@@ -15,7 +19,7 @@ import org.xml.sax.XMLReader
 /**
  * Created by vagrant on 2/8/18.
  */
-@WebServlet( value = '/export' )
+@WebServlet(value = '/export')
 class ExportService extends HttpServlet {
 
     /**
@@ -44,6 +48,7 @@ class ExportService extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
+
             if (request.getContentLength() < Constants.MAX_REQUEST_SIZE) {
                 long t0 = System.currentTimeMillis()
 
@@ -53,8 +58,7 @@ class ExportService extends HttpServlet {
                 long dt = System.currentTimeMillis() - t0
 
                 request.with { println "export: ip= ${remoteAddr} ref='${getHeader('Referer')}' length=${contentLength} mem=${mem} dt=${dt}" }
-            }
-            else {
+            } else {
                 response.setStatus(HttpServletResponse.SC_REQUEST_ENTITY_TOO_LARGE)
             }
         }
@@ -81,7 +85,7 @@ class ExportService extends HttpServlet {
      *
      * @throws ParserConfigurationException
      * @throws SAXException
-//     * @throws DocumentException
+     //     * @throws DocumentException
      */
     protected void handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
         // Parses parameters
@@ -89,23 +93,26 @@ class ExportService extends HttpServlet {
         String fileName = request.getParameter('filename')
         int w = Integer.parseInt(request.getParameter('w'))
         int h = Integer.parseInt(request.getParameter('h'))
-        String tmp = request.getParameter('bg')
         String xml = getRequestXml(request)
 
-        // Checks parameters
-        if (w > 0 && h > 0 && w * h < Constants.MAX_AREA && format != null && xml != null && xml.length() > 0) {
+        if ( w > 0 && h > 0 && w * h < Constants.MAX_AREA && format != null && xml != null && xml.length() > 0 ) {
+            def renderer = new ITextRenderer()
+            renderer.setDocumentFromString(xml)
+            renderer.layout()
+            renderer.createPDF(response.outputStream)
+
+            // Checks parameters
             if (fileName != null && fileName.toLowerCase().endsWith('.xml')) {
                 fileName = fileName.substring(0, fileName.length() - 4) + format
             }
 
-            def url = request.getRequestURL().toString()
+            response.setContentType('application/pdf')
 
-            // Writes response
-            writePdf(url, fileName, w, h, xml, response)
-
+            if (fileName != null) {
+                response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"; filename*=UTF-8''" + fileName)
+            }
             response.setStatus(HttpServletResponse.SC_OK)
-        }
-        else {
+        } else {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST)
         }
     }
@@ -113,7 +120,7 @@ class ExportService extends HttpServlet {
     /**
      * Gets the XML request parameter.
      */
-    protected String getRequestXml(HttpServletRequest request) throws IOException, UnsupportedEncodingException {
+    protected static String getRequestXml(HttpServletRequest request) throws IOException, UnsupportedEncodingException {
         def xml = request.getParameter('xml')
 
         // Decoding is optional (no plain text values allowed)
@@ -125,8 +132,7 @@ class ExportService extends HttpServlet {
     }
 
     protected void writePdf(String url, String fname, int w, int h, String xml, HttpServletResponse response)
-            /*throws DocumentException, IOException, SAXException, ParserConfigurationException*/ {
-
+    /*throws DocumentException, IOException, SAXException, ParserConfigurationException*/ {
 
         /*response.setContentType('application/pdf')
 
@@ -156,15 +162,13 @@ class ExportService extends HttpServlet {
 
     /**
      * Renders the XML to the given canvas.
-     *//*
-    protected void renderXml(String xml, mxICanvas2D canvas) throws SAXException, ParserConfigurationException, IOException
-    {
+     */
+    protected void renderXml(String xml) throws SAXException, ParserConfigurationException, IOException {
         XMLReader reader = parserFactory.newSAXParser().getXMLReader()
         reader.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true)
         reader.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false)
         reader.setFeature("http://xml.org/sax/features/external-general-entities", false)
         reader.setFeature("http://xml.org/sax/features/external-parameter-entities", false)
-        reader.setContentHandler(new mxSaxOutputHandler(canvas))
         reader.parse(new InputSource(new StringReader(xml)))
-    }*/
+    }
 }

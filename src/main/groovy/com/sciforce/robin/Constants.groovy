@@ -1,28 +1,9 @@
 package com.sciforce.robin
 
-import java.awt.image.BufferedImage
-
 /**
  * Created by vagrant on 2/8/18.
  */
 class Constants {
-
-    /**
-     * Contains an empty image.
-     */
-    public static BufferedImage EMPTY_IMAGE
-
-    /**
-     * Initializes the empty image.
-     */
-    static {
-        try {
-            EMPTY_IMAGE = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB)
-        }
-        catch (final Exception e) {
-            // ignore
-        }
-    }
 
     /**
      * Maximum size (in bytes) for request payloads. Default is 10485760 (10MB).
