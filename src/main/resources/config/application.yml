@@ -1,3 +1,29 @@
+# turn on the banner and disable groovy templating
 spring:
   main:
     banner-mode: "off"
+
+management:
+    security:
+      enabled: false
+    context-path: /operations
+
+# configure operations endpoints
+endpoints:
+  health:
+    sensitive: false
+  prometheus:
+    id: prometheus
+
+server:
+  port: 8080
+  contextPath: /
+  use-forward-headers: true
+
+# Override the default values of the info endpoint
+info:
+  app:
+    name: ${name}
+    description: ${description}
+    version: ${version}
+    built-on: ${builtOn}
