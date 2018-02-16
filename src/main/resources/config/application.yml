@@ -12,8 +12,6 @@ management:
 endpoints:
   health:
     sensitive: false
-  prometheus:
-    id: prometheus
 
 server:
   port: 8080

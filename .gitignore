@@ -1,5 +1,8 @@
 .gradle
-/build/
+/build/classes
+/build/reports
+/build/test-results
+/build/tmp
 
 ### IntelliJ IDEA ###
 .idea/workspace.xml
