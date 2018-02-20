@@ -45,7 +45,7 @@ import com.sciforce.robin.graph.util.mxUtils;
  * Graphics2D g2 = image.createGraphics();
  * mxUtils.setAntiAlias(g2, true, true);
  * XMLReader reader = SAXParserFactory.newInstance().newSAXParser().getXMLReader();
- * reader.setContentHandler(new mxSaxOutputHandler(new GraphicsCanvas2D(g2)));
+ * reader.setContentHandler(new SaxOutputHandler(new GraphicsCanvas2D(g2)));
  * reader.parse(new InputSource(new StringReader(xml)));
  * </code>
  * 

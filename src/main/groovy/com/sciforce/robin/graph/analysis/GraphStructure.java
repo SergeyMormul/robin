@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.Set;
 
 import com.sciforce.robin.graph.costfunction.CostFunction;
-import com.sciforce.robin.graph.model.mxGraphModel;
-import com.sciforce.robin.graph.model.mxCell;
-import com.sciforce.robin.graph.model.mxIGraphModel;
+import com.sciforce.robin.graph.model.Cell;
+import com.sciforce.robin.graph.model.GraphModel;
+import com.sciforce.robin.graph.model.IGraphModel;
 import com.sciforce.robin.graph.view.mxCellState;
 import com.sciforce.robin.graph.view.mxGraph;
 import com.sciforce.robin.graph.view.mxGraph.mxICellVisitor;
@@ -110,9 +110,9 @@ public class GraphStructure
 	public static boolean isCyclicUndirected(AnalysisGraph aGraph)
 	{
 		mxGraph graph = aGraph.getGraph();
-		mxIGraphModel model = graph.getModel();
+		IGraphModel model = graph.getModel();
 		Object[] cells = model.cloneCells(aGraph.getChildCells(graph.getDefaultParent(), true, true), true);
-		mxGraphModel modelCopy = new mxGraphModel();
+		GraphModel modelCopy = new GraphModel();
 		mxGraph graphCopy = new mxGraph(modelCopy);
 		Object parentCopy = graphCopy.getDefaultParent();
 		graphCopy.addCells(cells);
@@ -455,7 +455,7 @@ public class GraphStructure
 			GraphProperties.setDirected(aGraph.getProperties(), false);
 			final ArrayList<Object> bFSList = new ArrayList<Object>();
 			mxGraph graph = aGraph.getGraph();
-			final mxIGraphModel model = graph.getModel();
+			final IGraphModel model = graph.getModel();
 			Object parent = graph.getDefaultParent();
 
 			Traversal.bfs(aGraph, startVertex, new mxICellVisitor()
@@ -506,7 +506,7 @@ public class GraphStructure
 	 */
 	public static Object getConnectingEdge(AnalysisGraph aGraph, Object vertexOne, Object vertexTwo)
 	{
-		mxIGraphModel model = aGraph.getGraph().getModel();
+		IGraphModel model = aGraph.getGraph().getModel();
 		Object[] edges = aGraph.getEdges(vertexOne, null, true, true, false, true);
 
 		for (int i = 0; i < edges.length; i++)
@@ -537,9 +537,9 @@ public class GraphStructure
 	public static boolean isCyclicDirected(AnalysisGraph aGraph)
 	{
 		mxGraph graph = aGraph.getGraph();
-		mxIGraphModel model = graph.getModel();
+		IGraphModel model = graph.getModel();
 		Object[] cells = model.cloneCells(aGraph.getChildCells(graph.getDefaultParent(), true, true), true);
-		mxGraphModel modelCopy = new mxGraphModel();
+		GraphModel modelCopy = new GraphModel();
 		mxGraph graphCopy = new mxGraph(modelCopy);
 		Object parentCopy = graphCopy.getDefaultParent();
 		graphCopy.addCells(cells);
@@ -605,7 +605,7 @@ public class GraphStructure
 	 */
 	public static void complementaryGraph(AnalysisGraph aGraph)
 	{
-		ArrayList<ArrayList<mxCell>> oldConnections = new ArrayList<ArrayList<mxCell>>();
+		ArrayList<ArrayList<Cell>> oldConnections = new ArrayList<ArrayList<Cell>>();
 		mxGraph graph = aGraph.getGraph();
 		Object parent = graph.getDefaultParent();
 		//replicate the edge connections in oldConnections
@@ -614,17 +614,17 @@ public class GraphStructure
 
 		for (int i = 0; i < vertexCount; i++)
 		{
-			mxCell currVertex = (mxCell) vertices[i];
+			Cell currVertex = (Cell) vertices[i];
 			int edgeCount = currVertex.getEdgeCount();
-			mxCell currEdge = new mxCell();
-			ArrayList<mxCell> neighborVertexes = new ArrayList<mxCell>();
+			Cell currEdge = new Cell();
+			ArrayList<Cell> neighborVertexes = new ArrayList<Cell>();
 
 			for (int j = 0; j < edgeCount; j++)
 			{
-				currEdge = (mxCell) currVertex.getEdgeAt(j);
+				currEdge = (Cell) currVertex.getEdgeAt(j);
 
-				mxCell source = (mxCell) currEdge.getSource();
-				mxCell destination = (mxCell) currEdge.getTarget();
+				Cell source = (Cell) currEdge.getSource();
+				Cell destination = (Cell) currEdge.getTarget();
 
 				if (!source.equals(currVertex))
 				{
@@ -646,13 +646,13 @@ public class GraphStructure
 
 		for (int i = 0; i < vertexCount; i++)
 		{
-			ArrayList<mxCell> oldNeighbors = new ArrayList<mxCell>();
+			ArrayList<Cell> oldNeighbors = new ArrayList<Cell>();
 			oldNeighbors = oldConnections.get(i);
-			mxCell currVertex = (mxCell) vertices[i];
+			Cell currVertex = (Cell) vertices[i];
 
 			for (int j = 0; j < vertexCount; j++)
 			{
-				mxCell targetVertex = (mxCell) vertices[j];
+				Cell targetVertex = (Cell) vertices[j];
 				boolean shouldConnect = true; // the decision if the two current vertexes should be connected
 
 				if (oldNeighbors.contains(targetVertex))
@@ -717,7 +717,7 @@ public class GraphStructure
 		mxGraph graph = aGraph.getGraph();
 		Object parent = graph.getDefaultParent();
 		Object[] vertices = aGraph.getChildVertices(parent);
-		mxIGraphModel model = graph.getModel();
+		IGraphModel model = graph.getModel();
 
 		for (int i = 0; i < vertices.length; i++)
 		{
@@ -829,12 +829,12 @@ public class GraphStructure
 	public static boolean isCutVertex(AnalysisGraph aGraph, Object vertex)
 	{
 		mxGraph graph = aGraph.getGraph();
-		mxIGraphModel model = graph.getModel();
+		IGraphModel model = graph.getModel();
 
 		if (aGraph.getEdges(vertex, null, true, true, false, true).length >= 2)
 		{
 			Object[] cells = model.cloneCells(aGraph.getChildCells(graph.getDefaultParent(), true, true), true);
-			mxGraphModel modelCopy = new mxGraphModel();
+			GraphModel modelCopy = new GraphModel();
 			mxGraph graphCopy = new mxGraph(modelCopy);
 			graphCopy.addCells(cells);
 			AnalysisGraph aGraphCopy = new AnalysisGraph();
@@ -887,7 +887,7 @@ public class GraphStructure
 	public static boolean isCutEdge(AnalysisGraph aGraph, Object edge)
 	{
 		mxGraph graph = aGraph.getGraph();
-		mxIGraphModel model = graph.getModel();
+		IGraphModel model = graph.getModel();
 		CostFunction costFunction = aGraph.getGenerator().getCostFunction();
 		mxGraphView view = graph.getView();
 
@@ -897,7 +897,7 @@ public class GraphStructure
 		if (aGraph.getTerminal(edge, false) != null || aGraph.getTerminal(edge, true) != null)
 		{
 			Object[] cells = model.cloneCells(aGraph.getChildCells(graph.getDefaultParent(), true, true), true);
-			mxGraphModel modelCopy = new mxGraphModel();
+			GraphModel modelCopy = new GraphModel();
 			mxGraph graphCopy = new mxGraph(modelCopy);
 			graphCopy.addCells(cells);
 			AnalysisGraph aGraphCopy = new AnalysisGraph();

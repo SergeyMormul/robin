@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.sciforce.robin.graph.model.mxGraphModel;
+import com.sciforce.robin.graph.model.GraphModel;
 import com.sciforce.robin.graph.view.mxGraph;
 
 /**
@@ -167,7 +167,7 @@ public class GdCodec
 		StringBuilder builder = new StringBuilder();
 		
 		Object parent = graph.getDefaultParent();
-		Object[] vertices = mxGraphModel.getChildCells(graph.getModel(), parent, true, false);
+		Object[] vertices = GraphModel.getChildCells(graph.getModel(), parent, true, false);
 		
 		builder.append("# Number of Nodes (0-" + String.valueOf(vertices.length - 1) + ")");
 		builder.append(String.valueOf(vertices.length));

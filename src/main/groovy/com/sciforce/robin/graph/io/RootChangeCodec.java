@@ -5,8 +5,8 @@ package com.sciforce.robin.graph.io;
 
 import java.util.Map;
 
-import com.sciforce.robin.graph.model.mxGraphModel;
-import com.sciforce.robin.graph.model.mxICell;
+import com.sciforce.robin.graph.model.GraphModel;
+import com.sciforce.robin.graph.model.ICell;
 import org.w3c.dom.Node;
 
 /**
@@ -22,7 +22,7 @@ public class RootChangeCodec extends ObjectCodec
 	 */
 	public RootChangeCodec()
 	{
-		this(new mxGraphModel.mxRootChange(), new String[] { "model", "previous", "root" },
+		this(new GraphModel.mxRootChange(), new String[] { "model", "previous", "root" },
 				null, null);
 	}
 
@@ -41,9 +41,9 @@ public class RootChangeCodec extends ObjectCodec
 	@Override
 	public Node afterEncode(Codec enc, Object obj, Node node)
 	{
-		if (obj instanceof mxGraphModel.mxRootChange)
+		if (obj instanceof GraphModel.mxRootChange)
 		{
-			enc.encodeCell((mxICell) ((mxGraphModel.mxRootChange) obj).getRoot(), node, true);
+			enc.encodeCell((ICell) ((GraphModel.mxRootChange) obj).getRoot(), node, true);
 		}
 
 		return node;
@@ -55,9 +55,9 @@ public class RootChangeCodec extends ObjectCodec
 	 */
 	public Node beforeDecode(Codec dec, Node node, Object into)
 	{
-		if (into instanceof mxGraphModel.mxRootChange)
+		if (into instanceof GraphModel.mxRootChange)
 		{
-			mxGraphModel.mxRootChange change = (mxGraphModel.mxRootChange) into;
+			GraphModel.mxRootChange change = (GraphModel.mxRootChange) into;
 
 			if (node.getFirstChild() != null
 					&& node.getFirstChild().getNodeType() == Node.ELEMENT_NODE)
@@ -96,9 +96,9 @@ public class RootChangeCodec extends ObjectCodec
 	@Override
 	public Object afterDecode(Codec dec, Node node, Object obj)
 	{
-		if (obj instanceof mxGraphModel.mxRootChange)
+		if (obj instanceof GraphModel.mxRootChange)
 		{
-			mxGraphModel.mxRootChange change = (mxGraphModel.mxRootChange) obj;
+			GraphModel.mxRootChange change = (GraphModel.mxRootChange) obj;
 			change.setPrevious(change.getRoot());
 		}
 

@@ -5,8 +5,8 @@ package com.sciforce.robin.graph.io;
 
 import java.util.Map;
 
-import com.sciforce.robin.graph.model.mxGraphModel;
-import com.sciforce.robin.graph.model.mxICell;
+import com.sciforce.robin.graph.model.GraphModel;
+import com.sciforce.robin.graph.model.ICell;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
@@ -23,7 +23,7 @@ public class ChildChangeCodec extends ObjectCodec
 	 */
 	public ChildChangeCodec()
 	{
-		this(new mxGraphModel.mxChildChange(), new String[] { "model", "child",
+		this(new GraphModel.mxChildChange(), new String[] { "model", "child",
 				"previousIndex" }, new String[] { "parent", "previous" }, null);
 	}
 
@@ -43,8 +43,8 @@ public class ChildChangeCodec extends ObjectCodec
 	public boolean isReference(Object obj, String attr, Object value,
 			boolean isWrite)
 	{
-		if (attr.equals("child") && obj instanceof mxGraphModel.mxChildChange
-				&& (((mxGraphModel.mxChildChange) obj).getPrevious() != null || !isWrite))
+		if (attr.equals("child") && obj instanceof GraphModel.mxChildChange
+				&& (((GraphModel.mxChildChange) obj).getPrevious() != null || !isWrite))
 		{
 			return true;
 		}
@@ -58,9 +58,9 @@ public class ChildChangeCodec extends ObjectCodec
 	@Override
 	public Node afterEncode(Codec enc, Object obj, Node node)
 	{
-		if (obj instanceof mxGraphModel.mxChildChange)
+		if (obj instanceof GraphModel.mxChildChange)
 		{
-			mxGraphModel.mxChildChange change = (mxGraphModel.mxChildChange) obj;
+			GraphModel.mxChildChange change = (GraphModel.mxChildChange) obj;
 			Object child = change.getChild();
 
 			if (isReference(obj, "child", child, true))
@@ -75,7 +75,7 @@ public class ChildChangeCodec extends ObjectCodec
 				// ignore the ones that are already there at decoding time. Note:
 				// This can only be resolved by moving the notify event into the
 				// execute of the edit.
-				enc.encodeCell((mxICell) child, node, true);
+				enc.encodeCell((ICell) child, node, true);
 			}
 		}
 
@@ -88,9 +88,9 @@ public class ChildChangeCodec extends ObjectCodec
 	 */
 	public Node beforeDecode(Codec dec, Node node, Object into)
 	{
-		if (into instanceof mxGraphModel.mxChildChange)
+		if (into instanceof GraphModel.mxChildChange)
 		{
-			mxGraphModel.mxChildChange change = (mxGraphModel.mxChildChange) into;
+			GraphModel.mxChildChange change = (GraphModel.mxChildChange) into;
 
 			if (node.getFirstChild() != null
 					&& node.getFirstChild().getNodeType() == Node.ELEMENT_NODE)
@@ -132,7 +132,7 @@ public class ChildChangeCodec extends ObjectCodec
 			else
 			{
 				String childRef = ((Element) node).getAttribute("child");
-				change.setChild((mxICell) dec.getObject(childRef));
+				change.setChild((ICell) dec.getObject(childRef));
 			}
 		}
 
@@ -145,15 +145,15 @@ public class ChildChangeCodec extends ObjectCodec
 	@Override
 	public Object afterDecode(Codec dec, Node node, Object obj)
 	{
-		if (obj instanceof mxGraphModel.mxChildChange)
+		if (obj instanceof GraphModel.mxChildChange)
 		{
-			mxGraphModel.mxChildChange change = (mxGraphModel.mxChildChange) obj;
+			GraphModel.mxChildChange change = (GraphModel.mxChildChange) obj;
 
 			// Cells are encoded here after a complete transaction so the previous
 			// parent must be restored on the cell for the case where the cell was
 			// added. This is needed for the local model to identify the cell as a
 			// new cell and register the ID.
-			((mxICell) change.getChild()).setParent((mxICell) change
+			((ICell) change.getChild()).setParent((ICell) change
 					.getPrevious());
 			change.setPrevious(change.getParent());
 			change.setPreviousIndex(change.getIndex());

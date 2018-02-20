@@ -6,10 +6,9 @@ package com.sciforce.robin.graph.io;
 import java.util.Iterator;
 import java.util.Map;
 
+import com.sciforce.robin.graph.model.Cell;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-
-import com.sciforce.robin.graph.model.mxCell;
 
 /**
  * Codec for mxCells. This class is created and registered
@@ -24,7 +23,7 @@ public class CellCodec extends ObjectCodec
 	 */
 	public CellCodec()
 	{
-		this(new mxCell(), null, new String[] { "parent", "source", "target" },
+		this(new Cell(), null, new String[] { "parent", "source", "target" },
 				null);
 	}
 
@@ -57,14 +56,14 @@ public class CellCodec extends ObjectCodec
 	}
 
 	/**
-	 * Encodes an mxCell and wraps the XML up inside the
+	 * Encodes an Cell and wraps the XML up inside the
 	 * XML of the user object (inversion).
 	 */
 	public Node afterEncode(Codec enc, Object obj, Node node)
 	{
-		if (obj instanceof mxCell)
+		if (obj instanceof Cell)
 		{
-			mxCell cell = (mxCell) obj;
+			Cell cell = (Cell) obj;
 
 			if (cell.getValue() instanceof Node)
 			{
@@ -91,16 +90,16 @@ public class CellCodec extends ObjectCodec
 	}
 
 	/**
-	 * Decodes an mxCell and uses the enclosing XML node as
+	 * Decodes an Cell and uses the enclosing XML node as
 	 * the user object for the cell (inversion).
 	 */
 	public Node beforeDecode(Codec dec, Node node, Object obj)
 	{
 		Element inner = (Element) node;
 
-		if (obj instanceof mxCell)
+		if (obj instanceof Cell)
 		{
-			mxCell cell = (mxCell) obj;
+			Cell cell = (Cell) obj;
 			String classname = getName();
 			String nodeName = node.getNodeName();
 			

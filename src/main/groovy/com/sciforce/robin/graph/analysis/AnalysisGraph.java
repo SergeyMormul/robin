@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.sciforce.robin.graph.costfunction.DoubleValCostFunction;
-import com.sciforce.robin.graph.model.mxIGraphModel;
+import com.sciforce.robin.graph.model.IGraphModel;
 import com.sciforce.robin.graph.view.mxGraph;
 
 /**
@@ -56,7 +56,7 @@ public class AnalysisGraph
 			Object[] edges = graph.getEdges(cell, parent, incoming, outgoing, includeLoops, recurse);
 			List<Object> result = new ArrayList<Object>(edges.length);
 
-			mxIGraphModel model = graph.getModel();
+			IGraphModel model = graph.getModel();
 
 			for (int i = 0; i < edges.length; i++)
 			{

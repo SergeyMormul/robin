@@ -33,7 +33,7 @@ import org.xml.sax.XMLReader;
 
 import com.sciforce.robin.graph.canvas.ICanvas2D;
 import com.sciforce.robin.graph.util.mxUtils;
-import com.sciforce.robin.graph.reader.mxSaxOutputHandler;
+import com.sciforce.robin.graph.reader.SaxOutputHandler;
 
 /**
  * Inbound HTTP gateway for supporting generation PDF from XML.
@@ -244,7 +244,7 @@ public class ExportPDFService {
         reader.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
         reader.setFeature("http://xml.org/sax/features/external-general-entities", false);
         reader.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
-        reader.setContentHandler(new mxSaxOutputHandler(canvas));
+        reader.setContentHandler(new SaxOutputHandler(canvas));
         reader.parse(new InputSource(new StringReader(xml)));
     }
 

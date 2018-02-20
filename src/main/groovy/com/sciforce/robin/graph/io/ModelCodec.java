@@ -5,8 +5,8 @@ package com.sciforce.robin.graph.io;
 
 import java.util.Map;
 
-import com.sciforce.robin.graph.model.mxGraphModel;
-import com.sciforce.robin.graph.model.mxICell;
+import com.sciforce.robin.graph.model.GraphModel;
+import com.sciforce.robin.graph.model.ICell;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
@@ -23,7 +23,7 @@ public class ModelCodec extends ObjectCodec
 	 */
 	public ModelCodec()
 	{
-		this(new mxGraphModel());
+		this(new GraphModel());
 	}
 
 	/**
@@ -44,17 +44,17 @@ public class ModelCodec extends ObjectCodec
 	}
 
 	/**
-	 * Encodes the given mxGraphModel by writing a (flat) XML sequence
+	 * Encodes the given GraphModel by writing a (flat) XML sequence
 	 * of cell nodes as produced by the CellCodec. The sequence is
 	 * wrapped-up in a node with the name root.
 	 */
 	protected void encodeObject(Codec enc, Object obj, Node node)
 	{
-		if (obj instanceof mxGraphModel)
+		if (obj instanceof GraphModel)
 		{
 			Node rootNode = enc.document.createElement("root");
-			mxGraphModel model = (mxGraphModel) obj;
-			enc.encodeCell((mxICell) model.getRoot(), rootNode, true);
+			GraphModel model = (GraphModel) obj;
+			enc.encodeCell((ICell) model.getRoot(), rootNode, true);
 			node.appendChild(rootNode);
 		}
 	}
@@ -68,21 +68,21 @@ public class ModelCodec extends ObjectCodec
 		if (node instanceof Element)
 		{
 			Element elt = (Element) node;
-			mxGraphModel model = null;
+			GraphModel model = null;
 
-			if (into instanceof mxGraphModel)
+			if (into instanceof GraphModel)
 			{
-				model = (mxGraphModel) into;
+				model = (GraphModel) into;
 			}
 			else
 			{
-				model = new mxGraphModel();
+				model = new GraphModel();
 			}
 
 			// Reads the cells into the graph model. All cells
 			// are children of the root element in the node.
 			Node root = elt.getElementsByTagName("root").item(0);
-			mxICell rootCell = null;
+			ICell rootCell = null;
 
 			if (root != null)
 			{
@@ -90,7 +90,7 @@ public class ModelCodec extends ObjectCodec
 
 				while (tmp != null)
 				{
-					mxICell cell = dec.decodeCell(tmp, true);
+					ICell cell = dec.decodeCell(tmp, true);
 
 					if (cell != null && cell.getParent() == null)
 					{

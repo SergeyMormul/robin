@@ -153,7 +153,7 @@ public class ObjectCodec
 	 * if that is different than what this returns. The default implementation
 	 * returns the classname of the template class.
 	 * 
-	 * Here is an example on how to use this for renaming mxCell nodes:
+	 * Here is an example on how to use this for renaming Cell nodes:
 	 * <code>
 	 * CodecRegistry.register(new CellCodec()
 	 * {
@@ -761,8 +761,8 @@ public class ObjectCodec
 			// this should be considered an error in the scope of this method, but the
 			// calling code already depends on this method failing softly to filter
 			// non-serializable properties, so it gets called for static fields
-			// (mxCell.serialVersionUID), non-transient-but-probably-should-be fields
-			// (mxCell.children, mxCell.edges)
+			// (Cell.serialVersionUID), non-transient-but-probably-should-be fields
+			// (Cell.children, Cell.edges)
 			// the proper fix is to rewrite the whole thing to use Introspector, like
 			// encodeFields already intends, so for now let's just log at a lower level
 			if (log.isLoggable(Level.FINER))

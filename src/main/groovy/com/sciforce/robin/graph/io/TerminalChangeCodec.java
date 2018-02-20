@@ -5,7 +5,7 @@ package com.sciforce.robin.graph.io;
 
 import java.util.Map;
 
-import com.sciforce.robin.graph.model.mxGraphModel;
+import com.sciforce.robin.graph.model.GraphModel;
 import org.w3c.dom.Node;
 
 /**
@@ -21,7 +21,7 @@ public class TerminalChangeCodec extends ObjectCodec
 	 */
 	public TerminalChangeCodec()
 	{
-		this(new mxGraphModel.mxTerminalChange(), new String[] { "model", "previous" },
+		this(new GraphModel.mxTerminalChange(), new String[] { "model", "previous" },
 				new String[] { "cell", "terminal" }, null);
 	}
 
@@ -40,9 +40,9 @@ public class TerminalChangeCodec extends ObjectCodec
 	@Override
 	public Object afterDecode(Codec dec, Node node, Object obj)
 	{
-		if (obj instanceof mxGraphModel.mxTerminalChange)
+		if (obj instanceof GraphModel.mxTerminalChange)
 		{
-			mxGraphModel.mxTerminalChange change = (mxGraphModel.mxTerminalChange) obj;
+			GraphModel.mxTerminalChange change = (GraphModel.mxTerminalChange) obj;
 
 			change.setPrevious(change.getTerminal());
 		}

@@ -8,14 +8,13 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.sciforce.robin.graph.model.mxCellPath;
-import com.sciforce.robin.graph.model.mxICell;
+import com.sciforce.robin.graph.model.Cell;
+import com.sciforce.robin.graph.model.CellPath;
+import com.sciforce.robin.graph.model.ICell;
 import com.sciforce.robin.graph.util.mxDomUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-
-import com.sciforce.robin.graph.model.mxCell;
 
 /**
  * XML codec for Java object graphs. In order to resolve forward references
@@ -217,9 +216,9 @@ public class Codec
 	/**
 	 * Returns the ID of the specified object. This implementation calls
 	 * reference first and if that returns null handles the object as an
-	 * mxCell by returning their IDs using mxCell.getId. If no ID exists for
+	 * Cell by returning their IDs using Cell.getId. If no ID exists for
 	 * the given cell, then an on-the-fly ID is generated using
-	 * mxCellPath.create.
+	 * CellPath.create.
 	 * 
 	 * @param obj Object to return the ID for.
 	 * @return Returns the ID for the given object.
@@ -232,14 +231,14 @@ public class Codec
 		{
 			id = reference(obj);
 
-			if (id == null && obj instanceof mxICell)
+			if (id == null && obj instanceof ICell)
 			{
-				id = ((mxICell) obj).getId();
+				id = ((ICell) obj).getId();
 
 				if (id == null)
 				{
 					// Uses an on-the-fly Id
-					id = mxCellPath.create((mxICell) obj);
+					id = CellPath.create((ICell) obj);
 
 					if (id.length() == 0)
 					{
@@ -361,12 +360,12 @@ public class Codec
 	 * The function is in charge of adding the result into the given node
 	 * and has no return value.
 	 * 
-	 * @param cell mxCell to be encoded.
+	 * @param cell Cell to be encoded.
 	 * @param node Parent XML node to add the encoded cell into.
 	 * @param includeChildren Boolean indicating if the method
 	 * should include all descendents.
 	 */
-	public void encodeCell(mxICell cell, Node node, boolean includeChildren)
+	public void encodeCell(ICell cell, Node node, boolean includeChildren)
 	{
 		node.appendChild(encode(cell));
 
@@ -384,7 +383,7 @@ public class Codec
 	/**
 	 * Decodes cells that have been encoded using inversion, ie. where the
 	 * user object is the enclosing node in the XML, and restores the group
-	 * and graph structure in the cells. Returns a new <mxCell> instance
+	 * and graph structure in the cells. Returns a new <Cell> instance
 	 * that represents the given node.
 	 * 
 	 * @param node XML node that contains the cell data.
@@ -393,15 +392,15 @@ public class Codec
 	 * parent and terminals, respectively.
 	 * @return Graph cell that represents the given node.
 	 */
-	public mxICell decodeCell(Node node, boolean restoreStructures)
+	public ICell decodeCell(Node node, boolean restoreStructures)
 	{
-		mxICell cell = null;
+		ICell cell = null;
 
 		if (node != null && node.getNodeType() == Node.ELEMENT_NODE)
 		{
 			// Tries to find a codec for the given node name. If that does
 			// not return a codec then the node is the user object (an XML node
-			// that contains the mxCell, aka inversion).
+			// that contains the Cell, aka inversion).
 			ObjectCodec decoder = CodecRegistry
 					.getCodec(node.getNodeName());
 
@@ -418,17 +417,17 @@ public class Codec
 					child = child.getNextSibling();
 				}
 
-				String name = mxCell.class.getSimpleName();
+				String name = Cell.class.getSimpleName();
 				decoder = CodecRegistry.getCodec(name);
 			}
 
 			if (!(decoder instanceof CellCodec))
 			{
-				String name = mxCell.class.getSimpleName();
+				String name = Cell.class.getSimpleName();
 				decoder = CodecRegistry.getCodec(name);
 			}
 
-			cell = (mxICell) decoder.decode(this, node);
+			cell = (ICell) decoder.decode(this, node);
 
 			if (restoreStructures)
 			{
@@ -442,11 +441,11 @@ public class Codec
 	/**
 	 * Inserts the given cell into its parent and terminal cells.
 	 */
-	public void insertIntoGraph(mxICell cell)
+	public void insertIntoGraph(ICell cell)
 	{
-		mxICell parent = cell.getParent();
-		mxICell source = cell.getTerminal(true);
-		mxICell target = cell.getTerminal(false);
+		ICell parent = cell.getParent();
+		ICell source = cell.getTerminal(true);
+		ICell target = cell.getTerminal(false);
 
 		// Fixes possible inconsistencies during insert into graph
 		cell.setTerminal(null, false);

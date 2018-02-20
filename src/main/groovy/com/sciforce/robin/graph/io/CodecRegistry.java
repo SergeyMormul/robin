@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.sciforce.robin.graph.model.mxGraphModel;
+import com.sciforce.robin.graph.model.GraphModel;
 
 /**
  * Singleton class that acts as a global registry for codecs. See
@@ -34,7 +34,7 @@ public class CodecRegistry
 
 	/**
 	 * Holds the list of known packages. Packages are used to prefix short
-	 * class names (eg. mxCell) in XML markup.
+	 * class names (eg. Cell) in XML markup.
 	 */
 	protected static List<String> packages = new ArrayList<String>();
 
@@ -56,11 +56,11 @@ public class CodecRegistry
 		register(new RootChangeCodec());
 		register(new ChildChangeCodec());
 		register(new TerminalChangeCodec());
-		register(new GenericChangeCodec(new mxGraphModel.mxValueChange(), "value"));
-		register(new GenericChangeCodec(new mxGraphModel.mxStyleChange(), "style"));
-		register(new GenericChangeCodec(new mxGraphModel.mxGeometryChange(), "geometry"));
-		register(new GenericChangeCodec(new mxGraphModel.mxCollapseChange(), "collapsed"));
-		register(new GenericChangeCodec(new mxGraphModel.mxVisibleChange(), "visible"));
+		register(new GenericChangeCodec(new GraphModel.mxValueChange(), "value"));
+		register(new GenericChangeCodec(new GraphModel.mxStyleChange(), "style"));
+		register(new GenericChangeCodec(new GraphModel.mxGeometryChange(), "geometry"));
+		register(new GenericChangeCodec(new GraphModel.mxCollapseChange(), "collapsed"));
+		register(new GenericChangeCodec(new GraphModel.mxVisibleChange(), "visible"));
 	}
 
 	/**
@@ -223,8 +223,8 @@ public class CodecRegistry
 	 * with the given instance..
 	 *
 	 * The I/O system uses unqualified classnames, eg. for a
-	 * <code>mxCell</code> this returns
-	 * <code>mxCell</code>.
+	 * <code>Cell</code> this returns
+	 * <code>Cell</code>.
 	 * 
 	 * @param instance Instance whose node name should be returned.
 	 * @return Returns a string that identifies the codec.
