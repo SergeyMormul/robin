@@ -10,9 +10,9 @@ import java.util.Comparator;
 import java.util.Hashtable;
 import java.util.List;
 
-import com.sciforce.robin.graph.view.mxGraphView;
-import com.sciforce.robin.graph.view.mxCellState;
-import com.sciforce.robin.graph.view.mxGraph;
+import com.sciforce.robin.graph.view.CellState;
+import com.sciforce.robin.graph.view.Graph;
+import com.sciforce.robin.graph.view.GraphView;
 
 /**
  * A singleton class that provides algorithms for graphs. Assume these
@@ -98,13 +98,13 @@ public class GraphAnalysis
 	 * 
 	 * @see #createPriorityQueue()
 	 */
-	public Object[] getShortestPath(mxGraph graph, Object from, Object to,
+	public Object[] getShortestPath(Graph graph, Object from, Object to,
 									ICostFunction cf, int steps, boolean directed)
 	{
 		// Sets up a pqueue and a hashtable to store the predecessor for each
 		// cell in tha graph traversal. The pqueue is initialized
 		// with the from element at prio 0.
-		mxGraphView view = graph.getView();
+		GraphView view = graph.getView();
 		FibonacciHeap q = createPriorityQueue();
 		Hashtable<Object, Object> pred = new Hashtable<Object, Object>();
 		q.decreaseKey(q.getNode(from, true), 0); // Inserts automatically
@@ -182,7 +182,7 @@ public class GraphAnalysis
 			{
 				list.add(0, edge);
 
-				mxCellState state = view.getState(edge);
+				CellState state = view.getState(edge);
 				Object source = (state != null) ? state
 						.getVisibleTerminal(true) : view.getVisibleTerminal(
 						edge, true);
@@ -218,7 +218,7 @@ public class GraphAnalysis
 	 * 
 	 * @see #createPriorityQueue()
 	 */
-	public Object[] getMinimumSpanningTree(mxGraph graph, Object[] v,
+	public Object[] getMinimumSpanningTree(Graph graph, Object[] v,
 										   ICostFunction cf, boolean directed)
 	{
 		ArrayList<Object> mst = new ArrayList<Object>(v.length);
@@ -298,7 +298,7 @@ public class GraphAnalysis
 	 * O(|E|) find and O(|V|) union calls on the union find structure, thus
 	 * yielding no more than O(|E|log|V|) steps. For a faster implementatin
 	 * 
-	 * @see #getMinimumSpanningTree(mxGraph, Object[], ICostFunction,
+	 * @see #getMinimumSpanningTree(Graph, Object[], ICostFunction,
 	 *      boolean)
 	 * 
 	 * @param graph The object that contains the graph.
@@ -310,8 +310,8 @@ public class GraphAnalysis
 	 * 
 	 * @see #createUnionFind(Object[])
 	 */
-	public Object[] getMinimumSpanningTree(mxGraph graph, Object[] v,
-			Object[] e, ICostFunction cf)
+	public Object[] getMinimumSpanningTree(Graph graph, Object[] v,
+										   Object[] e, ICostFunction cf)
 	{
 		// Sorts all edges according to their lengths, then creates a union
 		// find structure for all vertices. Then walks through all edges by
@@ -320,10 +320,10 @@ public class GraphAnalysis
 		// and target are in different sets in the union find structure.
 		// Whenever an edge is added to the MST, the two different sets are
 		// unified.
-		mxGraphView view = graph.getView();
+		GraphView view = graph.getView();
 		UnionFind uf = createUnionFind(v);
 		ArrayList<Object> result = new ArrayList<Object>(e.length);
-		mxCellState[] edgeStates = sort(view.getCellStates(e), cf);
+		CellState[] edgeStates = sort(view.getCellStates(e), cf);
 
 		for (int i = 0; i < edgeStates.length; i++)
 		{
@@ -354,15 +354,15 @@ public class GraphAnalysis
 	 * 
 	 * @see #createUnionFind(Object[])
 	 */
-	public UnionFind getConnectionComponents(mxGraph graph, Object[] v,
+	public UnionFind getConnectionComponents(Graph graph, Object[] v,
 											 Object[] e)
 	{
-		mxGraphView view = graph.getView();
+		GraphView view = graph.getView();
 		UnionFind uf = createUnionFind(v);
 
 		for (int i = 0; i < e.length; i++)
 		{
-			mxCellState state = view.getState(e[i]);
+			CellState state = view.getState(e[i]);
 			Object source = (state != null) ? state.getVisibleTerminal(true)
 					: view.getVisibleTerminal(e[i], true);
 			Object target = (state != null) ? state.getVisibleTerminal(false)
@@ -386,17 +386,17 @@ public class GraphAnalysis
 	 * @return Returns an ordered set of <code>cells</code> wrt.
 	 *         <code>cf</code>
 	 */
-	public mxCellState[] sort(mxCellState[] states, final ICostFunction cf)
+	public CellState[] sort(CellState[] states, final ICostFunction cf)
 	{
-		List<mxCellState> result = Arrays.asList(states);
+		List<CellState> result = Arrays.asList(states);
 
-		Collections.sort(result, new Comparator<mxCellState>()
+		Collections.sort(result, new Comparator<CellState>()
 		{
 
 			/**
 			 * 
 			 */
-			public int compare(mxCellState o1, mxCellState o2)
+			public int compare(CellState o1, CellState o2)
 			{
 				Double d1 = new Double(cf.getCost(o1));
 				Double d2 = new Double(cf.getCost(o2));
@@ -406,7 +406,7 @@ public class GraphAnalysis
 
 		});
 
-		return (mxCellState[]) result.toArray();
+		return (CellState[]) result.toArray();
 	}
 
 	/**
@@ -420,7 +420,7 @@ public class GraphAnalysis
 	 * 
 	 * @return Returns the sum of all cell cost
 	 */
-	public double sum(mxCellState[] states, ICostFunction cf)
+	public double sum(CellState[] states, ICostFunction cf)
 	{
 		double sum = 0;
 

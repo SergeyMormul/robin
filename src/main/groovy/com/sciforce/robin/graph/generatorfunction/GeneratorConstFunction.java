@@ -3,7 +3,7 @@
  */
 package com.sciforce.robin.graph.generatorfunction;
 
-import com.sciforce.robin.graph.view.mxCellState;
+import com.sciforce.robin.graph.view.CellState;
 
 /**
  * A constant cost function that can be used during graph generation
@@ -18,7 +18,7 @@ public class GeneratorConstFunction extends GeneratorFunction
 		this.cost = cost;
 	};
 	
-	public double getCost(mxCellState state)
+	public double getCost(CellState state)
 	{
 		return cost;
 	};

@@ -3,7 +3,7 @@
  */
 package com.sciforce.robin.graph.generatorfunction;
 
-import com.sciforce.robin.graph.view.mxCellState;
+import com.sciforce.robin.graph.view.CellState;
 
 /**
  * A generator random cost function
@@ -20,10 +20,10 @@ public class GeneratorRandomIntFunction extends GeneratorFunction
 		setWeightRange(minWeight, maxWeight);
 	};
 
-	public double getCost(mxCellState state)
+	public double getCost(CellState state)
 	{
 		//assumed future parameters
-		//		mxGraph graph = state.getView().getGraph();
+		//		Graph graph = state.getView().getGraph();
 		//		Object cell = state.getCell();
 
 		if (minWeight == maxWeight)

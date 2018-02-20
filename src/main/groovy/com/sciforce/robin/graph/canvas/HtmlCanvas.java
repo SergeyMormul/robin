@@ -15,7 +15,7 @@ import org.w3c.dom.Node;
 
 import com.sciforce.robin.graph.util.mxPoint;
 import com.sciforce.robin.graph.util.mxRectangle;
-import com.sciforce.robin.graph.view.mxCellState;
+import com.sciforce.robin.graph.view.CellState;
 
 /**
  * An implementation of a canvas that uses HTML for painting.
@@ -84,7 +84,7 @@ public class HtmlCanvas extends BasicCanvas
 	 * (non-Javadoc)
 	 * @see ICanvas#drawCell()
 	 */
-	public Object drawCell(mxCellState state)
+	public Object drawCell(CellState state)
 	{
 		Map<String, Object> style = state.getStyle();
 		
@@ -141,7 +141,7 @@ public class HtmlCanvas extends BasicCanvas
 	 * (non-Javadoc)
 	 * @see ICanvas#drawLabel()
 	 */
-	public Object drawLabel(String label, mxCellState state, boolean html)
+	public Object drawLabel(String label, CellState state, boolean html)
 	{
 		mxRectangle bounds = state.getLabelBounds();
 

@@ -10,13 +10,13 @@ import java.util.Map;
 
 import com.sciforce.robin.graph.util.mxRectangle;
 import com.sciforce.robin.graph.util.mxUtils;
+import com.sciforce.robin.graph.view.CellState;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import com.sciforce.robin.graph.canvas.ICanvas;
 import com.sciforce.robin.graph.util.mxPoint;
-import com.sciforce.robin.graph.view.mxCellState;
 
 /**
  * An abstract converter that renders display XML data onto a canvas.
@@ -129,7 +129,7 @@ public abstract class GraphViewReader extends DefaultHandler
 							&& attrs.containsKey("width") && attrs
 							.containsKey("height")))
 			{
-				mxCellState state = new mxCellState(null, null, attrs);
+				CellState state = new CellState(null, null, attrs);
 
 				String label = parseState(state, edge);
 				canvas.drawCell(state);
@@ -143,7 +143,7 @@ public abstract class GraphViewReader extends DefaultHandler
 	 * of the state into its respective fields and returns the label of the
 	 * cell.
 	 */
-	public String parseState(mxCellState state, boolean edge)
+	public String parseState(CellState state, boolean edge)
 	{
 		Map<String, Object> style = state.getStyle();
 

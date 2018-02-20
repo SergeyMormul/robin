@@ -3,7 +3,7 @@
  */
 package com.sciforce.robin.graph.analysis;
 
-import com.sciforce.robin.graph.view.mxCellState;
+import com.sciforce.robin.graph.view.CellState;
 
 /**
  * The cost function takes a cell and returns it's cost as a double. Two typical
@@ -21,6 +21,6 @@ public interface ICostFunction
 	 * @param state The cell state to be evaluated
 	 * @return Returns the cost to traverse the given cell state.
 	 */
-	double getCost(mxCellState state);
+	double getCost(CellState state);
 
 }

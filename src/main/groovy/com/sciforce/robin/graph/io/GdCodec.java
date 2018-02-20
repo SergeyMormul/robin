@@ -10,7 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.sciforce.robin.graph.model.GraphModel;
-import com.sciforce.robin.graph.view.mxGraph;
+import com.sciforce.robin.graph.view.Graph;
 
 /**
  * Parses a GD .txt file and imports it in the given graph.<br/>
@@ -39,7 +39,7 @@ public class GdCodec
 	 * @param input GD file to be parsed
 	 * @param graph Graph where the parsed graph is included.
 	 */
-	public static void decode(String input, mxGraph graph)
+	public static void decode(String input, Graph graph)
 	{
 		BufferedReader br = new BufferedReader(new StringReader(input));
 		mxGDParseState state = mxGDParseState.START;
@@ -162,7 +162,7 @@ public class GdCodec
 	 * @param graph Graph with the cells.
 	 * @return The GD document generated.
 	 */
-	public static String encode(mxGraph graph)
+	public static String encode(Graph graph)
 	{
 		StringBuilder builder = new StringBuilder();
 		

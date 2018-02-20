@@ -241,7 +241,7 @@ public class GraphViewImageReader extends GraphViewReader
 
 	/**
 	 * Creates the image for the given display XML file. (Note: The XML file is
-	 * an encoded mxGraphView, not GraphModel.)
+	 * an encoded GraphView, not GraphModel.)
 	 * 
 	 * @param filename
 	 *            Filename of the display XML file.
@@ -257,7 +257,7 @@ public class GraphViewImageReader extends GraphViewReader
 
 	/**
 	 * Creates the image for the given display XML input source. (Note: The XML
-	 * is an encoded mxGraphView, not GraphModel.)
+	 * is an encoded GraphView, not GraphModel.)
 	 * 
 	 * @param inputSource
 	 *            Input source that contains the display XML.

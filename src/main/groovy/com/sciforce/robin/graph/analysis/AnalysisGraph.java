@@ -10,7 +10,7 @@ import java.util.Map;
 
 import com.sciforce.robin.graph.costfunction.DoubleValCostFunction;
 import com.sciforce.robin.graph.model.IGraphModel;
-import com.sciforce.robin.graph.view.mxGraph;
+import com.sciforce.robin.graph.view.Graph;
 
 /**
  * Implements a collection of utility methods abstracting the graph structure
@@ -24,7 +24,7 @@ public class AnalysisGraph
 	// contains various data that is used for graph generation and analysis
 	protected GraphGenerator generator;
 
-	protected mxGraph graph;
+	protected Graph graph;
 
 	/**
 	 * Returns the incoming and/or outgoing edges for the given cell.
@@ -195,12 +195,12 @@ public class AnalysisGraph
 		this.properties = properties;
 	};
 
-	public mxGraph getGraph()
+	public Graph getGraph()
 	{
 		return graph;
 	};
 
-	public void setGraph(mxGraph graph)
+	public void setGraph(Graph graph)
 	{
 		this.graph = graph;
 	}

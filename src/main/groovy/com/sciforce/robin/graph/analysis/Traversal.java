@@ -13,10 +13,10 @@ import java.util.Map;
 import java.util.Set;
 
 import com.sciforce.robin.graph.costfunction.CostFunction;
-import com.sciforce.robin.graph.view.mxCellState;
-import com.sciforce.robin.graph.view.mxGraph;
-import com.sciforce.robin.graph.view.mxGraph.mxICellVisitor;
-import com.sciforce.robin.graph.view.mxGraphView;
+import com.sciforce.robin.graph.view.CellState;
+import com.sciforce.robin.graph.view.Graph;
+import com.sciforce.robin.graph.view.Graph.mxICellVisitor;
+import com.sciforce.robin.graph.view.GraphView;
 
 /**
  * Implements a collection of utility methods for traversing the
@@ -195,7 +195,7 @@ public class Traversal
 
 		distances[vertexListStatic.indexOf(startVertex)] = 0;
 		CostFunction costFunction = aGraph.getGenerator().getCostFunction();
-		mxGraphView view = aGraph.getGraph().getView();
+		GraphView view = aGraph.getGraph().getView();
 
 		while (vertexList.size() > 0)
 		{
@@ -258,7 +258,7 @@ public class Traversal
 					double oldDistance = distances[neighborIndex];
 					double currEdgeWeight;
 
-					currEdgeWeight = costFunction.getCost(new mxCellState(view, connectingEdge, null));
+					currEdgeWeight = costFunction.getCost(new CellState(view, connectingEdge, null));
 
 					double newDistance = minDistance + currEdgeWeight;
 
@@ -301,7 +301,7 @@ public class Traversal
 	 */
 	public static List<Map<Object, Object>> bellmanFord(AnalysisGraph aGraph, Object startVertex) throws StructuralException
 	{
-		mxGraph graph = aGraph.getGraph();
+		Graph graph = aGraph.getGraph();
 		Object[] vertices = aGraph.getChildVertices(graph.getDefaultParent());
 		Object[] edges = aGraph.getChildEdges(graph.getDefaultParent());
 		int vertexNum = vertices.length;
@@ -309,7 +309,7 @@ public class Traversal
 		Map<Object, Object> distanceMap = new HashMap<Object, Object>();
 		Map<Object, Object> parentMap = new HashMap<Object, Object>();
 		CostFunction costFunction = aGraph.getGenerator().getCostFunction();
-		mxGraphView view = graph.getView();
+		GraphView view = graph.getView();
 
 		for (int i = 0; i < vertexNum; i++)
 		{
@@ -328,7 +328,7 @@ public class Traversal
 				Object source = aGraph.getTerminal(currEdge, true);
 				Object target = aGraph.getTerminal(currEdge, false);
 
-				double dist = (Double) distanceMap.get(source) + costFunction.getCost(new mxCellState(view, currEdge, null));
+				double dist = (Double) distanceMap.get(source) + costFunction.getCost(new CellState(view, currEdge, null));
 
 				if (dist < (Double) distanceMap.get(target))
 				{
@@ -339,7 +339,7 @@ public class Traversal
 				//for undirected graphs, check the reverse direction too
 				if (!GraphProperties.isDirected(aGraph.getProperties(), GraphProperties.DEFAULT_DIRECTED))
 				{
-					dist = (Double) distanceMap.get(target) + costFunction.getCost(new mxCellState(view, currEdge, null));
+					dist = (Double) distanceMap.get(target) + costFunction.getCost(new CellState(view, currEdge, null));
 
 					if (dist < (Double) distanceMap.get(source))
 					{
@@ -357,7 +357,7 @@ public class Traversal
 			Object source = aGraph.getTerminal(currEdge, true);
 			Object target = aGraph.getTerminal(currEdge, false);
 
-			double dist = (Double) distanceMap.get(source) + costFunction.getCost(new mxCellState(view, currEdge, null));
+			double dist = (Double) distanceMap.get(source) + costFunction.getCost(new CellState(view, currEdge, null));
 
 			if (dist < (Double) distanceMap.get(target))
 			{
@@ -443,7 +443,7 @@ public class Traversal
 
 		boolean isDirected = GraphProperties.isDirected(aGraph.getProperties(), GraphProperties.DEFAULT_DIRECTED);
 		CostFunction costFunction = aGraph.getGenerator().getCostFunction();
-		mxGraphView view = aGraph.getGraph().getView();
+		GraphView view = aGraph.getGraph().getView();
 
 		for (Object currEdge : edges)
 		{
@@ -498,7 +498,7 @@ public class Traversal
 		if (startVertex != targetVertex)
 		{
 			CostFunction cf = aGraph.getGenerator().getCostFunction();
-			mxGraphView view = aGraph.getGraph().getView();
+			GraphView view = aGraph.getGraph().getView();
 			ArrayList<Object> currPath = new ArrayList<Object>();
 			currPath.add(startVertex);
 
@@ -530,7 +530,7 @@ public class Traversal
 	 * @throws StructuralException
 	 */
 	private static ArrayList<Object> getWFIPathRec(AnalysisGraph aGraph, Object[][] paths, Object startVertex, Object targetVertex,
-												   ArrayList<Object> currPath, CostFunction cf, mxGraphView view) throws StructuralException
+												   ArrayList<Object> currPath, CostFunction cf, GraphView view) throws StructuralException
 	{
 		Double sourceIndexD = (Double) cf.getCost(view.getState(startVertex));
 		Object[] parents = paths[sourceIndexD.intValue()];

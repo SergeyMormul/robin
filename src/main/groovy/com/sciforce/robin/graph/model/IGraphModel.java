@@ -7,7 +7,7 @@ import com.sciforce.robin.graph.util.mxEventSource;
 import com.sciforce.robin.graph.util.mxUndoableEdit;
 
 /**
- * Defines the requirements for a graph model to be used with mxGraph.
+ * Defines the requirements for a graph model to be used with Graph.
  */
 public interface IGraphModel
 {

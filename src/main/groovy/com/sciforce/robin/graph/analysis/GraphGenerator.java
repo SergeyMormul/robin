@@ -13,9 +13,9 @@ import com.sciforce.robin.graph.generatorfunction.GeneratorFunction;
 import com.sciforce.robin.graph.generatorfunction.GeneratorRandomFunction;
 import com.sciforce.robin.graph.model.Geometry;
 import com.sciforce.robin.graph.model.IGraphModel;
-import com.sciforce.robin.graph.view.mxCellState;
-import com.sciforce.robin.graph.view.mxGraph;
-import com.sciforce.robin.graph.view.mxGraphView;
+import com.sciforce.robin.graph.view.CellState;
+import com.sciforce.robin.graph.view.Graph;
+import com.sciforce.robin.graph.view.GraphView;
 
 public class GraphGenerator
 {
@@ -58,7 +58,7 @@ public class GraphGenerator
 		{
 			throw new IllegalArgumentException();
 		}
-		mxGraph graph = aGraph.getGraph();
+		Graph graph = aGraph.getGraph();
 		Object parent = graph.getDefaultParent();
 
 		for (int i = 0; i < numVertices; i++)
@@ -79,7 +79,7 @@ public class GraphGenerator
 			throw new IllegalArgumentException();
 		}
 
-		mxGraph graph = aGraph.getGraph();
+		Graph graph = aGraph.getGraph();
 		Object parent = graph.getDefaultParent();
 		Object[] vertices = new Object[numVertices];
 		
@@ -117,7 +117,7 @@ public class GraphGenerator
 			throw new IllegalArgumentException();
 		}
 
-		mxGraph graph = aGraph.getGraph();
+		Graph graph = aGraph.getGraph();
 		Object parent = graph.getDefaultParent();
 		int numVertices = numColumns * numRows;
 		Object[] vertices = new Object[numVertices];
@@ -162,7 +162,7 @@ public class GraphGenerator
 	 */
 	public void setGridGraphSpacing(AnalysisGraph aGraph, double xSpacing, double ySpacing, int numColumns, int numRows)
 	{
-		mxGraph graph = aGraph.getGraph();
+		Graph graph = aGraph.getGraph();
 
 		if (xSpacing < 0 || ySpacing < 0 || numColumns < 1 || numRows < 1)
 		{
@@ -199,7 +199,7 @@ public class GraphGenerator
 		}
 
 		int numVertices = numVerticesGroup1 + numVerticesGroup2;
-		mxGraph graph = aGraph.getGraph();
+		Graph graph = aGraph.getGraph();
 		Object parent = graph.getDefaultParent();
 		Object[] vertices = new Object[numVertices];
 		
@@ -245,7 +245,7 @@ public class GraphGenerator
 			throw new IllegalArgumentException();
 		}
 
-		mxGraph graph = aGraph.getGraph();
+		Graph graph = aGraph.getGraph();
 		double group1StartY = 0;
 		double group2StartY = 0;
 		Object parent = graph.getDefaultParent();
@@ -297,7 +297,7 @@ public class GraphGenerator
 		}
 
 		int numVertices = numVerticesGroup1 + numVerticesGroup2;
-		mxGraph graph = aGraph.getGraph();
+		Graph graph = aGraph.getGraph();
 		Object parent = graph.getDefaultParent();
 		Object[] vertices = new Object[numVertices];
 		
@@ -332,7 +332,7 @@ public class GraphGenerator
 		}
 
 		int numVertices = xDim * yDim;
-		mxGraph graph = aGraph.getGraph();
+		Graph graph = aGraph.getGraph();
 		Object parent = graph.getDefaultParent();
 		Object[] vertices = new Object[numVertices];
 		
@@ -378,7 +378,7 @@ public class GraphGenerator
 			throw new IllegalArgumentException();
 		}
 
-		mxGraph graph = aGraph.getGraph();
+		Graph graph = aGraph.getGraph();
 		Object[] vertices = aGraph.getChildVertices(graph.getDefaultParent());
 
 		//check all possible 8 locations
@@ -538,7 +538,7 @@ public class GraphGenerator
 		}
 
 		int numVertices = xDim * yDim;
-		mxGraph graph = aGraph.getGraph();
+		Graph graph = aGraph.getGraph();
 		Object parent = graph.getDefaultParent();
 		Object[] vertices = new Object[numVertices];
 		
@@ -584,7 +584,7 @@ public class GraphGenerator
 			throw new IllegalArgumentException();
 		}
 
-		mxGraph graph = aGraph.getGraph();
+		Graph graph = aGraph.getGraph();
 		Object[] vertices = aGraph.getChildVertices(graph.getDefaultParent());
 
 		//check all possible 8 locations
@@ -681,7 +681,7 @@ public class GraphGenerator
 	 */
 	public void getPetersenGraph(AnalysisGraph aGraph)
 	{
-		mxGraph graph = aGraph.getGraph();
+		Graph graph = aGraph.getGraph();
 		Object parent = graph.getDefaultParent();
 		Object[] vertices = new Object[10];
 		
@@ -719,7 +719,7 @@ public class GraphGenerator
 			throw new IllegalArgumentException();
 		}
 
-		mxGraph graph = aGraph.getGraph();
+		Graph graph = aGraph.getGraph();
 		Object parent = graph.getDefaultParent();
 		Object[] vertices = new Object[numVertices];
 		
@@ -747,7 +747,7 @@ public class GraphGenerator
 			throw new IllegalArgumentException();
 		}
 
-		mxGraph graph = aGraph.getGraph();
+		Graph graph = aGraph.getGraph();
 		Object parent = graph.getDefaultParent();
 		Object[] vertices = aGraph.getChildVertices(parent);
 		IGraphModel model = graph.getModel();
@@ -775,7 +775,7 @@ public class GraphGenerator
 			throw new IllegalArgumentException();
 		}
 
-		mxGraph graph = aGraph.getGraph();
+		Graph graph = aGraph.getGraph();
 		Object parent = graph.getDefaultParent();
 		Object[] vertices = new Object[numVertices];
 		
@@ -804,7 +804,7 @@ public class GraphGenerator
 			throw new IllegalArgumentException();
 		}
 
-		mxGraph graph = aGraph.getGraph();
+		Graph graph = aGraph.getGraph();
 		Object parent = graph.getDefaultParent();
 		Object[] vertices = aGraph.getChildVertices(parent);
 		IGraphModel model = graph.getModel();
@@ -848,7 +848,7 @@ public class GraphGenerator
 			throw new IllegalArgumentException();
 		}
 
-		mxGraph graph = aGraph.getGraph();
+		Graph graph = aGraph.getGraph();
 		Object parent = graph.getDefaultParent();
 		Object[] vertices = new Object[numVertices];
 		
@@ -887,7 +887,7 @@ public class GraphGenerator
 			throw new IllegalArgumentException();
 		}
 
-		mxGraph graph = aGraph.getGraph();
+		Graph graph = aGraph.getGraph();
 		Object parent = graph.getDefaultParent();
 		int numVertices = numBranches * branchSize + 1;
 		Object[] vertices = new Object[numVertices];
@@ -934,7 +934,7 @@ public class GraphGenerator
 			throw new IllegalArgumentException();
 		}
 
-		mxGraph graph = aGraph.getGraph();
+		Graph graph = aGraph.getGraph();
 		Object parent = graph.getDefaultParent();
 		int numVertices = numBranches * branchSize + 1;
 		Object[] vertices = new Object[numVertices];
@@ -992,7 +992,7 @@ public class GraphGenerator
 			throw new IllegalArgumentException();
 		}
 
-		mxGraph graph = aGraph.getGraph();
+		Graph graph = aGraph.getGraph();
 		Object parent = graph.getDefaultParent();
 		Object[] vertices = aGraph.getChildVertices(parent);
 		IGraphModel model = graph.getModel();
@@ -1108,7 +1108,7 @@ public class GraphGenerator
 	public void getSimpleRandomGraph(AnalysisGraph aGraph, int numNodes, int numEdges, boolean allowSelfLoops,
 									 boolean allowMultipleEdges, boolean forceConnected)
 	{
-		mxGraph graph = aGraph.getGraph();
+		Graph graph = aGraph.getGraph();
 		Object parent = graph.getDefaultParent();
 		Object[] vertices = new Object[numNodes];
 		
@@ -1190,7 +1190,7 @@ public class GraphGenerator
 	{
 		if (getGeneratorFunction() != null)
 		{
-			mxGraph graph = aGraph.getGraph();
+			Graph graph = aGraph.getGraph();
 			return getGeneratorFunction().getCost(graph.getView().getState(graph.getDefaultParent()));
 		}
 		else
@@ -1206,7 +1206,7 @@ public class GraphGenerator
 	 * @param maxWeight maximum edge weight if weighted
 	 * @return a generator function
 	 */
-	public static GeneratorFunction getGeneratorFunction(mxGraph graph, boolean weighted, double minWeight, double maxWeight)
+	public static GeneratorFunction getGeneratorFunction(Graph graph, boolean weighted, double minWeight, double maxWeight)
 	{
 		if (weighted)
 		{
@@ -1256,7 +1256,7 @@ public class GraphGenerator
 	 */
 	public void oneSpanningTree(AnalysisGraph aGraph, boolean forceConnected, boolean forceSimple) throws StructuralException
 	{
-		mxGraph graph = aGraph.getGraph();
+		Graph graph = aGraph.getGraph();
 
 		boolean isSimple = GraphStructure.isSimple(aGraph);
 		boolean isConnected = GraphStructure.isConnected(aGraph);
@@ -1319,7 +1319,7 @@ public class GraphGenerator
 		ArrayList<Object> resultPath = new ArrayList<Object>();
 		int vertexNum = xDim * yDim;
 
-		mxGraph graph = aGraph.getGraph();
+		Graph graph = aGraph.getGraph();
 		Object parent = graph.getDefaultParent();
 		int vertexCount = 0;
 
@@ -1340,7 +1340,7 @@ public class GraphGenerator
 		resultPath.add(oldMove);
 		Object nextMove = getNextKnightMove(aGraph, xDim, yDim, currCoords[0], currCoords[1], resultPath);
 		CostFunction costFunction = aGraph.getGenerator().getCostFunction();
-		mxGraphView view = graph.getView();
+		GraphView view = graph.getView();
 		
 		//the main loop
 		while (nextMove != null)
@@ -1350,7 +1350,7 @@ public class GraphGenerator
 			resultPath.add(nextMove);
 			// that vertex becomes the current vertex and we repeat until no possible moves
 			
-			currValue = (int) costFunction.getCost(new mxCellState(view, nextMove, null));
+			currValue = (int) costFunction.getCost(new CellState(view, nextMove, null));
 			currCoords = getVertexGridCoords(xDim, yDim, currValue);
 			oldMove = nextMove;
 			nextMove = getNextKnightMove(aGraph, xDim, yDim, currCoords[0], currCoords[1], resultPath);
@@ -1382,11 +1382,11 @@ public class GraphGenerator
 		float biggestDistance = 0;
 		Object currVertex = null;
 		CostFunction costFunction = aGraph.getGenerator().getCostFunction();
-		mxGraphView view = aGraph.getGraph().getView();
+		GraphView view = aGraph.getGraph().getView();
 		
 		for (int i = 0; i < possibleMoves.length; i++)
 		{
-			int currValue = (int) costFunction.getCost(new mxCellState(view, possibleMoves[i], null));
+			int currValue = (int) costFunction.getCost(new CellState(view, possibleMoves[i], null));
 			int[] currCoords = getVertexGridCoords(xDim, yDim, currValue);
 			int currMoveNum = getPossibleKnightMoveCount(aGraph, xDim, yDim, currCoords[0], currCoords[1]);
 			float currDistance = getDistanceFromGridCenter(xDim, yDim, currValue);

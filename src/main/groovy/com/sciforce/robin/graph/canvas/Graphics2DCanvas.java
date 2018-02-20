@@ -50,7 +50,7 @@ import com.sciforce.robin.graph.shape.mxTriangleShape;
 import com.sciforce.robin.graph.swing.util.mxSwingConstants;
 import com.sciforce.robin.graph.util.mxPoint;
 import com.sciforce.robin.graph.util.mxRectangle;
-import com.sciforce.robin.graph.view.mxCellState;
+import com.sciforce.robin.graph.view.CellState;
 
 /**
  * An implementation of a canvas that uses Graphics2D for painting.
@@ -227,7 +227,7 @@ public class Graphics2DCanvas extends BasicCanvas
 	 * (non-Javadoc)
 	 * @see ICanvas#drawCell()
 	 */
-	public Object drawCell(mxCellState state)
+	public Object drawCell(CellState state)
 	{
 		Map<String, Object> style = state.getStyle();
 		mxIShape shape = getShape(style);
@@ -253,7 +253,7 @@ public class Graphics2DCanvas extends BasicCanvas
 	 * (non-Javadoc)
 	 * @see ICanvas#drawLabel()
 	 */
-	public Object drawLabel(String text, mxCellState state, boolean html)
+	public Object drawLabel(String text, CellState state, boolean html)
 	{
 		Map<String, Object> style = state.getStyle();
 		mxITextShape shape = getTextShape(style, html);

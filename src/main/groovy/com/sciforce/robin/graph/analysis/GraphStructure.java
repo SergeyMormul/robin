@@ -13,10 +13,10 @@ import com.sciforce.robin.graph.costfunction.CostFunction;
 import com.sciforce.robin.graph.model.Cell;
 import com.sciforce.robin.graph.model.GraphModel;
 import com.sciforce.robin.graph.model.IGraphModel;
-import com.sciforce.robin.graph.view.mxCellState;
-import com.sciforce.robin.graph.view.mxGraph;
-import com.sciforce.robin.graph.view.mxGraph.mxICellVisitor;
-import com.sciforce.robin.graph.view.mxGraphView;
+import com.sciforce.robin.graph.view.CellState;
+import com.sciforce.robin.graph.view.Graph;
+import com.sciforce.robin.graph.view.Graph.mxICellVisitor;
+import com.sciforce.robin.graph.view.GraphView;
 
 public class GraphStructure
 {
@@ -109,11 +109,11 @@ public class GraphStructure
 	 */
 	public static boolean isCyclicUndirected(AnalysisGraph aGraph)
 	{
-		mxGraph graph = aGraph.getGraph();
+		Graph graph = aGraph.getGraph();
 		IGraphModel model = graph.getModel();
 		Object[] cells = model.cloneCells(aGraph.getChildCells(graph.getDefaultParent(), true, true), true);
 		GraphModel modelCopy = new GraphModel();
-		mxGraph graphCopy = new mxGraph(modelCopy);
+		Graph graphCopy = new Graph(modelCopy);
 		Object parentCopy = graphCopy.getDefaultParent();
 		graphCopy.addCells(cells);
 		//		AnalysisGraph aGraphCopy = new AnalysisGraph(graphCopy, aGraph.getGenerator(), aGraph.getProperties());
@@ -295,7 +295,7 @@ public class GraphStructure
 	{
 		// remove all self-loops
 		// reduce all valences >1 to 1
-		mxGraph graph = aGraph.getGraph();
+		Graph graph = aGraph.getGraph();
 		Object parent = graph.getDefaultParent();
 
 		Object[] edges = aGraph.getChildEdges(parent);
@@ -359,7 +359,7 @@ public class GraphStructure
 			return;
 		}
 
-		mxGraph graph = aGraph.getGraph();
+		Graph graph = aGraph.getGraph();
 		Object parent = graph.getDefaultParent();
 
 		// find a random vertex in each group and connect them.
@@ -454,7 +454,7 @@ public class GraphStructure
 		{
 			GraphProperties.setDirected(aGraph.getProperties(), false);
 			final ArrayList<Object> bFSList = new ArrayList<Object>();
-			mxGraph graph = aGraph.getGraph();
+			Graph graph = aGraph.getGraph();
 			final IGraphModel model = graph.getModel();
 			Object parent = graph.getDefaultParent();
 
@@ -536,11 +536,11 @@ public class GraphStructure
 	 */
 	public static boolean isCyclicDirected(AnalysisGraph aGraph)
 	{
-		mxGraph graph = aGraph.getGraph();
+		Graph graph = aGraph.getGraph();
 		IGraphModel model = graph.getModel();
 		Object[] cells = model.cloneCells(aGraph.getChildCells(graph.getDefaultParent(), true, true), true);
 		GraphModel modelCopy = new GraphModel();
-		mxGraph graphCopy = new mxGraph(modelCopy);
+		Graph graphCopy = new Graph(modelCopy);
 		Object parentCopy = graphCopy.getDefaultParent();
 		graphCopy.addCells(cells);
 		AnalysisGraph aGraphCopy = new AnalysisGraph();
@@ -606,7 +606,7 @@ public class GraphStructure
 	public static void complementaryGraph(AnalysisGraph aGraph)
 	{
 		ArrayList<ArrayList<Cell>> oldConnections = new ArrayList<ArrayList<Cell>>();
-		mxGraph graph = aGraph.getGraph();
+		Graph graph = aGraph.getGraph();
 		Object parent = graph.getDefaultParent();
 		//replicate the edge connections in oldConnections
 		Object[] vertices = aGraph.getChildVertices(parent);
@@ -684,20 +684,20 @@ public class GraphStructure
 	 */
 	public static Object getVertexWithValue(AnalysisGraph aGraph, int value)
 	{
-		mxGraph graph = aGraph.getGraph();
+		Graph graph = aGraph.getGraph();
 
 		Object[] vertices = aGraph.getChildVertices(aGraph.getGraph().getDefaultParent());
 
 		int childNum = vertices.length;
 		int vertexValue = 0;
 		CostFunction costFunction = aGraph.getGenerator().getCostFunction();
-		mxGraphView view = graph.getView();
+		GraphView view = graph.getView();
 
 		for (int i = 0; i < childNum; i++)
 		{
 			Object currVertex = vertices[i];
 
-			vertexValue = (int) costFunction.getCost(new mxCellState(view, currVertex, null));
+			vertexValue = (int) costFunction.getCost(new CellState(view, currVertex, null));
 
 			if (vertexValue == value)
 			{
@@ -714,7 +714,7 @@ public class GraphStructure
 	 */
 	public static void setDefaultGraphStyle(AnalysisGraph aGraph, boolean resetEdgeValues)
 	{
-		mxGraph graph = aGraph.getGraph();
+		Graph graph = aGraph.getGraph();
 		Object parent = graph.getDefaultParent();
 		Object[] vertices = aGraph.getChildVertices(parent);
 		IGraphModel model = graph.getModel();
@@ -763,7 +763,7 @@ public class GraphStructure
 	 */
 	public static int regularity(AnalysisGraph aGraph) throws StructuralException
 	{
-		mxGraph graph = aGraph.getGraph();
+		Graph graph = aGraph.getGraph();
 		Object[] vertices = aGraph.getChildVertices(graph.getDefaultParent());
 		int vertexCount = vertices.length;
 		Object currVertex = vertices[0];
@@ -828,14 +828,14 @@ public class GraphStructure
 	 */
 	public static boolean isCutVertex(AnalysisGraph aGraph, Object vertex)
 	{
-		mxGraph graph = aGraph.getGraph();
+		Graph graph = aGraph.getGraph();
 		IGraphModel model = graph.getModel();
 
 		if (aGraph.getEdges(vertex, null, true, true, false, true).length >= 2)
 		{
 			Object[] cells = model.cloneCells(aGraph.getChildCells(graph.getDefaultParent(), true, true), true);
 			GraphModel modelCopy = new GraphModel();
-			mxGraph graphCopy = new mxGraph(modelCopy);
+			Graph graphCopy = new Graph(modelCopy);
 			graphCopy.addCells(cells);
 			AnalysisGraph aGraphCopy = new AnalysisGraph();
 			aGraphCopy.setGraph(graphCopy);
@@ -843,7 +843,7 @@ public class GraphStructure
 			aGraphCopy.setProperties(aGraph.getProperties());
 
 			Object newVertex = getVertexWithValue(aGraphCopy,
-					(int) aGraph.getGenerator().getCostFunction().getCost(new mxCellState(graph.getView(), vertex, null)));
+					(int) aGraph.getGenerator().getCostFunction().getCost(new CellState(graph.getView(), vertex, null)));
 
 			graphCopy.removeCells(new Object[] { newVertex }, true);
 			Object[][] oldComponents = getGraphComponents(aGraph);
@@ -886,19 +886,19 @@ public class GraphStructure
 	 */
 	public static boolean isCutEdge(AnalysisGraph aGraph, Object edge)
 	{
-		mxGraph graph = aGraph.getGraph();
+		Graph graph = aGraph.getGraph();
 		IGraphModel model = graph.getModel();
 		CostFunction costFunction = aGraph.getGenerator().getCostFunction();
-		mxGraphView view = graph.getView();
+		GraphView view = graph.getView();
 
-		int srcValue = (int) costFunction.getCost(new mxCellState(view, aGraph.getTerminal(edge, true), null));
-		int destValue = (int) costFunction.getCost(new mxCellState(view, aGraph.getTerminal(edge, false), null));
+		int srcValue = (int) costFunction.getCost(new CellState(view, aGraph.getTerminal(edge, true), null));
+		int destValue = (int) costFunction.getCost(new CellState(view, aGraph.getTerminal(edge, false), null));
 
 		if (aGraph.getTerminal(edge, false) != null || aGraph.getTerminal(edge, true) != null)
 		{
 			Object[] cells = model.cloneCells(aGraph.getChildCells(graph.getDefaultParent(), true, true), true);
 			GraphModel modelCopy = new GraphModel();
-			mxGraph graphCopy = new mxGraph(modelCopy);
+			Graph graphCopy = new Graph(modelCopy);
 			graphCopy.addCells(cells);
 			AnalysisGraph aGraphCopy = new AnalysisGraph();
 			aGraphCopy.setGraph(graphCopy);
@@ -908,10 +908,10 @@ public class GraphStructure
 			Object[] edges = aGraphCopy.getChildEdges(aGraphCopy.getGraph().getDefaultParent());
 			Object currEdge = edges[0];
 			CostFunction costFunctionCopy = aGraphCopy.getGenerator().getCostFunction();
-			mxGraphView viewCopy = graphCopy.getView();
+			GraphView viewCopy = graphCopy.getView();
 
-			int currSrcValue = (int) costFunctionCopy.getCost(new mxCellState(viewCopy, aGraphCopy.getTerminal(currEdge, true), null));
-			int currDestValue = (int) costFunctionCopy.getCost(new mxCellState(viewCopy, aGraphCopy.getTerminal(currEdge, false), null));
+			int currSrcValue = (int) costFunctionCopy.getCost(new CellState(viewCopy, aGraphCopy.getTerminal(currEdge, true), null));
+			int currDestValue = (int) costFunctionCopy.getCost(new CellState(viewCopy, aGraphCopy.getTerminal(currEdge, false), null));
 			int i = 0;
 
 			while (currSrcValue != srcValue || currDestValue != destValue)

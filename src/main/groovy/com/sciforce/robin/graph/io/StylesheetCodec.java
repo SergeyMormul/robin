@@ -11,7 +11,7 @@ import com.sciforce.robin.graph.util.mxUtils;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-import com.sciforce.robin.graph.view.mxStylesheet;
+import com.sciforce.robin.graph.view.Stylesheet;
 
 /**
  * Codec for mxStylesheets. This class is created and registered
@@ -26,7 +26,7 @@ public class StylesheetCodec extends ObjectCodec
 	 */
 	public StylesheetCodec()
 	{
-		this(new mxStylesheet());
+		this(new Stylesheet());
 	}
 
 	/**
@@ -47,15 +47,15 @@ public class StylesheetCodec extends ObjectCodec
 	}
 
 	/**
-	 * Encodes the given mxStylesheet.
+	 * Encodes the given Stylesheet.
 	 */
 	public Node encode(Codec enc, Object obj)
 	{
 		Element node = enc.document.createElement(getName());
 
-		if (obj instanceof mxStylesheet)
+		if (obj instanceof Stylesheet)
 		{
-			mxStylesheet stylesheet = (mxStylesheet) obj;
+			Stylesheet stylesheet = (Stylesheet) obj;
 			Iterator<Map.Entry<String, Map<String, Object>>> it = stylesheet
 					.getStyles().entrySet().iterator();
 
@@ -105,7 +105,7 @@ public class StylesheetCodec extends ObjectCodec
 	}
 
 	/**
-	 * Decodes the given mxStylesheet.
+	 * Decodes the given Stylesheet.
 	 */
 	public Object decode(Codec dec, Node node, Object into)
 	{
@@ -144,7 +144,7 @@ public class StylesheetCodec extends ObjectCodec
 					if (as != null && as.length() > 0)
 					{
 						String extend = ((Element) node).getAttribute("extend");
-						Map<String, Object> style = (extend != null) ? ((mxStylesheet) obj)
+						Map<String, Object> style = (extend != null) ? ((Stylesheet) obj)
 								.getStyles().get(extend) : null;
 
 						if (style == null)
@@ -195,7 +195,7 @@ public class StylesheetCodec extends ObjectCodec
 							entry = entry.getNextSibling();
 						}
 
-						((mxStylesheet) obj).putCellStyle(as, style);
+						((Stylesheet) obj).putCellStyle(as, style);
 					}
 				}
 

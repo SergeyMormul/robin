@@ -9,7 +9,7 @@ import java.awt.image.BufferedImage;
 
 import com.sciforce.robin.graph.util.mxUtils;
 import com.sciforce.robin.graph.util.mxPoint;
-import com.sciforce.robin.graph.view.mxCellState;
+import com.sciforce.robin.graph.view.CellState;
 
 /**
  * An implementation of a canvas that uses Graphics2D for painting. To use an
@@ -82,7 +82,7 @@ public class ImageCanvas implements ICanvas
 	/**
 	 * 
 	 */
-	public Object drawCell(mxCellState state)
+	public Object drawCell(CellState state)
 	{
 		return canvas.drawCell(state);
 	}
@@ -90,7 +90,7 @@ public class ImageCanvas implements ICanvas
 	/**
 	 * 
 	 */
-	public Object drawLabel(String label, mxCellState state, boolean html)
+	public Object drawLabel(String label, CellState state, boolean html)
 	{
 		return canvas.drawLabel(label, state, html);
 	}

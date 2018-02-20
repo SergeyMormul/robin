@@ -4,7 +4,7 @@
 package com.sciforce.robin.graph.canvas;
 
 import com.sciforce.robin.graph.util.mxPoint;
-import com.sciforce.robin.graph.view.mxCellState;
+import com.sciforce.robin.graph.view.CellState;
 
 /**
  * Defines the requirements for a canvas that paints the vertices and edges of
@@ -40,7 +40,7 @@ public interface ICanvas
 	 * @param state State of the cell to be painted.
 	 * @return Object that represents the cell.
 	 */
-	Object drawCell(mxCellState state);
+	Object drawCell(CellState state);
 
 	/**
 	 * Draws the given label.
@@ -50,6 +50,6 @@ public interface ICanvas
 	 * @param html Specifies if the label contains HTML markup.
 	 * @return Object that represents the label.
 	 */
-	Object drawLabel(String text, mxCellState state, boolean html);
+	Object drawLabel(String text, CellState state, boolean html);
 
 }

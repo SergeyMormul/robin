@@ -3,7 +3,7 @@
  */
 package com.sciforce.robin.graph.analysis;
 
-import com.sciforce.robin.graph.view.mxCellState;
+import com.sciforce.robin.graph.view.CellState;
 
 /**
  * Implements a cost function for a constant cost per traversed cell.
@@ -28,7 +28,7 @@ public class ConstantCostFunction implements ICostFunction
 	/**
 	 *
 	 */
-	public double getCost(mxCellState state)
+	public double getCost(CellState state)
 	{
 		return cost;
 	}

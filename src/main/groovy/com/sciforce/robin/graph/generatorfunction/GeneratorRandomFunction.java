@@ -3,7 +3,7 @@
  */
 package com.sciforce.robin.graph.generatorfunction;
 
-import com.sciforce.robin.graph.view.mxCellState;
+import com.sciforce.robin.graph.view.CellState;
 
 /**
  * A generator random cost function
@@ -23,7 +23,7 @@ public class GeneratorRandomFunction extends GeneratorFunction
 		setRoundToDecimals(roundToDecimals);
 	};
 
-	public double getCost(mxCellState state)
+	public double getCost(CellState state)
 	{
 		Double edgeWeight = null;
 

@@ -17,13 +17,13 @@ import java.util.logging.Logger;
 
 import com.sciforce.robin.graph.util.mxConstants;
 import com.sciforce.robin.graph.util.mxUtils;
+import com.sciforce.robin.graph.view.CellState;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.sciforce.robin.graph.util.mxBase64;
 import com.sciforce.robin.graph.util.mxPoint;
 import com.sciforce.robin.graph.util.mxRectangle;
-import com.sciforce.robin.graph.view.mxCellState;
 
 /**
  * An implementation of a canvas that uses SVG for painting. This canvas
@@ -492,7 +492,7 @@ public class SvgCanvas extends BasicCanvas
 	 * (non-Javadoc)
 	 * @see ICanvas#drawCell()
 	 */
-	public Object drawCell(mxCellState state)
+	public Object drawCell(CellState state)
 	{
 		Map<String, Object> style = state.getStyle();
 		Element elem = null;
@@ -568,7 +568,7 @@ public class SvgCanvas extends BasicCanvas
 	 * (non-Javadoc)
 	 * @see ICanvas#drawLabel()
 	 */
-	public Object drawLabel(String label, mxCellState state, boolean html)
+	public Object drawLabel(String label, CellState state, boolean html)
 	{
 		mxRectangle bounds = state.getLabelBounds();
 

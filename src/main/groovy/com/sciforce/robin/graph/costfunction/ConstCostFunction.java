@@ -3,7 +3,7 @@
  */
 package com.sciforce.robin.graph.costfunction;
 
-import com.sciforce.robin.graph.view.mxCellState;
+import com.sciforce.robin.graph.view.CellState;
 
 /**
  * A constant cost function that returns <b>const</b> regardless of edge value
@@ -17,7 +17,7 @@ public class ConstCostFunction extends CostFunction
 		this.cost = cost;
 	};
 	
-	public double getCost(mxCellState state)
+	public double getCost(CellState state)
 	{
 		return cost;
 	};
