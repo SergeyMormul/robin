@@ -24,14 +24,14 @@ import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.sciforce.robin.graph.canvas.GraphicsCanvas2D;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
-import com.sciforce.robin.graph.canvas.mxGraphicsCanvas2D;
-import com.sciforce.robin.graph.canvas.mxICanvas2D;
+import com.sciforce.robin.graph.canvas.ICanvas2D;
 import com.sciforce.robin.graph.util.mxUtils;
 import com.sciforce.robin.graph.reader.mxSaxOutputHandler;
 
@@ -222,7 +222,7 @@ public class ExportPDFService {
         PdfWriter writer = PdfWriter.getInstance(document, response.getOutputStream());
         document.open();
 
-        mxGraphicsCanvas2D gc = createCanvas( url, new PdfGraphics2D( writer.getDirectContent(), w, h ));
+        GraphicsCanvas2D gc = createCanvas( url, new PdfGraphics2D( writer.getDirectContent(), w, h ));
 
         // Fixes PDF offset
         gc.translate(1, 1);
@@ -237,7 +237,7 @@ public class ExportPDFService {
     /**
      * Renders the XML to the given canvas.
      */
-    protected void renderXml(String xml, mxICanvas2D canvas) throws SAXException, ParserConfigurationException, IOException
+    protected void renderXml(String xml, ICanvas2D canvas) throws SAXException, ParserConfigurationException, IOException
     {
         XMLReader reader = parserFactory.newSAXParser().getXMLReader();
         reader.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
@@ -251,13 +251,13 @@ public class ExportPDFService {
     /**
      * Creates a graphics canvas with an image cache.
      */
-    protected mxGraphicsCanvas2D createCanvas(String url, Graphics2D g2)
+    protected GraphicsCanvas2D createCanvas(String url, Graphics2D g2)
     {
         // Caches custom images for the time of the request
         final Hashtable<String, Image> shortCache = new Hashtable<String, Image>();
         final String domain = url.substring(0, url.lastIndexOf("/"));
 
-        mxGraphicsCanvas2D g2c = new mxGraphicsCanvas2D(g2)
+        GraphicsCanvas2D g2c = new GraphicsCanvas2D(g2)
         {
             public Image loadImage(String src)
             {
