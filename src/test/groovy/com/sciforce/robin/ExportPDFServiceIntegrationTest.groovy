@@ -1,3 +1,6 @@
+/*
+ * Copyright (c) 2018 Sciforce Solutions.
+ */
 package com.sciforce.robin
 
 import org.springframework.beans.factory.annotation.Autowired
