@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.sciforce.robin.graph.costfunction.mxCostFunction;
+import com.sciforce.robin.graph.costfunction.CostFunction;
 import com.sciforce.robin.graph.model.mxGraphModel;
 import com.sciforce.robin.graph.model.mxCell;
 import com.sciforce.robin.graph.model.mxIGraphModel;
@@ -690,7 +690,7 @@ public class GraphStructure
 
 		int childNum = vertices.length;
 		int vertexValue = 0;
-		mxCostFunction costFunction = aGraph.getGenerator().getCostFunction();
+		CostFunction costFunction = aGraph.getGenerator().getCostFunction();
 		mxGraphView view = graph.getView();
 
 		for (int i = 0; i < childNum; i++)
@@ -888,7 +888,7 @@ public class GraphStructure
 	{
 		mxGraph graph = aGraph.getGraph();
 		mxIGraphModel model = graph.getModel();
-		mxCostFunction costFunction = aGraph.getGenerator().getCostFunction();
+		CostFunction costFunction = aGraph.getGenerator().getCostFunction();
 		mxGraphView view = graph.getView();
 
 		int srcValue = (int) costFunction.getCost(new mxCellState(view, aGraph.getTerminal(edge, true), null));
@@ -907,7 +907,7 @@ public class GraphStructure
 
 			Object[] edges = aGraphCopy.getChildEdges(aGraphCopy.getGraph().getDefaultParent());
 			Object currEdge = edges[0];
-			mxCostFunction costFunctionCopy = aGraphCopy.getGenerator().getCostFunction();
+			CostFunction costFunctionCopy = aGraphCopy.getGenerator().getCostFunction();
 			mxGraphView viewCopy = graphCopy.getView();
 
 			int currSrcValue = (int) costFunctionCopy.getCost(new mxCellState(viewCopy, aGraphCopy.getTerminal(currEdge, true), null));

@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.sciforce.robin.graph.costfunction.mxCostFunction;
+import com.sciforce.robin.graph.costfunction.CostFunction;
 import com.sciforce.robin.graph.view.mxCellState;
 import com.sciforce.robin.graph.view.mxGraph;
 import com.sciforce.robin.graph.view.mxGraph.mxICellVisitor;
@@ -194,7 +194,7 @@ public class Traversal
 		}
 
 		distances[vertexListStatic.indexOf(startVertex)] = 0;
-		mxCostFunction costFunction = aGraph.getGenerator().getCostFunction();
+		CostFunction costFunction = aGraph.getGenerator().getCostFunction();
 		mxGraphView view = aGraph.getGraph().getView();
 
 		while (vertexList.size() > 0)
@@ -308,7 +308,7 @@ public class Traversal
 		int edgeNum = edges.length;
 		Map<Object, Object> distanceMap = new HashMap<Object, Object>();
 		Map<Object, Object> parentMap = new HashMap<Object, Object>();
-		mxCostFunction costFunction = aGraph.getGenerator().getCostFunction();
+		CostFunction costFunction = aGraph.getGenerator().getCostFunction();
 		mxGraphView view = graph.getView();
 
 		for (int i = 0; i < vertexNum; i++)
@@ -442,7 +442,7 @@ public class Traversal
 		}
 
 		boolean isDirected = GraphProperties.isDirected(aGraph.getProperties(), GraphProperties.DEFAULT_DIRECTED);
-		mxCostFunction costFunction = aGraph.getGenerator().getCostFunction();
+		CostFunction costFunction = aGraph.getGenerator().getCostFunction();
 		mxGraphView view = aGraph.getGraph().getView();
 
 		for (Object currEdge : edges)
@@ -497,7 +497,7 @@ public class Traversal
 
 		if (startVertex != targetVertex)
 		{
-			mxCostFunction cf = aGraph.getGenerator().getCostFunction();
+			CostFunction cf = aGraph.getGenerator().getCostFunction();
 			mxGraphView view = aGraph.getGraph().getView();
 			ArrayList<Object> currPath = new ArrayList<Object>();
 			currPath.add(startVertex);
@@ -530,7 +530,7 @@ public class Traversal
 	 * @throws StructuralException
 	 */
 	private static ArrayList<Object> getWFIPathRec(AnalysisGraph aGraph, Object[][] paths, Object startVertex, Object targetVertex,
-												   ArrayList<Object> currPath, mxCostFunction cf, mxGraphView view) throws StructuralException
+												   ArrayList<Object> currPath, CostFunction cf, mxGraphView view) throws StructuralException
 	{
 		Double sourceIndexD = (Double) cf.getCost(view.getState(startVertex));
 		Object[] parents = paths[sourceIndexD.intValue()];

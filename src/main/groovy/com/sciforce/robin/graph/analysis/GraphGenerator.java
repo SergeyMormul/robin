@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.sciforce.robin.graph.costfunction.mxDoubleValCostFunction;
-import com.sciforce.robin.graph.costfunction.mxCostFunction;
+import com.sciforce.robin.graph.costfunction.DoubleValCostFunction;
+import com.sciforce.robin.graph.costfunction.CostFunction;
 import com.sciforce.robin.graph.generatorfunction.mxGeneratorFunction;
 import com.sciforce.robin.graph.generatorfunction.mxGeneratorRandomFunction;
 import com.sciforce.robin.graph.model.mxGeometry;
@@ -32,9 +32,9 @@ public class GraphGenerator
 	//	private mxGeneratorFunction generatorFunction = new mxGeneratorRandomIntFunction(0, 20);
 	private mxGeneratorFunction generatorFunction = null;
 
-	private mxCostFunction costFunction = null;
+	private CostFunction costFunction = null;
 
-	public GraphGenerator(mxGeneratorFunction generatorFunction, mxCostFunction costFunction)
+	public GraphGenerator(mxGeneratorFunction generatorFunction, CostFunction costFunction)
 	{
 		if (generatorFunction != null)
 		{
@@ -47,7 +47,7 @@ public class GraphGenerator
 		}
 		else
 		{
-			this.costFunction = new mxDoubleValCostFunction();
+			this.costFunction = new DoubleValCostFunction();
 		}
 	};
 
@@ -1343,7 +1343,7 @@ public class GraphGenerator
 		currCoords = getVertexGridCoords(xDim, yDim, startVertexValue);
 		resultPath.add(oldMove);
 		Object nextMove = getNextKnightMove(aGraph, xDim, yDim, currCoords[0], currCoords[1], resultPath);
-		mxCostFunction costFunction = aGraph.getGenerator().getCostFunction();
+		CostFunction costFunction = aGraph.getGenerator().getCostFunction();
 		mxGraphView view = graph.getView();
 		
 		//the main loop
@@ -1385,7 +1385,7 @@ public class GraphGenerator
 		int minMoveNum = 9;
 		float biggestDistance = 0;
 		Object currVertex = null;
-		mxCostFunction costFunction = aGraph.getGenerator().getCostFunction();
+		CostFunction costFunction = aGraph.getGenerator().getCostFunction();
 		mxGraphView view = aGraph.getGraph().getView();
 		
 		for (int i = 0; i < possibleMoves.length; i++)
@@ -1539,12 +1539,12 @@ public class GraphGenerator
 		return (float) Math.sqrt(x * x + y * y);
 	}
 
-	public mxCostFunction getCostFunction()
+	public CostFunction getCostFunction()
 	{
 		return costFunction;
 	}
 
-	public void setCostFunction(mxCostFunction costFunction)
+	public void setCostFunction(CostFunction costFunction)
 	{
 		this.costFunction = costFunction;
 	};

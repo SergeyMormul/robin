@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.sciforce.robin.graph.costfunction.mxDoubleValCostFunction;
+import com.sciforce.robin.graph.costfunction.DoubleValCostFunction;
 import com.sciforce.robin.graph.model.mxIGraphModel;
 import com.sciforce.robin.graph.view.mxGraph;
 
@@ -213,7 +213,7 @@ public class AnalysisGraph
 		}
 		else
 		{
-			return new GraphGenerator(null, new mxDoubleValCostFunction());
+			return new GraphGenerator(null, new DoubleValCostFunction());
 		}
 	}
 
