@@ -9,32 +9,28 @@ import java.util.logging.Logger;
 
 import com.sciforce.robin.graph.costfunction.DoubleValCostFunction;
 import com.sciforce.robin.graph.costfunction.CostFunction;
-import com.sciforce.robin.graph.generatorfunction.mxGeneratorFunction;
-import com.sciforce.robin.graph.generatorfunction.mxGeneratorRandomFunction;
+import com.sciforce.robin.graph.generatorfunction.GeneratorFunction;
+import com.sciforce.robin.graph.generatorfunction.GeneratorRandomFunction;
 import com.sciforce.robin.graph.model.mxGeometry;
 import com.sciforce.robin.graph.model.mxIGraphModel;
 import com.sciforce.robin.graph.view.mxCellState;
 import com.sciforce.robin.graph.view.mxGraph;
 import com.sciforce.robin.graph.view.mxGraphView;
 
-/**
- * @author Mate
- *
- */
 public class GraphGenerator
 {
 
 	private static final Logger log = Logger.getLogger(GraphGenerator.class.getName());
 
 	// cost function class that implements ICostFunction
-	//	private mxGeneratorFunction generatorFunction = new mxGeneratorRandomFunction(0,1,2);
-	//	private mxGeneratorFunction generatorFunction = new mxGeneratorConstFunction(1.5);
-	//	private mxGeneratorFunction generatorFunction = new mxGeneratorRandomIntFunction(0, 20);
-	private mxGeneratorFunction generatorFunction = null;
+	//	private GeneratorFunction generatorFunction = new GeneratorRandomFunction(0,1,2);
+	//	private GeneratorFunction generatorFunction = new GeneratorConstFunction(1.5);
+	//	private GeneratorFunction generatorFunction = new GeneratorRandomIntFunction(0, 20);
+	private GeneratorFunction generatorFunction = null;
 
 	private CostFunction costFunction = null;
 
-	public GraphGenerator(mxGeneratorFunction generatorFunction, CostFunction costFunction)
+	public GraphGenerator(GeneratorFunction generatorFunction, CostFunction costFunction)
 	{
 		if (generatorFunction != null)
 		{
@@ -53,7 +49,7 @@ public class GraphGenerator
 
 	/**
 	 * @param aGraph 
-	 * @param numVertexes 
+	 * @param numVertices
 	 * @return a null graph
 	 */
 	public void getNullGraph(AnalysisGraph aGraph, int numVertices)
@@ -528,9 +524,9 @@ public class GraphGenerator
 	};
 
 	/**
+	 * @param aGraph
 	 * @param xDim
 	 * @param yDim
-	 * @param weights
 	 * Return a king graph of size <b>xDim</b> x <b>yDim</b>
 	 * Note that the minimum size is 4x4
 	 */
@@ -1070,7 +1066,7 @@ public class GraphGenerator
 
 	/**
 	 * A helper function that calculates the ring size for a windmill graph, based on the index of a vertex in a brach and branch size. - for internal use
-	 * @param currVertex - starting from 1
+	 * @param currIndex - starting from 1
 	 * @param branchSize - starting from 1
 	 * @param fullSize
 	 * @return ring size
@@ -1210,11 +1206,11 @@ public class GraphGenerator
 	 * @param maxWeight maximum edge weight if weighted
 	 * @return a generator function
 	 */
-	public static mxGeneratorFunction getGeneratorFunction(mxGraph graph, boolean weighted, double minWeight, double maxWeight)
+	public static GeneratorFunction getGeneratorFunction(mxGraph graph, boolean weighted, double minWeight, double maxWeight)
 	{
 		if (weighted)
 		{
-			return new mxGeneratorRandomFunction(minWeight, maxWeight, 2);
+			return new GeneratorRandomFunction(minWeight, maxWeight, 2);
 		}
 		else
 		{
@@ -1222,7 +1218,7 @@ public class GraphGenerator
 		}
 	};
 
-	public mxGeneratorFunction getGeneratorFunction()
+	public GeneratorFunction getGeneratorFunction()
 	{
 		return this.generatorFunction;
 	};
@@ -1249,7 +1245,7 @@ public class GraphGenerator
 	};
 
 	/**
-	 * @param graph
+	 * @param aGraph
 	 * @param forceConnected if true, an unconnected graph is made connected
 	 * @param forceSimple if true, a non-simple graph is made simple
 	 * Calculates one spanning tree of graph, which doesn't have to be but can be minimal
