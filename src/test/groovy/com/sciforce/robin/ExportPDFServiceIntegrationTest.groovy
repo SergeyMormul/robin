@@ -5,7 +5,10 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.SpringBootContextLoader
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
+import org.springframework.http.HttpMethod
+import org.springframework.http.RequestEntity
 import org.springframework.test.context.ContextConfiguration
+import org.springframework.web.util.UriComponentsBuilder
 
 /**
  * Integration test for {@link ExportPDFService}.
@@ -25,17 +28,32 @@ class ExportPDFServiceIntegrationTest extends BaseTest {
 
     def 'verify pdf generation'() {
 
-        given: 'a valid hypermedia control'
-        def control = new HypermediaControl( w: 1, h: 1, filename: 'file', xml: XMLTemplate )
+        given: 'a valid url'
+        def url = buildUri()
 
         when: 'the service is called'
-        def result = template.postForObject("http://localhost:${port}/export", control, byte[] )
+        def result = template.exchange( new RequestEntity<Object>(HttpMethod.POST, url ), byte[] )
 
         then: 'the result is returned'
         result
 
         and: 'pdf is generated'
         // need to inspect by hand
-        outputPdf( result )
+        outputPdf( result.body )
+    }
+
+    URI buildUri() {
+        UriComponentsBuilder.newInstance()
+                .scheme('http')
+                .host('localhost')
+                .port(port)
+                .path('/export')
+                .queryParam('w', '1')
+                .queryParam('h', '1')
+                .queryParam('bg', '000000')
+                .queryParam('filename', 'fuckoff')
+                .queryParam('format', 'pdf')
+                .queryParam('xml', XMLTemplate)
+                .build().toUri()
     }
 }
