@@ -51,7 +51,7 @@ public class SwimlaneManager extends EventSource
 	/**
 	 * 
 	 */
-	protected mxIEventListener addHandler = new mxIEventListener()
+	protected IEventListener addHandler = new IEventListener()
 	{
 		public void invoke(Object source, EventObject evt)
 		{
@@ -65,7 +65,7 @@ public class SwimlaneManager extends EventSource
 	/**
 	 * 
 	 */
-	protected mxIEventListener resizeHandler = new mxIEventListener()
+	protected IEventListener resizeHandler = new IEventListener()
 	{
 		public void invoke(Object source, EventObject evt)
 		{

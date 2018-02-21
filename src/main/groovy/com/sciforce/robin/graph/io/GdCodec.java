@@ -24,7 +24,7 @@ public class GdCodec
 	/**
 	 * Represents the different states in the parse of a file.
 	 */
-	public enum mxGDParseState
+	public enum GDParseState
 	{
 		START, NUM_NODES, PARSING_NODES, PARSING_EDGES
 	}
@@ -42,7 +42,7 @@ public class GdCodec
 	public static void decode(String input, Graph graph)
 	{
 		BufferedReader br = new BufferedReader(new StringReader(input));
-		mxGDParseState state = mxGDParseState.START;
+		GDParseState state = GDParseState.START;
 		Object parent = graph.getDefaultParent();
 
 		graph.getModel().beginUpdate();
@@ -58,7 +58,7 @@ public class GdCodec
 					{
 						if (!line.startsWith("#"))
 						{
-							state = mxGDParseState.NUM_NODES;
+							state = GDParseState.NUM_NODES;
 						}
 						else
 						{
@@ -82,7 +82,7 @@ public class GdCodec
 						}
 						else
 						{
-							state = mxGDParseState.PARSING_EDGES;
+							state = GDParseState.PARSING_EDGES;
 						}
 						
 						break;
@@ -91,7 +91,7 @@ public class GdCodec
 					{
 						if (line.startsWith("# Edges"))
 						{
-							state = mxGDParseState.PARSING_EDGES;
+							state = GDParseState.PARSING_EDGES;
 						}
 						else if (!line.equals(""))
 						{

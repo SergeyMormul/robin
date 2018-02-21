@@ -99,7 +99,7 @@ public class RotationHandler extends MouseAdapter
 		handle = createHandle();
 
 		// Installs the paint handler
-		graphComponent.addListener(Event.AFTER_PAINT, new EventSource.mxIEventListener()
+		graphComponent.addListener(Event.AFTER_PAINT, new EventSource.IEventListener()
 		{
 			public void invoke(Object sender, EventObject evt)
 			{

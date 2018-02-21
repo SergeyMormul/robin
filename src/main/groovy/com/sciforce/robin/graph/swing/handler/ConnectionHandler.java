@@ -133,7 +133,7 @@ public class ConnectionHandler extends MouseAdapter
 	/**
 	 * 
 	 */
-	protected transient EventSource.mxIEventListener resetHandler = new EventSource.mxIEventListener()
+	protected transient EventSource.IEventListener resetHandler = new EventSource.IEventListener()
 	{
 		public void invoke(Object source, EventObject evt)
 		{
@@ -150,7 +150,7 @@ public class ConnectionHandler extends MouseAdapter
 		this.graphComponent = graphComponent;
 
 		// Installs the paint handler
-		graphComponent.addListener(Event.AFTER_PAINT, new EventSource.mxIEventListener()
+		graphComponent.addListener(Event.AFTER_PAINT, new EventSource.IEventListener()
 		{
 			public void invoke(Object sender, EventObject evt)
 			{
@@ -161,7 +161,7 @@ public class ConnectionHandler extends MouseAdapter
 
 		connectPreview = createConnectPreview();
 
-		GraphComponent.mxGraphControl graphControl = graphComponent.getGraphControl();
+		GraphComponent.GraphControl graphControl = graphComponent.getGraphControl();
 		graphControl.addMouseListener(this);
 		graphControl.addMouseMotionListener(this);
 
@@ -795,7 +795,7 @@ public class ConnectionHandler extends MouseAdapter
 	/**
 	 * Adds the given event listener.
 	 */
-	public void addListener(String eventName, EventSource.mxIEventListener listener)
+	public void addListener(String eventName, EventSource.IEventListener listener)
 	{
 		eventSource.addListener(eventName, listener);
 	}
@@ -803,7 +803,7 @@ public class ConnectionHandler extends MouseAdapter
 	/**
 	 * Removes the given event listener.
 	 */
-	public void removeListener(EventSource.mxIEventListener listener)
+	public void removeListener(EventSource.IEventListener listener)
 	{
 		eventSource.removeListener(listener);
 	}
@@ -811,7 +811,7 @@ public class ConnectionHandler extends MouseAdapter
 	/**
 	 * Removes the given event listener for the specified event name.
 	 */
-	public void removeListener(EventSource.mxIEventListener listener, String eventName)
+	public void removeListener(EventSource.IEventListener listener, String eventName)
 	{
 		eventSource.removeListener(listener, eventName);
 	}

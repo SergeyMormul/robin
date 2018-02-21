@@ -15,7 +15,7 @@ import java.util.Set;
 import com.sciforce.robin.graph.costfunction.CostFunction;
 import com.sciforce.robin.graph.view.CellState;
 import com.sciforce.robin.graph.view.Graph;
-import com.sciforce.robin.graph.view.Graph.mxICellVisitor;
+import com.sciforce.robin.graph.view.Graph.ICellVisitor;
 import com.sciforce.robin.graph.view.GraphView;
 
 /**
@@ -31,7 +31,7 @@ public class Traversal
 	 * The visitor has access to the current cell and the edge traversed to
 	 * find this cell. Every cell is processed once only.
 	 * <pre>
-	 * Traversal.bfs(analysisGraph, startVertex, new mxICellVisitor()
+	 * Traversal.bfs(analysisGraph, startVertex, new ICellVisitor()
 	 * {
 	 * 	public boolean visit(Object vertex, Object edge)
 	 * 	{
@@ -44,7 +44,7 @@ public class Traversal
 	 * @param startVertex
 	 * @param visitor
 	 */
-	public static void dfs(AnalysisGraph aGraph, Object startVertex, mxICellVisitor visitor)
+	public static void dfs(AnalysisGraph aGraph, Object startVertex, ICellVisitor visitor)
 	{
 		dfsRec(aGraph, startVertex, null, new HashSet<Object>(), visitor);
 	}
@@ -57,7 +57,7 @@ public class Traversal
 	 * @param seen
 	 * @param visitor
 	 */
-	private static void dfsRec(AnalysisGraph aGraph, Object cell, Object edge, Set<Object> seen, mxICellVisitor visitor)
+	private static void dfsRec(AnalysisGraph aGraph, Object cell, Object edge, Set<Object> seen, Graph.ICellVisitor visitor)
 	{
 		if (cell != null)
 		{
@@ -83,7 +83,7 @@ public class Traversal
 	 * The visitor has access to the current cell and the edge traversed to
 	 * find this cell. Every cell is processed once only.
 	 * <pre>
-	 * Traversal.bfs(analysisGraph, startVertex, new mxICellVisitor()
+	 * Traversal.bfs(analysisGraph, startVertex, new ICellVisitor()
 	 * {
 	 * 	public boolean visit(Object vertex, Object edge)
 	 * 	{
@@ -96,7 +96,7 @@ public class Traversal
 	 * @param startVertex
 	 * @param visitor
 	 */
-	public static void bfs(AnalysisGraph aGraph, Object startVertex, mxICellVisitor visitor)
+	public static void bfs(AnalysisGraph aGraph, Object startVertex, Graph.ICellVisitor visitor)
 	{
 		if (aGraph != null && startVertex != null && visitor != null)
 		{
@@ -117,7 +117,7 @@ public class Traversal
 	 * @param queue
 	 * @param visitor
 	 */
-	private static void bfsRec(AnalysisGraph aGraph, Set<Object> queued, LinkedList<Object[]> queue, mxICellVisitor visitor)
+	private static void bfsRec(AnalysisGraph aGraph, Set<Object> queued, LinkedList<Object[]> queue, ICellVisitor visitor)
 	{
 		if (queue.size() > 0)
 		{
@@ -152,7 +152,7 @@ public class Traversal
 	 * The visitor has access to the current cell and the edge traversed to
 	 * find this cell. Every cell is processed once only.
 	 * <pre>
-	 * Traversal.dijkstra(analysisGraph, startVertex, endVertex, new mxICellVisitor()
+	 * Traversal.dijkstra(analysisGraph, startVertex, endVertex, new ICellVisitor()
 	 * {
 	 * 	public boolean visit(Object vertex, Object edge)
 	 * 	{
@@ -168,7 +168,7 @@ public class Traversal
 	 * @param visitor
 	 * @throws StructuralException - The current Dijkstra algorithm only works for connected graphs
 	 */
-	public static void dijkstra(AnalysisGraph aGraph, Object startVertex, Object endVertex, mxICellVisitor visitor)
+	public static void dijkstra(AnalysisGraph aGraph, Object startVertex, Object endVertex, Graph.ICellVisitor visitor)
 			throws StructuralException
 	{
 		if (!GraphStructure.isConnected(aGraph))

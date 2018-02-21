@@ -230,7 +230,7 @@ public class GraphHandler extends MouseAdapter implements
 		movePreview = createMovePreview();
 
 		// Installs the paint handler
-		graphComponent.addListener(Event.AFTER_PAINT, new EventSource.mxIEventListener()
+		graphComponent.addListener(Event.AFTER_PAINT, new EventSource.IEventListener()
 		{
 			public void invoke(Object sender, EventObject evt)
 			{

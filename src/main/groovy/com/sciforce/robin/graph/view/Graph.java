@@ -181,7 +181,7 @@ public class Graph extends EventSource
 	/**
 	 * 
 	 */
-	public interface mxICellVisitor
+	public interface ICellVisitor
 	{
 
 		/**
@@ -435,7 +435,7 @@ public class Graph extends EventSource
 	/**
 	 * Specifies the default style for loops.
 	 */
-	protected EdgeStyle.mxEdgeStyleFunction defaultLoopStyle = EdgeStyle.Loop;
+	protected EdgeStyle.EdgeStyleFunction defaultLoopStyle = EdgeStyle.Loop;
 
 	/**
 	 * Specifies if multiple edges in the same direction between
@@ -509,7 +509,7 @@ public class Graph extends EventSource
 	/**
 	 * Fires repaint events for full repaints.
 	 */
-	protected mxIEventListener fullRepaintHandler = new mxIEventListener()
+	protected IEventListener fullRepaintHandler = new IEventListener()
 	{
 		public void invoke(Object sender, EventObject evt)
 		{
@@ -520,7 +520,7 @@ public class Graph extends EventSource
 	/**
 	 * Fires repaint events for full repaints.
 	 */
-	protected mxIEventListener updateOriginHandler = new mxIEventListener()
+	protected IEventListener updateOriginHandler = new IEventListener()
 	{
 		public void invoke(Object sender, EventObject evt)
 		{
@@ -534,7 +534,7 @@ public class Graph extends EventSource
 	/**
 	 * Fires repaint events for model changes.
 	 */
-	protected mxIEventListener graphModelChangeHandler = new mxIEventListener()
+	protected IEventListener graphModelChangeHandler = new IEventListener()
 	{
 		public void invoke(Object sender, EventObject evt)
 		{
@@ -4913,7 +4913,7 @@ public class Graph extends EventSource
 					.isTrue(edge.getStyle(), Constants.STYLE_ORTHOGONAL);
 		}
 
-		EdgeStyle.mxEdgeStyleFunction tmp = view.getEdgeStyle(edge, null,
+		EdgeStyle.EdgeStyleFunction tmp = view.getEdgeStyle(edge, null,
 				null, null);
 
 		return tmp == EdgeStyle.SegmentConnector
@@ -5343,7 +5343,7 @@ public class Graph extends EventSource
 	 * 
 	 * @return Returns the default loop style.
 	 */
-	public EdgeStyle.mxEdgeStyleFunction getDefaultLoopStyle()
+	public EdgeStyle.EdgeStyleFunction getDefaultLoopStyle()
 	{
 		return defaultLoopStyle;
 	}
@@ -5353,9 +5353,9 @@ public class Graph extends EventSource
 	 * 
 	 * @param value Default style to be used for loops.
 	 */
-	public void setDefaultLoopStyle(EdgeStyle.mxEdgeStyleFunction value)
+	public void setDefaultLoopStyle(EdgeStyle.EdgeStyleFunction value)
 	{
-		EdgeStyle.mxEdgeStyleFunction oldValue = defaultLoopStyle;
+		EdgeStyle.EdgeStyleFunction oldValue = defaultLoopStyle;
 		defaultLoopStyle = value;
 
 		changeSupport.firePropertyChange("defaultLoopStyle", oldValue,
@@ -7378,7 +7378,7 @@ public class Graph extends EventSource
 	 * Traverses the tree starting at the given vertex. Here is how to use this
 	 * method for a given vertex (root) which is typically the root of a tree:
 	 * <code>
-	 * graph.traverse(root, true, new mxICellVisitor()
+	 * graph.traverse(root, true, new ICellVisitor()
 	 * {
 	 *   public boolean visit(Object vertex, Object edge)
 	 *   {
@@ -7394,7 +7394,7 @@ public class Graph extends EventSource
 	 * @param directed
 	 * @param visitor
 	 */
-	public void traverse(Object vertex, boolean directed, mxICellVisitor visitor)
+	public void traverse(Object vertex, boolean directed, ICellVisitor visitor)
 	{
 		traverse(vertex, directed, visitor, null, null);
 	}
@@ -7416,7 +7416,7 @@ public class Graph extends EventSource
 	 * @param visited Optional array of cell paths for the visited cells.
 	 */
 	public void traverse(Object vertex, boolean directed,
-			mxICellVisitor visitor, Object edge, Set<Object> visited)
+						 ICellVisitor visitor, Object edge, Set<Object> visited)
 	{
 		if (vertex != null && visitor != null)
 		{

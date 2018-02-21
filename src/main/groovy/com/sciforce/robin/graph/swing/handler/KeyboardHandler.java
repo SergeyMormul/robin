@@ -15,8 +15,7 @@ import com.sciforce.robin.graph.swing.GraphComponent;
 import com.sciforce.robin.graph.swing.util.GraphActions;
 
 /**
- * @author Administrator
- * 
+ *
  */
 public class KeyboardHandler
 {

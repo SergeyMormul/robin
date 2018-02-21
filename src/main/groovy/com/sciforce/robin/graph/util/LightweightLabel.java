@@ -12,8 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
 /**
- * @author Administrator
- * 
+ *
  */
 public class LightweightLabel extends JLabel
 {

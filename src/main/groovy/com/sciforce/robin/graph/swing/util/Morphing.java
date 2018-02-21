@@ -73,7 +73,7 @@ public class Morphing extends Animation
 		this(graphComponent, 6, 1.5, DEFAULT_DELAY);
 
 		// Installs the paint handler
-		graphComponent.addListener(Event.AFTER_PAINT, new mxIEventListener()
+		graphComponent.addListener(Event.AFTER_PAINT, new IEventListener()
 		{
 			public void invoke(Object sender, EventObject evt)
 			{

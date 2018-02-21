@@ -105,7 +105,7 @@ public class MovePreview extends EventSource
 		this.graphComponent = graphComponent;
 
 		// Installs the paint handler
-		graphComponent.addListener(Event.AFTER_PAINT, new mxIEventListener()
+		graphComponent.addListener(Event.AFTER_PAINT, new IEventListener()
 		{
 			public void invoke(Object sender, EventObject evt)
 			{

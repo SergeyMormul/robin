@@ -1143,7 +1143,7 @@ public class GraphView extends EventSource
 		{
 			List<Point> pts = new ArrayList<Point>();
 			pts.add(edge.getAbsolutePoint(0));
-			EdgeStyle.mxEdgeStyleFunction edgeStyle = getEdgeStyle(edge, points, source,
+			EdgeStyle.EdgeStyleFunction edgeStyle = getEdgeStyle(edge, points, source,
 					target);
 
 			if (edgeStyle != null)
@@ -1182,8 +1182,8 @@ public class GraphView extends EventSource
 	 * Returns the edge style function to be used to compute the absolute points
 	 * for the given state, control points and terminals.
 	 */
-	public EdgeStyle.mxEdgeStyleFunction getEdgeStyle(CellState edge,
-                                                      List<Point> points, Object source, Object target)
+	public EdgeStyle.EdgeStyleFunction getEdgeStyle(CellState edge,
+                                                    List<Point> points, Object source, Object target)
 	{
 		Object edgeStyle = null;
 
@@ -1216,9 +1216,9 @@ public class GraphView extends EventSource
 			edgeStyle = tmp;
 		}
 
-		if (edgeStyle instanceof EdgeStyle.mxEdgeStyleFunction)
+		if (edgeStyle instanceof EdgeStyle.EdgeStyleFunction)
 		{
-			return (EdgeStyle.mxEdgeStyleFunction) edgeStyle;
+			return (EdgeStyle.EdgeStyleFunction) edgeStyle;
 		}
 
 		return null;
@@ -1341,7 +1341,7 @@ public class GraphView extends EventSource
 
 		if (terminal != null)
 		{
-			Perimeter.mxPerimeterFunction perimeter = getPerimeterFunction(terminal);
+			Perimeter.PerimeterFunction perimeter = getPerimeterFunction(terminal);
 
 			if (perimeter != null && next != null)
 			{
@@ -1405,7 +1405,7 @@ public class GraphView extends EventSource
 	/**
 	 * Returns the perimeter function for the given state.
 	 */
-	public Perimeter.mxPerimeterFunction getPerimeterFunction(CellState state)
+	public Perimeter.PerimeterFunction getPerimeterFunction(CellState state)
 	{
 		Object perimeter = state.getStyle().get(Constants.STYLE_PERIMETER);
 
@@ -1423,9 +1423,9 @@ public class GraphView extends EventSource
 			perimeter = tmp;
 		}
 
-		if (perimeter instanceof Perimeter.mxPerimeterFunction)
+		if (perimeter instanceof Perimeter.PerimeterFunction)
 		{
-			return (Perimeter.mxPerimeterFunction) perimeter;
+			return (Perimeter.PerimeterFunction) perimeter;
 		}
 
 		return null;

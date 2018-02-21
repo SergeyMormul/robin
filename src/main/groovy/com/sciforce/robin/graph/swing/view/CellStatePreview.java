@@ -169,7 +169,7 @@ public class CellStatePreview
 	}
 
 	/**
-	 * Returns a dirty rectangle to be repainted in mxGraphControl.
+	 * Returns a dirty rectangle to be repainted in GraphControl.
 	 */
 	public Rectangle show()
 	{

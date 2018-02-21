@@ -27,7 +27,7 @@ import javax.swing.JComponent;
 import javax.swing.JScrollBar;
 
 import com.sciforce.robin.graph.util.*;
-import com.sciforce.robin.graph.util.EventSource.mxIEventListener;
+import com.sciforce.robin.graph.util.EventSource.IEventListener;
 import com.sciforce.robin.graph.util.Rectangle;
 import com.sciforce.robin.graph.view.GraphView;
 
@@ -151,7 +151,7 @@ public class GraphOutline extends JComponent
 	/**
 	 * 
 	 */
-	protected mxIEventListener repaintHandler = new mxIEventListener()
+	protected IEventListener repaintHandler = new EventSource.IEventListener()
 	{
 		public void invoke(Object source, EventObject evt)
 		{

@@ -19,8 +19,7 @@ import com.sciforce.robin.graph.view.CellState;
 import com.sciforce.robin.graph.view.Graph;
 
 /**
- * @author Administrator
- * 
+ *
  */
 public class CellHandler
 {

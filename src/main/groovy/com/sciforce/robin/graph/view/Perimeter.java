@@ -20,7 +20,7 @@ public class Perimeter
 	/**
 	 * Defines the requirements for a perimeter function.
 	 */
-	public interface mxPerimeterFunction
+	public interface PerimeterFunction
 	{
 
 		/**
@@ -45,11 +45,11 @@ public class Perimeter
 	/**
 	 * Describes a rectangular perimeter for the given bounds. 
 	 */
-	public static mxPerimeterFunction RectanglePerimeter = new mxPerimeterFunction()
+	public static PerimeterFunction RectanglePerimeter = new PerimeterFunction()
 	{
 
 		/* (non-Javadoc)
-		 * @see Perimeter.mxPerimeterFunction#apply
+		 * @see Perimeter.PerimeterFunction#apply
 		 */
 		public Point apply(Rectangle bounds, CellState vertex,
                            Point next, boolean orthogonal)
@@ -131,11 +131,11 @@ public class Perimeter
 	/**
 	 * Describes an elliptic perimeter.
 	 */
-	public static mxPerimeterFunction EllipsePerimeter = new mxPerimeterFunction()
+	public static PerimeterFunction EllipsePerimeter = new PerimeterFunction()
 	{
 
 		/* (non-Javadoc)
-		 * @see Perimeter.mxPerimeterFunction#apply
+		 * @see Perimeter.PerimeterFunction#apply
 		 */
 		public Point apply(Rectangle bounds, CellState vertex,
                            Point next, boolean orthogonal)
@@ -244,11 +244,11 @@ public class Perimeter
 	/**
 	 * Describes a rhombus (aka diamond) perimeter.
 	 */
-	public static mxPerimeterFunction RhombusPerimeter = new mxPerimeterFunction()
+	public static PerimeterFunction RhombusPerimeter = new PerimeterFunction()
 	{
 
 		/* (non-Javadoc)
-		 * @see Perimeter.mxPerimeterFunction#apply
+		 * @see Perimeter.PerimeterFunction#apply
 		 */
 		public Point apply(Rectangle bounds, CellState vertex,
                            Point next, boolean orthogonal)
@@ -334,11 +334,11 @@ public class Perimeter
 	 * Describes a triangle perimeter. See RectanglePerimeter
 	 * for a description of the parameters.
 	 */
-	public static mxPerimeterFunction TrianglePerimeter = new mxPerimeterFunction()
+	public static PerimeterFunction TrianglePerimeter = new PerimeterFunction()
 	{
 
 		/* (non-Javadoc)
-		 * @see Perimeter.mxPerimeterFunction#apply(com.sciforce.robin.mx.mxgraph.utils.Rectangle, CellState, CellState, boolean, com.sciforce.robin.mx.mxgraph.utils.Point)
+		 * @see Perimeter.PerimeterFunction#apply(com.sciforce.robin.mx.mxgraph.utils.Rectangle, CellState, CellState, boolean, com.sciforce.robin.mx.mxgraph.utils.Point)
 		 */
 		public Point apply(Rectangle bounds, CellState vertex,
                            Point next, boolean orthogonal)
@@ -499,7 +499,7 @@ public class Perimeter
 	 * Describes a hexagon perimeter. See RectanglePerimeter
 	 * for a description of the parameters.
 	 */
-	public static mxPerimeterFunction HexagonPerimeter = new mxPerimeterFunction()
+	public static PerimeterFunction HexagonPerimeter = new PerimeterFunction()
 	{
 		public Point apply(Rectangle bounds, CellState vertex,
                            Point next, boolean orthogonal)

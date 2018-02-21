@@ -71,7 +71,7 @@ public class Rubberband implements MouseListener, MouseMotionListener
 		graphComponent.getGraphControl().addMouseListener(this);
 		graphComponent.getGraphControl().addMouseMotionListener(this);
 
-		graphComponent.addListener(Event.AFTER_PAINT, new EventSource.mxIEventListener()
+		graphComponent.addListener(Event.AFTER_PAINT, new EventSource.IEventListener()
 		{
 
 			public void invoke(Object source, EventObject evt)
@@ -235,7 +235,7 @@ public class Rubberband implements MouseListener, MouseMotionListener
 
 			if (graphComponent.isSignificant(bounds.width, bounds.height))
 			{
-				GraphComponent.mxGraphControl control = graphComponent.getGraphControl();
+				GraphComponent.GraphControl control = graphComponent.getGraphControl();
 
 				// Repaints exact difference between old and new bounds
 				Rectangle union = new Rectangle(oldBounds);

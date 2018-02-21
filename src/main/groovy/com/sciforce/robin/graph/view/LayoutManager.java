@@ -66,7 +66,7 @@ public class LayoutManager extends EventSource
 	/**
 	 * 
 	 */
-	protected mxIEventListener undoHandler = new mxIEventListener()
+	protected IEventListener undoHandler = new IEventListener()
 	{
 		public void invoke(Object source, EventObject evt)
 		{
@@ -80,7 +80,7 @@ public class LayoutManager extends EventSource
 	/**
 	 * 
 	 */
-	protected mxIEventListener moveHandler = new mxIEventListener()
+	protected IEventListener moveHandler = new IEventListener()
 	{
 		public void invoke(Object source, EventObject evt)
 		{

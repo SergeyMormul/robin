@@ -15,7 +15,7 @@ public class EventSource
 	/**
 	 * Defines the requirements for an object that listens to an event source.
 	 */
-	public interface mxIEventListener
+	public interface IEventListener
 	{
 
 		/**
@@ -97,7 +97,7 @@ public class EventSource
 	 * Binds the specified function to the given event name. If no event name
 	 * is given, then the listener is registered for all events.
 	 */
-	public void addListener(String eventName, mxIEventListener listener)
+	public void addListener(String eventName, IEventListener listener)
 	{
 		if (eventListeners == null)
 		{
@@ -113,7 +113,7 @@ public class EventSource
 	 *
 	 * Removes all occurances of the given listener from the list of listeners.
 	 */
-	public void removeListener(mxIEventListener listener)
+	public void removeListener(IEventListener listener)
 	{
 		removeListener(listener, null);
 	}
@@ -123,7 +123,7 @@ public class EventSource
 	 *
 	 * Removes all occurances of the given listener from the list of listeners.
 	 */
-	public void removeListener(mxIEventListener listener, String eventName)
+	public void removeListener(IEventListener listener, String eventName)
 	{
 		if (eventListeners != null)
 		{
@@ -175,7 +175,7 @@ public class EventSource
 
 				if (listen == null || listen.equals(evt.getName()))
 				{
-					((mxIEventListener) eventListeners.get(i + 1)).invoke(
+					((IEventListener) eventListeners.get(i + 1)).invoke(
 							sender, evt);
 				}
 			}

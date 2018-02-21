@@ -15,7 +15,6 @@ import com.sciforce.robin.graph.model.GraphModel;
 import com.sciforce.robin.graph.model.IGraphModel;
 import com.sciforce.robin.graph.view.CellState;
 import com.sciforce.robin.graph.view.Graph;
-import com.sciforce.robin.graph.view.Graph.mxICellVisitor;
 import com.sciforce.robin.graph.view.GraphView;
 
 public class GraphStructure
@@ -413,7 +412,7 @@ public class GraphStructure
 			{
 				final ArrayList<Object> currVertexList = new ArrayList<Object>();
 
-				Traversal.bfs(aGraph, currVertex, new mxICellVisitor()
+				Traversal.bfs(aGraph, currVertex, new Graph.ICellVisitor()
 				{
 					public boolean visit(Object vertex, Object edge)
 					{
@@ -458,7 +457,7 @@ public class GraphStructure
 			final IGraphModel model = graph.getModel();
 			Object parent = graph.getDefaultParent();
 
-			Traversal.bfs(aGraph, startVertex, new mxICellVisitor()
+			Traversal.bfs(aGraph, startVertex, new Graph.ICellVisitor()
 			{
 				public boolean visit(Object vertex, Object edge)
 				{

@@ -232,7 +232,7 @@ public class Constants
 	 * Defines the key for the perimeter style.
 	 * This is a function that defines the perimeter around a particular shape.
 	 * Possible values are the functions defined in Perimeter that use the
-	 * <code>mxPerimeterFunction</code> interface. Alternatively, the constants
+	 * <code>PerimeterFunction</code> interface. Alternatively, the constants
 	 * in this class that start with <code>PERIMETER_</code> may be used to 
 	 * access perimeter styles in <code>StyleRegistry</code>.
 	 */

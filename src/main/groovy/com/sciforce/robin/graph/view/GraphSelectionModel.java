@@ -36,7 +36,7 @@ import com.sciforce.robin.graph.util.UndoableEdit;
  * 
  * <code>
  * addListener(
- *   Event.CHANGE, new mxIEventListener()
+ *   Event.CHANGE, new IEventListener()
  *   {
  *     public void invoke(Object sender, EventObject evt)
  *     {

@@ -317,20 +317,20 @@ public interface IGraphModel
 	 * Binds the specified function to the given event name. If no event name
 	 * is given, then the listener is registered for all events.
 	 */
-	void addListener(String eventName, EventSource.mxIEventListener listener);
+	void addListener(String eventName, EventSource.IEventListener listener);
 
 	/**
 	 * Function: removeListener
 	 *
 	 * Removes the given listener from the list of listeners.
 	 */
-	void removeListener(EventSource.mxIEventListener listener);
+	void removeListener(EventSource.IEventListener listener);
 
 	/**
 	 * Function: removeListener
 	 *
 	 * Removes the given listener from the list of listeners.
 	 */
-	void removeListener(EventSource.mxIEventListener listener, String eventName);
+	void removeListener(EventSource.IEventListener listener, String eventName);
 
 }

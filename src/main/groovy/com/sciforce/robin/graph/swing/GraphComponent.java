@@ -62,12 +62,12 @@ import com.sciforce.robin.graph.util.*;
 import com.sciforce.robin.graph.util.Constants;
 import com.sciforce.robin.graph.view.*;
 import com.sciforce.robin.graph.view.CellState;
-import com.sciforce.robin.graph.view.EdgeStyle.mxEdgeStyleFunction;
+import com.sciforce.robin.graph.view.EdgeStyle.EdgeStyleFunction;
 
 /**
  * For setting the preferred size of the viewport for scrolling, use
  * Graph.setMinimumGraphSize. This component is a combined scrollpane with an
- * inner mxGraphControl. The control contains the actual graph display.
+ * inner GraphControl. The control contains the actual graph display.
  * 
  * To set the background color of the graph, use the following code:
  * 
@@ -187,7 +187,7 @@ public class GraphComponent extends JScrollPane implements Printable
 	/**
 	 * 
 	 */
-	protected mxGraphControl graphControl;
+	protected GraphControl graphControl;
 
 	/**
 	 * 
@@ -480,7 +480,7 @@ public class GraphComponent extends JScrollPane implements Printable
 	/**
 	 * Updates the heavyweight component structure after any changes.
 	 */
-	protected EventSource.mxIEventListener updateHandler = new EventSource.mxIEventListener()
+	protected EventSource.IEventListener updateHandler = new EventSource.IEventListener()
 	{
 		public void invoke(Object sender, EventObject evt)
 		{
@@ -492,7 +492,7 @@ public class GraphComponent extends JScrollPane implements Printable
 	/**
 	 * 
 	 */
-	protected EventSource.mxIEventListener repaintHandler = new EventSource.mxIEventListener()
+	protected EventSource.IEventListener repaintHandler = new EventSource.IEventListener()
 	{
 		public void invoke(Object source, EventObject evt)
 		{
@@ -596,7 +596,7 @@ public class GraphComponent extends JScrollPane implements Printable
 	/**
 	 * Resets the zoom policy if the scale is changed manually.
 	 */
-	protected EventSource.mxIEventListener scaleHandler = new EventSource.mxIEventListener()
+	protected EventSource.IEventListener scaleHandler = new EventSource.IEventListener()
 	{
 		/**
 		 * 
@@ -782,16 +782,16 @@ public class GraphComponent extends JScrollPane implements Printable
 	 * Creates the inner control that handles tooltips, preferred size and can
 	 * draw cells onto a canvas.
 	 */
-	protected mxGraphControl createGraphControl()
+	protected GraphControl createGraphControl()
 	{
-		return new mxGraphControl();
+		return new GraphControl();
 	}
 
 	/**
 	 * 
 	 * @return Returns the control that renders the graph.
 	 */
-	public mxGraphControl getGraphControl()
+	public GraphControl getGraphControl()
 	{
 		return graphControl;
 	}
@@ -2822,7 +2822,7 @@ public class GraphComponent extends JScrollPane implements Printable
 		}
 		else if (graph.getModel().isEdge(state.getCell()))
 		{
-			mxEdgeStyleFunction style = graph.getView().getEdgeStyle(state,
+			EdgeStyleFunction style = graph.getView().getEdgeStyle(state,
 					null, null, null);
 
 			if (graph.isLoop(state) || style == EdgeStyle.ElbowConnector
@@ -3952,9 +3952,9 @@ public class GraphComponent extends JScrollPane implements Printable
 	 * @param eventName
 	 * @param listener
 	 * @see EventSource#addListener(String,
-	 *      EventSource.mxIEventListener)
+	 *      EventSource.IEventListener)
 	 */
-	public void addListener(String eventName, EventSource.mxIEventListener listener)
+	public void addListener(String eventName, EventSource.IEventListener listener)
 	{
 		eventSource.addListener(eventName, listener);
 	}
@@ -3963,7 +3963,7 @@ public class GraphComponent extends JScrollPane implements Printable
 	 * @param listener
 	 *            Listener instance.
 	 */
-	public void removeListener(EventSource.mxIEventListener listener)
+	public void removeListener(EventSource.IEventListener listener)
 	{
 		eventSource.removeListener(listener);
 	}
@@ -3974,17 +3974,16 @@ public class GraphComponent extends JScrollPane implements Printable
 	 * @param listener
 	 *            Listener instance.
 	 */
-	public void removeListener(EventSource.mxIEventListener listener, String eventName)
+	public void removeListener(EventSource.IEventListener listener, String eventName)
 	{
 		eventSource.removeListener(listener, eventName);
 	}
 
 	/**
 	 * 
-	 * @author gaudenz
-	 * 
+	 *
 	 */
-	public class mxGraphControl extends JComponent
+	public class GraphControl extends JComponent
 	{
 
 		/**
@@ -4002,7 +4001,7 @@ public class GraphComponent extends JScrollPane implements Printable
 		/**
 		 * 
 		 */
-		public mxGraphControl()
+		public GraphControl()
 		{
 			addMouseListener(new MouseAdapter()
 			{
@@ -4456,7 +4455,7 @@ public class GraphComponent extends JScrollPane implements Printable
 	/**
 	 * 
 	 */
-	public static class mxMouseRedirector implements MouseListener,
+	public static class MouseRedirector implements MouseListener,
 			MouseMotionListener
 	{
 
@@ -4468,7 +4467,7 @@ public class GraphComponent extends JScrollPane implements Printable
 		/**
 		 * 
 		 */
-		public mxMouseRedirector(GraphComponent graphComponent)
+		public MouseRedirector(GraphComponent graphComponent)
 		{
 			this.graphComponent = graphComponent;
 		}

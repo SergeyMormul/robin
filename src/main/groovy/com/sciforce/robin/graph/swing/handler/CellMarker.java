@@ -565,7 +565,7 @@ public class CellMarker extends JComponent
 	/**
 	 * Adds the given event listener.
 	 */
-	public void addListener(String eventName, EventSource.mxIEventListener listener)
+	public void addListener(String eventName, EventSource.IEventListener listener)
 	{
 		eventSource.addListener(eventName, listener);
 	}
@@ -573,7 +573,7 @@ public class CellMarker extends JComponent
 	/**
 	 * Removes the given event listener.
 	 */
-	public void removeListener(EventSource.mxIEventListener listener)
+	public void removeListener(EventSource.IEventListener listener)
 	{
 		eventSource.removeListener(listener);
 	}
@@ -581,7 +581,7 @@ public class CellMarker extends JComponent
 	/**
 	 * Removes the given event listener for the specified event name.
 	 */
-	public void removeListener(EventSource.mxIEventListener listener, String eventName)
+	public void removeListener(EventSource.IEventListener listener, String eventName)
 	{
 		eventSource.removeListener(listener, eventName);
 	}

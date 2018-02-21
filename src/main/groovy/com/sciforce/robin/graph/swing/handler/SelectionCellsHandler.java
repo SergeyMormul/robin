@@ -19,7 +19,8 @@ import javax.swing.SwingUtilities;
 import com.sciforce.robin.graph.swing.GraphComponent;
 import com.sciforce.robin.graph.util.Event;
 import com.sciforce.robin.graph.util.EventObject;
-import com.sciforce.robin.graph.util.EventSource.mxIEventListener;
+import com.sciforce.robin.graph.util.EventSource;
+import com.sciforce.robin.graph.util.EventSource.IEventListener;
 import com.sciforce.robin.graph.view.CellState;
 import com.sciforce.robin.graph.view.Graph;
 
@@ -71,7 +72,7 @@ public class SelectionCellsHandler implements MouseListener,
 	/**
 	 * 
 	 */
-	protected transient mxIEventListener refreshHandler = new mxIEventListener()
+	protected transient IEventListener refreshHandler = new IEventListener()
 	{
 		public void invoke(Object source, EventObject evt)
 		{
@@ -131,7 +132,7 @@ public class SelectionCellsHandler implements MouseListener,
 		});
 
 		// Installs the paint handler
-		graphComponent.addListener(Event.PAINT, new mxIEventListener()
+		graphComponent.addListener(Event.PAINT, new EventSource.IEventListener()
 		{
 			public void invoke(Object sender, EventObject evt)
 			{

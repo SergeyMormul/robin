@@ -23,7 +23,7 @@ public class EdgeStyle
 	/**
 	 * Defines the requirements for an edge style function.
 	 */
-	public interface mxEdgeStyleFunction
+	public interface EdgeStyleFunction
 	{
 
 		/**
@@ -52,11 +52,11 @@ public class EdgeStyle
 	 * Provides an entity relation style for edges (as used in database
 	 * schema diagrams).
 	 */
-	public static mxEdgeStyleFunction EntityRelation = new mxEdgeStyleFunction()
+	public static EdgeStyleFunction EntityRelation = new EdgeStyleFunction()
 	{
 
 		/* (non-Javadoc)
-		 * @see EdgeStyle.mxEdgeStyleFunction#apply(CellState, CellState, CellState, java.util.List, java.util.List)
+		 * @see EdgeStyle.EdgeStyleFunction#apply(CellState, CellState, CellState, java.util.List, java.util.List)
 		 */
 		public void apply(CellState state, CellState source,
                           CellState target, List<Point> points, List<Point> result)
@@ -177,11 +177,11 @@ public class EdgeStyle
 	/**
 	 * Provides a self-reference, aka. loop.
 	 */
-	public static mxEdgeStyleFunction Loop = new mxEdgeStyleFunction()
+	public static EdgeStyleFunction Loop = new EdgeStyleFunction()
 	{
 
 		/* (non-Javadoc)
-		 * @see EdgeStyle.mxEdgeStyleFunction#apply(CellState, CellState, CellState, java.util.List, java.util.List)
+		 * @see EdgeStyle.EdgeStyleFunction#apply(CellState, CellState, CellState, java.util.List, java.util.List)
 		 */
 		public void apply(CellState state, CellState source,
                           CellState target, List<Point> points, List<Point> result)
@@ -276,11 +276,11 @@ public class EdgeStyle
 	 * flag in the cell style. SideToSide is used if horizontal is true or
 	 * unspecified.
 	 */
-	public static mxEdgeStyleFunction ElbowConnector = new mxEdgeStyleFunction()
+	public static EdgeStyleFunction ElbowConnector = new EdgeStyleFunction()
 	{
 
 		/* (non-Javadoc)
-		 * @see EdgeStyle.mxEdgeStyleFunction#apply(CellState, CellState, CellState, java.util.List, java.util.List)
+		 * @see EdgeStyle.EdgeStyleFunction#apply(CellState, CellState, CellState, java.util.List, java.util.List)
 		 */
 		public void apply(CellState state, CellState source,
                           CellState target, List<Point> points, List<Point> result)
@@ -348,11 +348,11 @@ public class EdgeStyle
 	/**
 	 * Provides a vertical elbow edge.
 	 */
-	public static mxEdgeStyleFunction SideToSide = new mxEdgeStyleFunction()
+	public static EdgeStyleFunction SideToSide = new EdgeStyleFunction()
 	{
 
 		/* (non-Javadoc)
-		 * @see EdgeStyle.mxEdgeStyleFunction#apply(CellState, CellState, CellState, java.util.List, java.util.List)
+		 * @see EdgeStyle.EdgeStyleFunction#apply(CellState, CellState, CellState, java.util.List, java.util.List)
 		 */
 		public void apply(CellState state, CellState source,
                           CellState target, List<Point> points, List<Point> result)
@@ -444,11 +444,11 @@ public class EdgeStyle
 	/**
 	 * Provides a horizontal elbow edge.
 	 */
-	public static mxEdgeStyleFunction TopToBottom = new mxEdgeStyleFunction()
+	public static EdgeStyleFunction TopToBottom = new EdgeStyleFunction()
 	{
 
 		/* (non-Javadoc)
-		 * @see EdgeStyle.mxEdgeStyleFunction#apply(CellState, CellState, CellState, java.util.List, java.util.List)
+		 * @see EdgeStyle.EdgeStyleFunction#apply(CellState, CellState, CellState, java.util.List, java.util.List)
 		 */
 		public void apply(CellState state, CellState source,
                           CellState target, List<Point> points, List<Point> result)
@@ -541,11 +541,11 @@ public class EdgeStyle
 	 * Implements an orthogonal edge style. Use <mxEdgeSegmentHandler>
 	 * as an interactive handler for this style.
 	 */
-	public static mxEdgeStyleFunction SegmentConnector = new mxEdgeStyleFunction()
+	public static EdgeStyleFunction SegmentConnector = new EdgeStyleFunction()
 	{
 
 		/* (non-Javadoc)
-		 * @see EdgeStyle.mxEdgeStyleFunction#apply(CellState, CellState, CellState, java.util.List, java.util.List)
+		 * @see EdgeStyle.EdgeStyleFunction#apply(CellState, CellState, CellState, java.util.List, java.util.List)
 		 */
 		public void apply(CellState state, CellState source, CellState target, List<Point> hints, List<Point> result)
 		{
@@ -781,11 +781,11 @@ public class EdgeStyle
 	 * An orthogonal connector that avoids connecting vertices and 
 	 * respects port constraints
 	 */
-	public static mxEdgeStyleFunction OrthConnector = new mxEdgeStyleFunction()
+	public static EdgeStyleFunction OrthConnector = new EdgeStyleFunction()
 	{
 
 		/* (non-Javadoc)
-		 * @see EdgeStyle.mxEdgeStyleFunction#apply(CellState, CellState, CellState, java.util.List, java.util.List)
+		 * @see EdgeStyle.EdgeStyleFunction#apply(CellState, CellState, CellState, java.util.List, java.util.List)
 		 */
 		public void apply(CellState state, CellState source,
                           CellState target, List<Point> points, List<Point> result)
