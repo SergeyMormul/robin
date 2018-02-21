@@ -26,7 +26,7 @@ import com.sciforce.robin.graph.shape.*;
 import com.sciforce.robin.graph.util.Constants;
 import com.sciforce.robin.graph.util.Utils;
 import com.sciforce.robin.graph.shape.ITextShape;
-import com.sciforce.robin.graph.swing.util.mxSwingConstants;
+import com.sciforce.robin.graph.swing.util.SwingConstants;
 import com.sciforce.robin.graph.util.Point;
 import com.sciforce.robin.graph.util.Rectangle;
 import com.sciforce.robin.graph.view.CellState;
@@ -474,7 +474,7 @@ public class Graphics2DCanvas extends BasicCanvas
 			// Saves the state and configures the graphics object
 			Paint p = g.getPaint();
 			Color previousColor = g.getColor();
-			g.setColor(mxSwingConstants.SHADOW_COLOR);
+			g.setColor(SwingConstants.SHADOW_COLOR);
 			g.translate(shadowOffsetX, shadowOffsetY);
 
 			// Paints the shadow

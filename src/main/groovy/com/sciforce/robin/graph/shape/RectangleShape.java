@@ -7,7 +7,7 @@ import java.awt.Rectangle;
 import java.util.Map;
 
 import com.sciforce.robin.graph.canvas.Graphics2DCanvas;
-import com.sciforce.robin.graph.swing.util.mxSwingConstants;
+import com.sciforce.robin.graph.swing.util.SwingConstants;
 import com.sciforce.robin.graph.util.Constants;
 import com.sciforce.robin.graph.util.Utils;
 import com.sciforce.robin.graph.view.CellState;
@@ -42,7 +42,7 @@ public class RectangleShape extends BasicShape
 				// Paints the optional shadow
 				if (shadow)
 				{
-					canvas.getGraphics().setColor(mxSwingConstants.SHADOW_COLOR);
+					canvas.getGraphics().setColor(SwingConstants.SHADOW_COLOR);
 					canvas.getGraphics().fillRoundRect(
 							x + Constants.SHADOW_OFFSETX,
 							y + Constants.SHADOW_OFFSETY, w, h, radius,

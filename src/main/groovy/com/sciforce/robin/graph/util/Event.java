@@ -289,7 +289,7 @@ public class Event
 	 *   {
 	 *     public void invoke(Object source, Object[] args)
 	 *     {
-	 *       cellMarked((mxCellMarker) source, (CellState) args[0]);
+	 *       cellMarked((CellMarker) source, (CellState) args[0]);
 	 *     }
 	 *   });
 	 * </code>

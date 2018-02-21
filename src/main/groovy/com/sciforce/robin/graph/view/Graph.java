@@ -5577,7 +5577,7 @@ public class Graph extends EventSource
 
 	/**
 	 * Returns true if the given cell is bendable. This implementation returns
-	 * bendable. This is used in mxElbowEdgeHandler to determine if the middle
+	 * bendable. This is used in ElbowEdgeHandler to determine if the middle
 	 * handle should be shown.
 	 * 
 	 * @param cell Cell whose bendable state should be returned.
@@ -5938,8 +5938,8 @@ public class Graph extends EventSource
 
 	/**
 	 * Affects the return values of isValidDropTarget to allow for edges as
-	 * drop targets. The splitEdge method is called in mxGraphHandler if
-	 * mxGraphComponent.isSplitEvent returns true for a given configuration.
+	 * drop targets. The splitEdge method is called in GraphHandler if
+	 * GraphComponent.isSplitEvent returns true for a given configuration.
 	 */
 	public boolean isSplitEnabled()
 	{
