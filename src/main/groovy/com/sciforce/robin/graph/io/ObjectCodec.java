@@ -17,7 +17,7 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.sciforce.robin.graph.util.mxUtils;
+import com.sciforce.robin.graph.util.Utils;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -1012,7 +1012,7 @@ public class ObjectCodec
 	 * variable name taken from the "as" attribute. - If the object is an array
 	 * and the variable name is empty then the value or child object is appended
 	 * to the array. - If an add child has no value or the object is not an
-	 * array then the child text content is evaluated using <mxUtils.eval>.
+	 * array then the child text content is evaluated using <Utils.eval>.
 	 * 
 	 * If no object exists for an ID in <idrefs> a warning is issued in
 	 * System.err.
@@ -1245,7 +1245,7 @@ public class ObjectCodec
 			{
 				try
 				{
-					Node xml = mxUtils.loadDocument(
+					Node xml = Utils.loadDocument(
 							ObjectCodec.class.getResource(name).toString())
 							.getDocumentElement();
 

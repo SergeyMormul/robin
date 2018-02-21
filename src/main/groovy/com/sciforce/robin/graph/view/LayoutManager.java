@@ -14,11 +14,8 @@ import java.util.Set;
 import com.sciforce.robin.graph.layout.mxIGraphLayout;
 import com.sciforce.robin.graph.model.GraphModel;
 import com.sciforce.robin.graph.model.IGraphModel;
-import com.sciforce.robin.graph.util.mxEvent;
-import com.sciforce.robin.graph.util.mxEventObject;
-import com.sciforce.robin.graph.util.mxEventSource;
-import com.sciforce.robin.graph.util.mxUndoableEdit;
-import com.sciforce.robin.graph.util.mxUtils;
+import com.sciforce.robin.graph.util.*;
+import com.sciforce.robin.graph.util.Event;
 
 /**
  * Implements a layout manager that updates the layout for a given transaction.
@@ -41,11 +38,11 @@ import com.sciforce.robin.graph.util.mxUtils;
  * 
  * This class fires the following event:
  * 
- * mxEvent.LAYOUT_CELLS fires between begin- and endUpdate after all cells have
+ * Event.LAYOUT_CELLS fires between begin- and endUpdate after all cells have
  * been layouted in layoutCells. The <code>cells</code> property contains all
  * cells that have been passed to layoutCells.
  */
-public class LayoutManager extends mxEventSource
+public class LayoutManager extends EventSource
 {
 
 	/**
@@ -71,11 +68,11 @@ public class LayoutManager extends mxEventSource
 	 */
 	protected mxIEventListener undoHandler = new mxIEventListener()
 	{
-		public void invoke(Object source, mxEventObject evt)
+		public void invoke(Object source, EventObject evt)
 		{
 			if (isEnabled())
 			{
-				beforeUndo((mxUndoableEdit) evt.getProperty("edit"));
+				beforeUndo((UndoableEdit) evt.getProperty("edit"));
 			}
 		}
 	};
@@ -85,7 +82,7 @@ public class LayoutManager extends mxEventSource
 	 */
 	protected mxIEventListener moveHandler = new mxIEventListener()
 	{
-		public void invoke(Object source, mxEventObject evt)
+		public void invoke(Object source, EventObject evt)
 		{
 			if (isEnabled())
 			{
@@ -160,8 +157,8 @@ public class LayoutManager extends mxEventSource
 		if (graph != null)
 		{
 			IGraphModel model = graph.getModel();
-			model.addListener(mxEvent.BEFORE_UNDO, undoHandler);
-			graph.addListener(mxEvent.MOVE_CELLS, moveHandler);
+			model.addListener(Event.BEFORE_UNDO, undoHandler);
+			graph.addListener(Event.MOVE_CELLS, moveHandler);
 		}
 	}
 
@@ -198,7 +195,7 @@ public class LayoutManager extends mxEventSource
 	/**
 	 * 
 	 */
-	protected void beforeUndo(mxUndoableEdit edit)
+	protected void beforeUndo(UndoableEdit edit)
 	{
 		Collection<Object> cells = getCellsForChanges(edit.getChanges());
 		IGraphModel model = getGraph().getModel();
@@ -214,23 +211,23 @@ public class LayoutManager extends mxEventSource
 			}
 		}
 
-		layoutCells(mxUtils.sortCells(cells, false).toArray());
+		layoutCells(Utils.sortCells(cells, false).toArray());
 	}
 
 	/**
 	 * 
 	 */
 	protected Collection<Object> getCellsForChanges(
-			List<mxUndoableEdit.mxUndoableChange> changes)
+			List<UndoableEdit.UndoableChange> changes)
 	{
 		Set<Object> result = new HashSet<Object>();
-		Iterator<mxUndoableEdit.mxUndoableChange> it = changes.iterator();
+		Iterator<UndoableEdit.UndoableChange> it = changes.iterator();
 
 		while (it.hasNext())
 		{
-			mxUndoableEdit.mxUndoableChange change = it.next();
+			UndoableEdit.UndoableChange change = it.next();
 
-			if (change instanceof GraphModel.mxRootChange)
+			if (change instanceof GraphModel.RrootChange)
 			{
 				return new HashSet<Object>();
 			}
@@ -246,14 +243,14 @@ public class LayoutManager extends mxEventSource
 	/**
 	 * 
 	 */
-	protected Collection<Object> getCellsForChange(mxUndoableEdit.mxUndoableChange change)
+	protected Collection<Object> getCellsForChange(UndoableEdit.UndoableChange change)
 	{
 		IGraphModel model = getGraph().getModel();
 		Set<Object> result = new HashSet<Object>();
 
-		if (change instanceof GraphModel.mxChildChange)
+		if (change instanceof GraphModel.ChildChange)
 		{
-			GraphModel.mxChildChange cc = (GraphModel.mxChildChange) change;
+			GraphModel.ChildChange cc = (GraphModel.ChildChange) change;
 			Object parent = model.getParent(cc.getChild());
 
 			if (cc.getChild() != null)
@@ -271,12 +268,12 @@ public class LayoutManager extends mxEventSource
 				result.add(cc.getPrevious());
 			}
 		}
-		else if (change instanceof GraphModel.mxTerminalChange
-				|| change instanceof GraphModel.mxGeometryChange)
+		else if (change instanceof GraphModel.TerminalChange
+				|| change instanceof GraphModel.GeometryChange)
 		{
-			Object cell = (change instanceof GraphModel.mxTerminalChange) ? ((GraphModel.mxTerminalChange) change)
+			Object cell = (change instanceof GraphModel.TerminalChange) ? ((GraphModel.TerminalChange) change)
 					.getCell()
-					: ((GraphModel.mxGeometryChange) change).getCell();
+					: ((GraphModel.GeometryChange) change).getCell();
 
 			if (cell != null)
 			{
@@ -314,7 +311,7 @@ public class LayoutManager extends mxEventSource
 					}
 				}
 
-				fireEvent(new mxEventObject(mxEvent.LAYOUT_CELLS, "cells",
+				fireEvent(new EventObject(Event.LAYOUT_CELLS, "cells",
 						cells));
 			}
 			finally

@@ -11,7 +11,6 @@ import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Paint;
-import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.geom.AffineTransform;
@@ -25,8 +24,8 @@ import javax.swing.CellRendererPane;
 
 import com.sciforce.robin.graph.shape.mxDoubleRectangleShape;
 import com.sciforce.robin.graph.shape.mxRectangleShape;
-import com.sciforce.robin.graph.util.mxConstants;
-import com.sciforce.robin.graph.util.mxUtils;
+import com.sciforce.robin.graph.util.Constants;
+import com.sciforce.robin.graph.util.Utils;
 import com.sciforce.robin.graph.shape.mxActorShape;
 import com.sciforce.robin.graph.shape.mxArrowShape;
 import com.sciforce.robin.graph.shape.mxCloudShape;
@@ -48,8 +47,8 @@ import com.sciforce.robin.graph.shape.mxStencilRegistry;
 import com.sciforce.robin.graph.shape.mxSwimlaneShape;
 import com.sciforce.robin.graph.shape.mxTriangleShape;
 import com.sciforce.robin.graph.swing.util.mxSwingConstants;
-import com.sciforce.robin.graph.util.mxPoint;
-import com.sciforce.robin.graph.util.mxRectangle;
+import com.sciforce.robin.graph.util.Point;
+import com.sciforce.robin.graph.util.Rectangle;
 import com.sciforce.robin.graph.view.CellState;
 
 /**
@@ -91,23 +90,23 @@ public class Graphics2DCanvas extends BasicCanvas
 	 */
 	static
 	{
-		putShape(mxConstants.SHAPE_ACTOR, new mxActorShape());
-		putShape(mxConstants.SHAPE_ARROW, new mxArrowShape());
-		putShape(mxConstants.SHAPE_CLOUD, new mxCloudShape());
-		putShape(mxConstants.SHAPE_CONNECTOR, new mxConnectorShape());
-		putShape(mxConstants.SHAPE_CYLINDER, new mxCylinderShape());
-		putShape(mxConstants.SHAPE_CURVE, new mxCurveShape());
-		putShape(mxConstants.SHAPE_DOUBLE_RECTANGLE, new mxDoubleRectangleShape());
-		putShape(mxConstants.SHAPE_DOUBLE_ELLIPSE, new mxDoubleEllipseShape());
-		putShape(mxConstants.SHAPE_ELLIPSE, new mxEllipseShape());
-		putShape(mxConstants.SHAPE_HEXAGON, new mxHexagonShape());
-		putShape(mxConstants.SHAPE_IMAGE, new mxImageShape());
-		putShape(mxConstants.SHAPE_LABEL, new mxLabelShape());
-		putShape(mxConstants.SHAPE_LINE, new mxLineShape());
-		putShape(mxConstants.SHAPE_RECTANGLE, new mxRectangleShape());
-		putShape(mxConstants.SHAPE_RHOMBUS, new mxRhombusShape());
-		putShape(mxConstants.SHAPE_SWIMLANE, new mxSwimlaneShape());
-		putShape(mxConstants.SHAPE_TRIANGLE, new mxTriangleShape());
+		putShape(Constants.SHAPE_ACTOR, new mxActorShape());
+		putShape(Constants.SHAPE_ARROW, new mxArrowShape());
+		putShape(Constants.SHAPE_CLOUD, new mxCloudShape());
+		putShape(Constants.SHAPE_CONNECTOR, new mxConnectorShape());
+		putShape(Constants.SHAPE_CYLINDER, new mxCylinderShape());
+		putShape(Constants.SHAPE_CURVE, new mxCurveShape());
+		putShape(Constants.SHAPE_DOUBLE_RECTANGLE, new mxDoubleRectangleShape());
+		putShape(Constants.SHAPE_DOUBLE_ELLIPSE, new mxDoubleEllipseShape());
+		putShape(Constants.SHAPE_ELLIPSE, new mxEllipseShape());
+		putShape(Constants.SHAPE_HEXAGON, new mxHexagonShape());
+		putShape(Constants.SHAPE_IMAGE, new mxImageShape());
+		putShape(Constants.SHAPE_LABEL, new mxLabelShape());
+		putShape(Constants.SHAPE_LINE, new mxLineShape());
+		putShape(Constants.SHAPE_RECTANGLE, new mxRectangleShape());
+		putShape(Constants.SHAPE_RHOMBUS, new mxRhombusShape());
+		putShape(Constants.SHAPE_SWIMLANE, new mxSwimlaneShape());
+		putShape(Constants.SHAPE_TRIANGLE, new mxTriangleShape());
 		putTextShape(TEXT_SHAPE_DEFAULT, new mxDefaultTextShape());
 		putTextShape(TEXT_SHAPE_HTML, new mxHtmlTextShape());
 	}
@@ -161,7 +160,7 @@ public class Graphics2DCanvas extends BasicCanvas
 	 */
 	public mxIShape getShape(Map<String, Object> style)
 	{
-		String name = mxUtils.getString(style, mxConstants.STYLE_SHAPE, null);
+		String name = Utils.getString(style, Constants.STYLE_SHAPE, null);
 		mxIShape shape = shapes.get(name);
 
 		if (shape == null && name != null)
@@ -235,7 +234,7 @@ public class Graphics2DCanvas extends BasicCanvas
 		if (g != null && shape != null)
 		{
 			// Creates a temporary graphics instance for drawing this shape
-			float opacity = mxUtils.getFloat(style, mxConstants.STYLE_OPACITY,
+			float opacity = Utils.getFloat(style, Constants.STYLE_OPACITY,
 					100);
 			Graphics2D previousGraphics = g;
 			g = createTemporaryGraphics(style, opacity, state);
@@ -262,16 +261,16 @@ public class Graphics2DCanvas extends BasicCanvas
 				&& text.length() > 0)
 		{
 			// Creates a temporary graphics instance for drawing this shape
-			float opacity = mxUtils.getFloat(style,
-					mxConstants.STYLE_TEXT_OPACITY, 100);
+			float opacity = Utils.getFloat(style,
+					Constants.STYLE_TEXT_OPACITY, 100);
 			Graphics2D previousGraphics = g;
 			g = createTemporaryGraphics(style, opacity, null);
 
 			// Draws the label background and border
-			Color bg = mxUtils.getColor(style,
-					mxConstants.STYLE_LABEL_BACKGROUNDCOLOR);
-			Color border = mxUtils.getColor(style,
-					mxConstants.STYLE_LABEL_BORDERCOLOR);
+			Color bg = Utils.getColor(style,
+					Constants.STYLE_LABEL_BACKGROUNDCOLOR);
+			Color border = Utils.getColor(style,
+					Constants.STYLE_LABEL_BORDERCOLOR);
 			paintRectangle(state.getLabelBounds().getRectangle(), bg, border);
 
 			// Paints the label and restores the graphics object
@@ -286,7 +285,7 @@ public class Graphics2DCanvas extends BasicCanvas
 	/**
 	 * 
 	 */
-	public void drawImage(Rectangle bounds, String imageUrl)
+	public void drawImage(java.awt.Rectangle bounds, String imageUrl)
 	{
 		drawImage(bounds, imageUrl, PRESERVE_IMAGE_ASPECT, false, false);
 	}
@@ -294,8 +293,8 @@ public class Graphics2DCanvas extends BasicCanvas
 	/**
 	 * 
 	 */
-	public void drawImage(Rectangle bounds, String imageUrl,
-			boolean preserveAspect, boolean flipH, boolean flipV)
+	public void drawImage(java.awt.Rectangle bounds, String imageUrl,
+                          boolean preserveAspect, boolean flipH, boolean flipV)
 	{
 		if (imageUrl != null && bounds.getWidth() > 0 && bounds.getHeight() > 0)
 		{
@@ -385,14 +384,14 @@ public class Graphics2DCanvas extends BasicCanvas
 	/**
 	 * 
 	 */
-	public void paintPolyline(mxPoint[] points, boolean rounded)
+	public void paintPolyline(Point[] points, boolean rounded)
 	{
 		if (points != null && points.length > 1)
 		{
-			mxPoint pt = points[0];
-			mxPoint pe = points[points.length - 1];
+			Point pt = points[0];
+			Point pe = points[points.length - 1];
 
-			double arcSize = mxConstants.LINE_ARCSIZE * scale;
+			double arcSize = Constants.LINE_ARCSIZE * scale;
 
 			GeneralPath path = new GeneralPath();
 			path.moveTo((float) pt.getX(), (float) pt.getY());
@@ -400,7 +399,7 @@ public class Graphics2DCanvas extends BasicCanvas
 			// Draws the line segments
 			for (int i = 1; i < points.length - 1; i++)
 			{
-				mxPoint tmp = points[i];
+				Point tmp = points[i];
 				double dx = pt.getX() - tmp.getX();
 				double dy = pt.getY() - tmp.getY();
 
@@ -420,7 +419,7 @@ public class Graphics2DCanvas extends BasicCanvas
 					// Draws a curve from the last point to the current
 					// point with a spacing of size off the current point
 					// into direction of the next point
-					mxPoint next = points[i + 1];
+					Point next = points[i + 1];
 
 					// Uses next non-overlapping point
 					while (i < points.length - 2 && Math.round(next.getX() - tmp.getX()) == 0 && Math.round(next.getY() - tmp.getY()) == 0)
@@ -441,7 +440,7 @@ public class Graphics2DCanvas extends BasicCanvas
 
 					path.quadTo((float) tmp.getX(), (float) tmp.getY(),
 							(float) x2, (float) y2);
-					tmp = new mxPoint(x2, y2);
+					tmp = new Point(x2, y2);
 				}
 				else
 				{
@@ -459,7 +458,7 @@ public class Graphics2DCanvas extends BasicCanvas
 	/**
 	 *
 	 */
-	public void paintRectangle(Rectangle bounds, Color background, Color border)
+	public void paintRectangle(java.awt.Rectangle bounds, Color background, Color border)
 	{
 		if (background != null)
 		{
@@ -487,8 +486,8 @@ public class Graphics2DCanvas extends BasicCanvas
 	 */
 	public void fillShape(Shape shape, boolean shadow)
 	{
-		int shadowOffsetX = (shadow) ? mxConstants.SHADOW_OFFSETX : 0;
-		int shadowOffsetY = (shadow) ? mxConstants.SHADOW_OFFSETY : 0;
+		int shadowOffsetX = (shadow) ? Constants.SHADOW_OFFSETX : 0;
+		int shadowOffsetY = (shadow) ? Constants.SHADOW_OFFSETY : 0;
 
 		if (shadow)
 		{
@@ -515,14 +514,14 @@ public class Graphics2DCanvas extends BasicCanvas
 	 */
 	public Stroke createStroke(Map<String, Object> style)
 	{
-		double width = mxUtils
-				.getFloat(style, mxConstants.STYLE_STROKEWIDTH, 1) * scale;
-		boolean dashed = mxUtils.isTrue(style, mxConstants.STYLE_DASHED);
+		double width = Utils
+				.getFloat(style, Constants.STYLE_STROKEWIDTH, 1) * scale;
+		boolean dashed = Utils.isTrue(style, Constants.STYLE_DASHED);
 		if (dashed)
 		{
-			float[] dashPattern = mxUtils.getFloatArray(style,
-					mxConstants.STYLE_DASH_PATTERN,
-					mxConstants.DEFAULT_DASHED_PATTERN, " ");
+			float[] dashPattern = Utils.getFloatArray(style,
+					Constants.STYLE_DASH_PATTERN,
+					Constants.DEFAULT_DASHED_PATTERN, " ");
 			float[] scaledDashPattern = new float[dashPattern.length];
 
 			for (int i = 0; i < dashPattern.length; i++)
@@ -542,20 +541,20 @@ public class Graphics2DCanvas extends BasicCanvas
 	/**
 	 * 
 	 */
-	public Paint createFillPaint(mxRectangle bounds, Map<String, Object> style)
+	public Paint createFillPaint(Rectangle bounds, Map<String, Object> style)
 	{
-		Color fillColor = mxUtils.getColor(style, mxConstants.STYLE_FILLCOLOR);
+		Color fillColor = Utils.getColor(style, Constants.STYLE_FILLCOLOR);
 		Paint fillPaint = null;
 
 		if (fillColor != null)
 		{
-			Color gradientColor = mxUtils.getColor(style,
-					mxConstants.STYLE_GRADIENTCOLOR);
+			Color gradientColor = Utils.getColor(style,
+					Constants.STYLE_GRADIENTCOLOR);
 
 			if (gradientColor != null)
 			{
-				String gradientDirection = mxUtils.getString(style,
-						mxConstants.STYLE_GRADIENT_DIRECTION);
+				String gradientDirection = Utils.getString(style,
+						Constants.STYLE_GRADIENT_DIRECTION);
 
 				float x1 = (float) bounds.getX();
 				float y1 = (float) bounds.getY();
@@ -564,19 +563,19 @@ public class Graphics2DCanvas extends BasicCanvas
 
 				if (gradientDirection == null
 						|| gradientDirection
-								.equals(mxConstants.DIRECTION_SOUTH))
+								.equals(Constants.DIRECTION_SOUTH))
 				{
 					y2 = (float) (bounds.getY() + bounds.getHeight());
 				}
-				else if (gradientDirection.equals(mxConstants.DIRECTION_EAST))
+				else if (gradientDirection.equals(Constants.DIRECTION_EAST))
 				{
 					x2 = (float) (bounds.getX() + bounds.getWidth());
 				}
-				else if (gradientDirection.equals(mxConstants.DIRECTION_NORTH))
+				else if (gradientDirection.equals(Constants.DIRECTION_NORTH))
 				{
 					y1 = (float) (bounds.getY() + bounds.getHeight());
 				}
-				else if (gradientDirection.equals(mxConstants.DIRECTION_WEST))
+				else if (gradientDirection.equals(Constants.DIRECTION_WEST))
 				{
 					x1 = (float) (bounds.getX() + bounds.getWidth());
 				}
@@ -593,7 +592,7 @@ public class Graphics2DCanvas extends BasicCanvas
 	 * 
 	 */
 	public Graphics2D createTemporaryGraphics(Map<String, Object> style,
-			float opacity, mxRectangle bounds)
+			float opacity, Rectangle bounds)
 	{
 		Graphics2D temporaryGraphics = (Graphics2D) g.create();
 
@@ -603,8 +602,8 @@ public class Graphics2DCanvas extends BasicCanvas
 		// Applies the rotation on the graphics object
 		if (bounds != null)
 		{
-			double rotation = mxUtils.getDouble(style,
-					mxConstants.STYLE_ROTATION, 0);
+			double rotation = Utils.getDouble(style,
+					Constants.STYLE_ROTATION, 0);
 
 			if (rotation != 0)
 			{

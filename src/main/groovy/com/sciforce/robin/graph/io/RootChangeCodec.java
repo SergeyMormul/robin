@@ -22,7 +22,7 @@ public class RootChangeCodec extends ObjectCodec
 	 */
 	public RootChangeCodec()
 	{
-		this(new GraphModel.mxRootChange(), new String[] { "model", "previous", "root" },
+		this(new GraphModel.RrootChange(), new String[] { "model", "previous", "root" },
 				null, null);
 	}
 
@@ -41,9 +41,9 @@ public class RootChangeCodec extends ObjectCodec
 	@Override
 	public Node afterEncode(Codec enc, Object obj, Node node)
 	{
-		if (obj instanceof GraphModel.mxRootChange)
+		if (obj instanceof GraphModel.RrootChange)
 		{
-			enc.encodeCell((ICell) ((GraphModel.mxRootChange) obj).getRoot(), node, true);
+			enc.encodeCell((ICell) ((GraphModel.RrootChange) obj).getRoot(), node, true);
 		}
 
 		return node;
@@ -55,9 +55,9 @@ public class RootChangeCodec extends ObjectCodec
 	 */
 	public Node beforeDecode(Codec dec, Node node, Object into)
 	{
-		if (into instanceof GraphModel.mxRootChange)
+		if (into instanceof GraphModel.RrootChange)
 		{
-			GraphModel.mxRootChange change = (GraphModel.mxRootChange) into;
+			GraphModel.RrootChange change = (GraphModel.RrootChange) into;
 
 			if (node.getFirstChild() != null
 					&& node.getFirstChild().getNodeType() == Node.ELEMENT_NODE)
@@ -96,9 +96,9 @@ public class RootChangeCodec extends ObjectCodec
 	@Override
 	public Object afterDecode(Codec dec, Node node, Object obj)
 	{
-		if (obj instanceof GraphModel.mxRootChange)
+		if (obj instanceof GraphModel.RrootChange)
 		{
-			GraphModel.mxRootChange change = (GraphModel.mxRootChange) obj;
+			GraphModel.RrootChange change = (GraphModel.RrootChange) obj;
 			change.setPrevious(change.getRoot());
 		}
 

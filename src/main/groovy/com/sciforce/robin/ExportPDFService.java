@@ -25,6 +25,7 @@ import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.sciforce.robin.graph.canvas.GraphicsCanvas2D;
+import com.sciforce.robin.graph.util.Utils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.xml.sax.InputSource;
@@ -32,7 +33,6 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
 import com.sciforce.robin.graph.canvas.ICanvas2D;
-import com.sciforce.robin.graph.util.mxUtils;
 import com.sciforce.robin.graph.reader.SaxOutputHandler;
 
 /**
@@ -114,7 +114,7 @@ public class ExportPDFService {
         String tmp = request.getParameter("bg");
         String xml = getRequestXml(request);
 
-        Color bg = (tmp != null) ? mxUtils.parseColor(tmp) : null;
+        Color bg = (tmp != null) ? Utils.parseColor(tmp) : null;
 
         // Checks parameters
         if (w > 0 && h > 0 && w * h < Constants.MAX_AREA && format != null && xml != null && xml.length() > 0)
@@ -175,12 +175,12 @@ public class ExportPDFService {
     protected void writeImage(String url, String format, String fname, int w, int h, Color bg, String xml, HttpServletResponse response)
             throws IOException, SAXException, ParserConfigurationException
     {
-        BufferedImage image = mxUtils.createBufferedImage(w, h, bg);
+        BufferedImage image = Utils.createBufferedImage(w, h, bg);
 
         if (image != null)
         {
             Graphics2D g2 = image.createGraphics();
-            mxUtils.setAntiAlias(g2, true, true);
+            Utils.setAntiAlias(g2, true, true);
             renderXml(xml, createCanvas(url, g2));
 
             if (fname != null)

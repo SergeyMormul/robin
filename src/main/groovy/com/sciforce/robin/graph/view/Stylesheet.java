@@ -6,18 +6,18 @@ package com.sciforce.robin.graph.view;
 import java.util.Hashtable;
 import java.util.Map;
 
-import com.sciforce.robin.graph.util.mxConstants;
+import com.sciforce.robin.graph.util.Constants;
 
 /**
  * Defines the appearance of the cells in a graph. The following example
  * changes the font size for all vertices by changing the default vertex
  * style in-place:
  * <code>
- * getDefaultVertexStyle().put(mxConstants.STYLE_FONTSIZE, 16);
+ * getDefaultVertexStyle().put(Constants.STYLE_FONTSIZE, 16);
  * </code>
  * 
  * To change the default font size for all cells, set
- * mxConstants.DEFAULT_FONTSIZE.
+ * Constants.DEFAULT_FONTSIZE.
  */
 public class Stylesheet
 {
@@ -68,13 +68,13 @@ public class Stylesheet
 	{
 		Map<String, Object> style = new Hashtable<String, Object>();
 
-		style.put(mxConstants.STYLE_SHAPE, mxConstants.SHAPE_RECTANGLE);
-		style.put(mxConstants.STYLE_PERIMETER, Perimeter.RectanglePerimeter);
-		style.put(mxConstants.STYLE_VERTICAL_ALIGN, mxConstants.ALIGN_MIDDLE);
-		style.put(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_CENTER);
-		style.put(mxConstants.STYLE_FILLCOLOR, "#C3D9FF");
-		style.put(mxConstants.STYLE_STROKECOLOR, "#6482B9");
-		style.put(mxConstants.STYLE_FONTCOLOR, "#774400");
+		style.put(Constants.STYLE_SHAPE, Constants.SHAPE_RECTANGLE);
+		style.put(Constants.STYLE_PERIMETER, Perimeter.RectanglePerimeter);
+		style.put(Constants.STYLE_VERTICAL_ALIGN, Constants.ALIGN_MIDDLE);
+		style.put(Constants.STYLE_ALIGN, Constants.ALIGN_CENTER);
+		style.put(Constants.STYLE_FILLCOLOR, "#C3D9FF");
+		style.put(Constants.STYLE_STROKECOLOR, "#6482B9");
+		style.put(Constants.STYLE_FONTCOLOR, "#774400");
 
 		return style;
 	}
@@ -88,12 +88,12 @@ public class Stylesheet
 	{
 		Map<String, Object> style = new Hashtable<String, Object>();
 
-		style.put(mxConstants.STYLE_SHAPE, mxConstants.SHAPE_CONNECTOR);
-		style.put(mxConstants.STYLE_ENDARROW, mxConstants.ARROW_CLASSIC);
-		style.put(mxConstants.STYLE_VERTICAL_ALIGN, mxConstants.ALIGN_MIDDLE);
-		style.put(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_CENTER);
-		style.put(mxConstants.STYLE_STROKECOLOR, "#6482B9");
-		style.put(mxConstants.STYLE_FONTCOLOR, "#446299");
+		style.put(Constants.STYLE_SHAPE, Constants.SHAPE_CONNECTOR);
+		style.put(Constants.STYLE_ENDARROW, Constants.ARROW_CLASSIC);
+		style.put(Constants.STYLE_VERTICAL_ALIGN, Constants.ALIGN_MIDDLE);
+		style.put(Constants.STYLE_ALIGN, Constants.ALIGN_CENTER);
+		style.put(Constants.STYLE_STROKECOLOR, "#6482B9");
+		style.put(Constants.STYLE_FONTCOLOR, "#446299");
 
 		return style;
 	}
@@ -186,7 +186,7 @@ public class Stylesheet
 					String key = tmp.substring(0, c);
 					String value = tmp.substring(c + 1);
 
-					if (value.equals(mxConstants.NONE))
+					if (value.equals(Constants.NONE))
 					{
 						style.remove(key);
 					}

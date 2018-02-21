@@ -23,7 +23,7 @@ public class ChildChangeCodec extends ObjectCodec
 	 */
 	public ChildChangeCodec()
 	{
-		this(new GraphModel.mxChildChange(), new String[] { "model", "child",
+		this(new GraphModel.ChildChange(), new String[] { "model", "child",
 				"previousIndex" }, new String[] { "parent", "previous" }, null);
 	}
 
@@ -43,8 +43,8 @@ public class ChildChangeCodec extends ObjectCodec
 	public boolean isReference(Object obj, String attr, Object value,
 			boolean isWrite)
 	{
-		if (attr.equals("child") && obj instanceof GraphModel.mxChildChange
-				&& (((GraphModel.mxChildChange) obj).getPrevious() != null || !isWrite))
+		if (attr.equals("child") && obj instanceof GraphModel.ChildChange
+				&& (((GraphModel.ChildChange) obj).getPrevious() != null || !isWrite))
 		{
 			return true;
 		}
@@ -58,9 +58,9 @@ public class ChildChangeCodec extends ObjectCodec
 	@Override
 	public Node afterEncode(Codec enc, Object obj, Node node)
 	{
-		if (obj instanceof GraphModel.mxChildChange)
+		if (obj instanceof GraphModel.ChildChange)
 		{
-			GraphModel.mxChildChange change = (GraphModel.mxChildChange) obj;
+			GraphModel.ChildChange change = (GraphModel.ChildChange) obj;
 			Object child = change.getChild();
 
 			if (isReference(obj, "child", child, true))
@@ -88,9 +88,9 @@ public class ChildChangeCodec extends ObjectCodec
 	 */
 	public Node beforeDecode(Codec dec, Node node, Object into)
 	{
-		if (into instanceof GraphModel.mxChildChange)
+		if (into instanceof GraphModel.ChildChange)
 		{
-			GraphModel.mxChildChange change = (GraphModel.mxChildChange) into;
+			GraphModel.ChildChange change = (GraphModel.ChildChange) into;
 
 			if (node.getFirstChild() != null
 					&& node.getFirstChild().getNodeType() == Node.ELEMENT_NODE)
@@ -145,9 +145,9 @@ public class ChildChangeCodec extends ObjectCodec
 	@Override
 	public Object afterDecode(Codec dec, Node node, Object obj)
 	{
-		if (obj instanceof GraphModel.mxChildChange)
+		if (obj instanceof GraphModel.ChildChange)
 		{
-			GraphModel.mxChildChange change = (GraphModel.mxChildChange) obj;
+			GraphModel.ChildChange change = (GraphModel.ChildChange) obj;
 
 			// Cells are encoded here after a complete transaction so the previous
 			// parent must be restored on the cell for the case where the cell was

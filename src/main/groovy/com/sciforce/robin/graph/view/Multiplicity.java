@@ -9,7 +9,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.sciforce.robin.graph.model.IGraphModel;
-import com.sciforce.robin.graph.util.mxUtils;
+import com.sciforce.robin.graph.util.Utils;
 import org.w3c.dom.Element;
 
 public class Multiplicity
@@ -19,7 +19,7 @@ public class Multiplicity
 
 	/**
 	 * Defines the type of the source or target terminal. The type is a string
-	 * passed to mxUtils.isNode together with the source or target vertex
+	 * passed to Utils.isNode together with the source or target vertex
 	 * value as the first argument.
 	 */
 	protected String type;
@@ -207,7 +207,7 @@ public class Multiplicity
 		{
 			if (value instanceof Element)
 			{
-				return mxUtils.isNode(value, type, attr, attrValue);
+				return Utils.isNode(value, type, attr, attrValue);
 			}
 			else
 			{

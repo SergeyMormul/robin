@@ -7,14 +7,14 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
-import com.sciforce.robin.graph.util.mxConstants;
-import com.sciforce.robin.graph.util.mxUtils;
+import com.sciforce.robin.graph.util.Constants;
+import com.sciforce.robin.graph.util.Point;
+import com.sciforce.robin.graph.util.Rectangle;
+import com.sciforce.robin.graph.util.Utils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-import com.sciforce.robin.graph.util.mxPoint;
-import com.sciforce.robin.graph.util.mxRectangle;
 import com.sciforce.robin.graph.view.CellState;
 
 /**
@@ -90,10 +90,10 @@ public class HtmlCanvas extends BasicCanvas
 		
 		if (state.getAbsolutePointCount() > 1)
 		{
-			List<mxPoint> pts = state.getAbsolutePoints();
+			List<Point> pts = state.getAbsolutePoints();
 
 			// Transpose all points by cloning into a new array
-			pts = mxUtils.translatePoints(pts, translate.getX(), translate.getY());
+			pts = Utils.translatePoints(pts, translate.getX(), translate.getY());
 			drawLine(pts, style);
 		}
 		else
@@ -103,25 +103,25 @@ public class HtmlCanvas extends BasicCanvas
 			int w = (int) state.getWidth();
 			int h = (int) state.getHeight();
 
-			if (!mxUtils.getString(style, mxConstants.STYLE_SHAPE, "").equals(
-					mxConstants.SHAPE_SWIMLANE))
+			if (!Utils.getString(style, Constants.STYLE_SHAPE, "").equals(
+					Constants.SHAPE_SWIMLANE))
 			{
 				drawShape(x, y, w, h, style);
 			}
 			else
 			{
-				int start = (int) Math.round(mxUtils.getInt(style,
-						mxConstants.STYLE_STARTSIZE,
-						mxConstants.DEFAULT_STARTSIZE)
+				int start = (int) Math.round(Utils.getInt(style,
+						Constants.STYLE_STARTSIZE,
+						Constants.DEFAULT_STARTSIZE)
 						* scale);
 
 				// Removes some styles to draw the content area
 				Map<String, Object> cloned = new Hashtable<String, Object>(
 						style);
-				cloned.remove(mxConstants.STYLE_FILLCOLOR);
-				cloned.remove(mxConstants.STYLE_ROUNDED);
+				cloned.remove(Constants.STYLE_FILLCOLOR);
+				cloned.remove(Constants.STYLE_ROUNDED);
 
-				if (mxUtils.isTrue(style, mxConstants.STYLE_HORIZONTAL, true))
+				if (Utils.isTrue(style, Constants.STYLE_HORIZONTAL, true))
 				{
 					drawShape(x, y, w, start, style);
 					drawShape(x, y + start, w, h - start, cloned);
@@ -143,7 +143,7 @@ public class HtmlCanvas extends BasicCanvas
 	 */
 	public Object drawLabel(String label, CellState state, boolean html)
 	{
-		mxRectangle bounds = state.getLabelBounds();
+		Rectangle bounds = state.getLabelBounds();
 
 		if (drawLabels && bounds != null)
 		{
@@ -171,25 +171,25 @@ public class HtmlCanvas extends BasicCanvas
 	public Element drawShape(int x, int y, int w, int h,
 			Map<String, Object> style)
 	{
-		String fillColor = mxUtils
-				.getString(style, mxConstants.STYLE_FILLCOLOR);
-		String strokeColor = mxUtils.getString(style,
-				mxConstants.STYLE_STROKECOLOR);
-		float strokeWidth = (float) (mxUtils.getFloat(style,
-				mxConstants.STYLE_STROKEWIDTH, 1) * scale);
+		String fillColor = Utils
+				.getString(style, Constants.STYLE_FILLCOLOR);
+		String strokeColor = Utils.getString(style,
+				Constants.STYLE_STROKECOLOR);
+		float strokeWidth = (float) (Utils.getFloat(style,
+				Constants.STYLE_STROKEWIDTH, 1) * scale);
 
 		// Draws the shape
-		String shape = mxUtils.getString(style, mxConstants.STYLE_SHAPE);
+		String shape = Utils.getString(style, Constants.STYLE_SHAPE);
 
 		Element elem = document.createElement("div");
 
-		if (shape.equals(mxConstants.SHAPE_LINE))
+		if (shape.equals(Constants.SHAPE_LINE))
 		{
-			String direction = mxUtils.getString(style,
-					mxConstants.STYLE_DIRECTION, mxConstants.DIRECTION_EAST);
+			String direction = Utils.getString(style,
+					Constants.STYLE_DIRECTION, Constants.DIRECTION_EAST);
 
-			if (direction.equals(mxConstants.DIRECTION_EAST)
-					|| direction.equals(mxConstants.DIRECTION_WEST))
+			if (direction.equals(Constants.DIRECTION_EAST)
+					|| direction.equals(Constants.DIRECTION_WEST))
 			{
 				y = Math.round(y + h / 2);
 				h = 1;
@@ -201,26 +201,26 @@ public class HtmlCanvas extends BasicCanvas
 			}
 		}
 
-		if (mxUtils.isTrue(style, mxConstants.STYLE_SHADOW, false)
+		if (Utils.isTrue(style, Constants.STYLE_SHADOW, false)
 				&& fillColor != null)
 		{
 			Element shadow = (Element) elem.cloneNode(true);
 
 			String s = "overflow:hidden;position:absolute;" + "left:"
-					+ String.valueOf(x + mxConstants.SHADOW_OFFSETX) + "px;"
-					+ "top:" + String.valueOf(y + mxConstants.SHADOW_OFFSETY)
+					+ String.valueOf(x + Constants.SHADOW_OFFSETX) + "px;"
+					+ "top:" + String.valueOf(y + Constants.SHADOW_OFFSETY)
 					+ "px;" + "width:" + String.valueOf(w) + "px;" + "height:"
 					+ String.valueOf(h) + "px;background:"
-					+ mxConstants.W3C_SHADOWCOLOR
+					+ Constants.W3C_SHADOWCOLOR
 					+ ";border-style:solid;border-color:"
-					+ mxConstants.W3C_SHADOWCOLOR + ";border-width:"
+					+ Constants.W3C_SHADOWCOLOR + ";border-width:"
 					+ String.valueOf(Math.round(strokeWidth)) + ";";
 			shadow.setAttribute("style", s);
 
 			appendHtmlElement(shadow);
 		}
 
-		if (shape.equals(mxConstants.SHAPE_IMAGE))
+		if (shape.equals(Constants.SHAPE_IMAGE))
 		{
 			String img = getImageForStyle(style);
 
@@ -255,21 +255,21 @@ public class HtmlCanvas extends BasicCanvas
 	 * @param pts List of points that define the line.
 	 * @param style Style to be used for painting the line.
 	 */
-	public void drawLine(List<mxPoint> pts, Map<String, Object> style)
+	public void drawLine(List<Point> pts, Map<String, Object> style)
 	{
-		String strokeColor = mxUtils.getString(style,
-				mxConstants.STYLE_STROKECOLOR);
-		int strokeWidth = (int) (mxUtils.getInt(style,
-				mxConstants.STYLE_STROKEWIDTH, 1) * scale);
+		String strokeColor = Utils.getString(style,
+				Constants.STYLE_STROKECOLOR);
+		int strokeWidth = (int) (Utils.getInt(style,
+				Constants.STYLE_STROKEWIDTH, 1) * scale);
 
 		if (strokeColor != null && strokeWidth > 0)
 		{
 
-			mxPoint last = pts.get(0);
+			Point last = pts.get(0);
 
 			for (int i = 1; i < pts.size(); i++)
 			{
-				mxPoint pt = pts.get(i);
+				Point pt = pts.get(i);
 
 				drawSegment((int) last.getX(), (int) last.getY(), (int) pt
 						.getX(), (int) pt.getY(), strokeColor, strokeWidth);
@@ -338,7 +338,7 @@ public class HtmlCanvas extends BasicCanvas
 	public Element drawText(String text, int x, int y, int w, int h,
 			Map<String, Object> style)
 	{
-		Element table = mxUtils.createTable(document, text, x, y, w, h, scale,
+		Element table = Utils.createTable(document, text, x, y, w, h, scale,
 				style);
 		appendHtmlElement(table);
 

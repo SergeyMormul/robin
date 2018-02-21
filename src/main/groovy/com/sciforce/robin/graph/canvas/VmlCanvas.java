@@ -3,15 +3,14 @@
  */
 package com.sciforce.robin.graph.canvas;
 
-import java.awt.Rectangle;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
-import com.sciforce.robin.graph.util.mxConstants;
-import com.sciforce.robin.graph.util.mxPoint;
-import com.sciforce.robin.graph.util.mxRectangle;
-import com.sciforce.robin.graph.util.mxUtils;
+import com.sciforce.robin.graph.util.Constants;
+import com.sciforce.robin.graph.util.Point;
+import com.sciforce.robin.graph.util.Rectangle;
+import com.sciforce.robin.graph.util.Utils;
 import com.sciforce.robin.graph.view.CellState;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -91,19 +90,19 @@ public class VmlCanvas extends BasicCanvas
 
 		if (state.getAbsolutePointCount() > 1)
 		{
-			List<mxPoint> pts = state.getAbsolutePoints();
+			List<Point> pts = state.getAbsolutePoints();
 
 			// Transpose all points by cloning into a new array
-			pts = mxUtils.translatePoints(pts, translate.getX(), translate.getY());
+			pts = Utils.translatePoints(pts, translate.getX(), translate.getY());
 
 			// Draws the line
 			elem = drawLine(pts, style);
 			Element strokeNode = document.createElement("v:stroke");
 
 			// Draws the markers
-			String start = mxUtils.getString(style,
-					mxConstants.STYLE_STARTARROW);
-			String end = mxUtils.getString(style, mxConstants.STYLE_ENDARROW);
+			String start = Utils.getString(style,
+					Constants.STYLE_STARTARROW);
+			String end = Utils.getString(style, Constants.STYLE_ENDARROW);
 
 			if (start != null || end != null)
 			{
@@ -113,9 +112,9 @@ public class VmlCanvas extends BasicCanvas
 
 					String startWidth = "medium";
 					String startLength = "medium";
-					double startSize = mxUtils.getFloat(style,
-							mxConstants.STYLE_STARTSIZE,
-							mxConstants.DEFAULT_MARKERSIZE)
+					double startSize = Utils.getFloat(style,
+							Constants.STYLE_STARTSIZE,
+							Constants.DEFAULT_MARKERSIZE)
 							* scale;
 
 					if (startSize < 6)
@@ -139,9 +138,9 @@ public class VmlCanvas extends BasicCanvas
 
 					String endWidth = "medium";
 					String endLength = "medium";
-					double endSize = mxUtils.getFloat(style,
-							mxConstants.STYLE_ENDSIZE,
-							mxConstants.DEFAULT_MARKERSIZE)
+					double endSize = Utils.getFloat(style,
+							Constants.STYLE_ENDSIZE,
+							Constants.DEFAULT_MARKERSIZE)
 							* scale;
 
 					if (endSize < 6)
@@ -160,7 +159,7 @@ public class VmlCanvas extends BasicCanvas
 				}
 			}
 
-			if (mxUtils.isTrue(style, mxConstants.STYLE_DASHED))
+			if (Utils.isTrue(style, Constants.STYLE_DASHED))
 			{
 				strokeNode.setAttribute("dashstyle", "2 2");
 			}
@@ -174,12 +173,12 @@ public class VmlCanvas extends BasicCanvas
 			int w = (int) state.getWidth();
 			int h = (int) state.getHeight();
 
-			if (!mxUtils.getString(style, mxConstants.STYLE_SHAPE, "").equals(
-					mxConstants.SHAPE_SWIMLANE))
+			if (!Utils.getString(style, Constants.STYLE_SHAPE, "").equals(
+					Constants.SHAPE_SWIMLANE))
 			{
 				elem = drawShape(x, y, w, h, style);
 
-				if (mxUtils.isTrue(style, mxConstants.STYLE_DASHED))
+				if (Utils.isTrue(style, Constants.STYLE_DASHED))
 				{
 					Element strokeNode = document.createElement("v:stroke");
 					strokeNode.setAttribute("dashstyle", "2 2");
@@ -188,18 +187,18 @@ public class VmlCanvas extends BasicCanvas
 			}
 			else
 			{
-				int start = (int) Math.round(mxUtils.getInt(style,
-						mxConstants.STYLE_STARTSIZE,
-						mxConstants.DEFAULT_STARTSIZE)
+				int start = (int) Math.round(Utils.getInt(style,
+						Constants.STYLE_STARTSIZE,
+						Constants.DEFAULT_STARTSIZE)
 						* scale);
 
 				// Removes some styles to draw the content area
 				Map<String, Object> cloned = new Hashtable<String, Object>(
 						style);
-				cloned.remove(mxConstants.STYLE_FILLCOLOR);
-				cloned.remove(mxConstants.STYLE_ROUNDED);
+				cloned.remove(Constants.STYLE_FILLCOLOR);
+				cloned.remove(Constants.STYLE_ROUNDED);
 
-				if (mxUtils.isTrue(style, mxConstants.STYLE_HORIZONTAL, true))
+				if (Utils.isTrue(style, Constants.STYLE_HORIZONTAL, true))
 				{
 					elem = drawShape(x, y, w, start, style);
 					drawShape(x, y + start, w, h - start, cloned);
@@ -221,7 +220,7 @@ public class VmlCanvas extends BasicCanvas
 	 */
 	public Object drawLabel(String label, CellState state, boolean html)
 	{
-		mxRectangle bounds = state.getLabelBounds();
+		Rectangle bounds = state.getLabelBounds();
 
 		if (drawLabels && bounds != null)
 		{
@@ -249,18 +248,18 @@ public class VmlCanvas extends BasicCanvas
 	public Element drawShape(int x, int y, int w, int h,
 			Map<String, Object> style)
 	{
-		String fillColor = mxUtils
-				.getString(style, mxConstants.STYLE_FILLCOLOR);
-		String strokeColor = mxUtils.getString(style,
-				mxConstants.STYLE_STROKECOLOR);
-		float strokeWidth = (float) (mxUtils.getFloat(style,
-				mxConstants.STYLE_STROKEWIDTH, 1) * scale);
+		String fillColor = Utils
+				.getString(style, Constants.STYLE_FILLCOLOR);
+		String strokeColor = Utils.getString(style,
+				Constants.STYLE_STROKECOLOR);
+		float strokeWidth = (float) (Utils.getFloat(style,
+				Constants.STYLE_STROKEWIDTH, 1) * scale);
 
 		// Draws the shape
-		String shape = mxUtils.getString(style, mxConstants.STYLE_SHAPE);
+		String shape = Utils.getString(style, Constants.STYLE_SHAPE);
 		Element elem = null;
 
-		if (shape.equals(mxConstants.SHAPE_IMAGE))
+		if (shape.equals(Constants.SHAPE_IMAGE))
 		{
 			String img = getImageForStyle(style);
 
@@ -270,14 +269,14 @@ public class VmlCanvas extends BasicCanvas
 				elem.setAttribute("src", img);
 			}
 		}
-		else if (shape.equals(mxConstants.SHAPE_LINE))
+		else if (shape.equals(Constants.SHAPE_LINE))
 		{
-			String direction = mxUtils.getString(style,
-					mxConstants.STYLE_DIRECTION, mxConstants.DIRECTION_EAST);
+			String direction = Utils.getString(style,
+					Constants.STYLE_DIRECTION, Constants.DIRECTION_EAST);
 			String points = null;
 
-			if (direction.equals(mxConstants.DIRECTION_EAST)
-					|| direction.equals(mxConstants.DIRECTION_WEST))
+			if (direction.equals(Constants.DIRECTION_EAST)
+					|| direction.equals(Constants.DIRECTION_WEST))
 			{
 				int mid = Math.round(h / 2);
 				points = "m 0 " + mid + " l " + w + " " + mid;
@@ -292,11 +291,11 @@ public class VmlCanvas extends BasicCanvas
 			elem.setAttribute("coordsize", w + " " + h);
 			elem.setAttribute("path", points + " x e");
 		}
-		else if (shape.equals(mxConstants.SHAPE_ELLIPSE))
+		else if (shape.equals(Constants.SHAPE_ELLIPSE))
 		{
 			elem = document.createElement("v:oval");
 		}
-		else if (shape.equals(mxConstants.SHAPE_DOUBLE_ELLIPSE))
+		else if (shape.equals(Constants.SHAPE_DOUBLE_ELLIPSE))
 		{
 			elem = document.createElement("v:shape");
 			elem.setAttribute("coordsize", w + " " + h);
@@ -309,7 +308,7 @@ public class VmlCanvas extends BasicCanvas
 
 			elem.setAttribute("path", points + " x e");
 		}
-		else if (shape.equals(mxConstants.SHAPE_RHOMBUS))
+		else if (shape.equals(Constants.SHAPE_RHOMBUS))
 		{
 			elem = document.createElement("v:shape");
 			elem.setAttribute("coordsize", w + " " + h);
@@ -319,25 +318,25 @@ public class VmlCanvas extends BasicCanvas
 
 			elem.setAttribute("path", points + " x e");
 		}
-		else if (shape.equals(mxConstants.SHAPE_TRIANGLE))
+		else if (shape.equals(Constants.SHAPE_TRIANGLE))
 		{
 			elem = document.createElement("v:shape");
 			elem.setAttribute("coordsize", w + " " + h);
 
-			String direction = mxUtils.getString(style,
-					mxConstants.STYLE_DIRECTION, "");
+			String direction = Utils.getString(style,
+					Constants.STYLE_DIRECTION, "");
 			String points = null;
 
-			if (direction.equals(mxConstants.DIRECTION_NORTH))
+			if (direction.equals(Constants.DIRECTION_NORTH))
 			{
 				points = "m 0 " + h + " l " + (w / 2) + " 0 " + " l " + w + " "
 						+ h;
 			}
-			else if (direction.equals(mxConstants.DIRECTION_SOUTH))
+			else if (direction.equals(Constants.DIRECTION_SOUTH))
 			{
 				points = "m 0 0 l " + (w / 2) + " " + h + " l " + w + " 0";
 			}
-			else if (direction.equals(mxConstants.DIRECTION_WEST))
+			else if (direction.equals(Constants.DIRECTION_WEST))
 			{
 				points = "m " + w + " 0 l " + w + " " + (h / 2) + " l " + w
 						+ " " + h;
@@ -350,17 +349,17 @@ public class VmlCanvas extends BasicCanvas
 
 			elem.setAttribute("path", points + " x e");
 		}
-		else if (shape.equals(mxConstants.SHAPE_HEXAGON))
+		else if (shape.equals(Constants.SHAPE_HEXAGON))
 		{
 			elem = document.createElement("v:shape");
 			elem.setAttribute("coordsize", w + " " + h);
 
-			String direction = mxUtils.getString(style,
-					mxConstants.STYLE_DIRECTION, "");
+			String direction = Utils.getString(style,
+					Constants.STYLE_DIRECTION, "");
 			String points = null;
 
-			if (direction.equals(mxConstants.DIRECTION_NORTH)
-					|| direction.equals(mxConstants.DIRECTION_SOUTH))
+			if (direction.equals(Constants.DIRECTION_NORTH)
+					|| direction.equals(Constants.DIRECTION_SOUTH))
 			{
 				points = "m " + (int) (0.5 * w) + " 0 l " + w + " "
 						+ (int) (0.25 * h) + " l " + w + " " + (int) (0.75 * h)
@@ -377,7 +376,7 @@ public class VmlCanvas extends BasicCanvas
 
 			elem.setAttribute("path", points + " x e");
 		}
-		else if (shape.equals(mxConstants.SHAPE_CLOUD))
+		else if (shape.equals(Constants.SHAPE_CLOUD))
 		{
 			elem = document.createElement("v:shape");
 			elem.setAttribute("coordsize", w + " " + h);
@@ -401,7 +400,7 @@ public class VmlCanvas extends BasicCanvas
 
 			elem.setAttribute("path", points + " x e");
 		}
-		else if (shape.equals(mxConstants.SHAPE_ACTOR))
+		else if (shape.equals(Constants.SHAPE_ACTOR))
 		{
 			elem = document.createElement("v:shape");
 			elem.setAttribute("coordsize", w + " " + h);
@@ -418,7 +417,7 @@ public class VmlCanvas extends BasicCanvas
 
 			elem.setAttribute("path", points + " x e");
 		}
-		else if (shape.equals(mxConstants.SHAPE_CYLINDER))
+		else if (shape.equals(Constants.SHAPE_CYLINDER))
 		{
 			elem = document.createElement("v:shape");
 			elem.setAttribute("coordsize", w + " " + h);
@@ -436,11 +435,11 @@ public class VmlCanvas extends BasicCanvas
 		}
 		else
 		{
-			if (mxUtils.isTrue(style, mxConstants.STYLE_ROUNDED, false))
+			if (Utils.isTrue(style, Constants.STYLE_ROUNDED, false))
 			{
 				elem = document.createElement("v:roundrect");
 				elem.setAttribute("arcsize",
-						(mxConstants.RECTANGLE_ROUNDING_FACTOR * 100) + "%");
+						(Constants.RECTANGLE_ROUNDING_FACTOR * 100) + "%");
 			}
 			else
 			{
@@ -453,7 +452,7 @@ public class VmlCanvas extends BasicCanvas
 				+ "px;height:" + String.valueOf(h) + "px;";
 
 		// Applies rotation
-		double rotation = mxUtils.getDouble(style, mxConstants.STYLE_ROTATION);
+		double rotation = Utils.getDouble(style, Constants.STYLE_ROTATION);
 
 		if (rotation != 0)
 		{
@@ -463,18 +462,18 @@ public class VmlCanvas extends BasicCanvas
 		elem.setAttribute("style", s);
 
 		// Adds the shadow element
-		if (mxUtils.isTrue(style, mxConstants.STYLE_SHADOW, false)
+		if (Utils.isTrue(style, Constants.STYLE_SHADOW, false)
 				&& fillColor != null)
 		{
 			Element shadow = document.createElement("v:shadow");
 			shadow.setAttribute("on", "true");
-			shadow.setAttribute("color", mxConstants.W3C_SHADOWCOLOR);
+			shadow.setAttribute("color", Constants.W3C_SHADOWCOLOR);
 			elem.appendChild(shadow);
 		}
 
-		float opacity = mxUtils.getFloat(style, mxConstants.STYLE_OPACITY, 100);
-		float fillOpacity = mxUtils.getFloat(style, mxConstants.STYLE_FILL_OPACITY, 100);
-		float strokeOpacity = mxUtils.getFloat(style, mxConstants.STYLE_STROKE_OPACITY, 100);
+		float opacity = Utils.getFloat(style, Constants.STYLE_OPACITY, 100);
+		float fillOpacity = Utils.getFloat(style, Constants.STYLE_FILL_OPACITY, 100);
+		float strokeOpacity = Utils.getFloat(style, Constants.STYLE_STROKE_OPACITY, 100);
 
 		// Applies opacity to fill
 		if (fillColor != null)
@@ -525,19 +524,19 @@ public class VmlCanvas extends BasicCanvas
 	 * @param pts List of points that define the line.
 	 * @param style Style to be used for painting the line.
 	 */
-	public Element drawLine(List<mxPoint> pts, Map<String, Object> style)
+	public Element drawLine(List<Point> pts, Map<String, Object> style)
 	{
-		String strokeColor = mxUtils.getString(style,
-				mxConstants.STYLE_STROKECOLOR);
-		float strokeWidth = (float) (mxUtils.getFloat(style,
-				mxConstants.STYLE_STROKEWIDTH, 1) * scale);
+		String strokeColor = Utils.getString(style,
+				Constants.STYLE_STROKECOLOR);
+		float strokeWidth = (float) (Utils.getFloat(style,
+				Constants.STYLE_STROKEWIDTH, 1) * scale);
 
 		Element elem = document.createElement("v:shape");
 
 		if (strokeColor != null && strokeWidth > 0)
 		{
-			mxPoint pt = pts.get(0);
-			Rectangle r = new Rectangle(pt.getPoint());
+			Point pt = pts.get(0);
+			java.awt.Rectangle r = new java.awt.Rectangle(pt.getPoint());
 
 			StringBuilder buf = new StringBuilder("m " + Math.round(pt.getX())
 					+ " " + Math.round(pt.getY()));
@@ -548,7 +547,7 @@ public class VmlCanvas extends BasicCanvas
 				buf.append(" l " + Math.round(pt.getX()) + " "
 						+ Math.round(pt.getY()));
 
-				r = r.union(new Rectangle(pt.getPoint()));
+				r = r.union(new java.awt.Rectangle(pt.getPoint()));
 			}
 
 			String d = buf.toString();
@@ -588,7 +587,7 @@ public class VmlCanvas extends BasicCanvas
 	public Element drawText(String text, int x, int y, int w, int h,
 			Map<String, Object> style)
 	{
-		Element table = mxUtils.createTable(document, text, x, y, w, h, scale,
+		Element table = Utils.createTable(document, text, x, y, w, h, scale,
 				style);
 		appendVmlElement(table);
 

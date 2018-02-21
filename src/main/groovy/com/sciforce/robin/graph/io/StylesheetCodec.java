@@ -7,7 +7,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 
-import com.sciforce.robin.graph.util.mxUtils;
+import com.sciforce.robin.graph.util.Utils;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
@@ -172,7 +172,7 @@ public class StylesheetCodec extends ObjectCodec
 
 									if (text != null && text.length() > 0)
 									{
-										value = mxUtils.eval(text);
+										value = Utils.eval(text);
 									}
 									else
 									{

@@ -18,20 +18,20 @@ import org.w3c.dom.Node;
 		{
 			String filename = Test.class.getResource(
 					"/com.sciforce.robin.mx.mxgraph/online/exported.xml").getPath();
-			String xml = mxUtils.readFile(filename);
+			String xml = Utils.readFile(filename);
 			System.out.println("xml=" + xml);
 
-			Document doc = mxUtils.parseXml(xml);
+			Document doc = Utils.parseXml(xml);
 			Element root = doc.getDocumentElement();
 			int width = Integer.parseInt(root.getAttribute("width"));
 			int height = Integer.parseInt(root.getAttribute("height"));
 
 			System.out.println("width=" + width + " height=" + height);
 
-			BufferedImage img = mxUtils.createBufferedImage(width, height,
+			BufferedImage img = Utils.createBufferedImage(width, height,
 					Color.WHITE);
 			Graphics2D g2 = img.createGraphics();
-			mxUtils.setAntiAlias(g2, true, true);
+			Utils.setAntiAlias(g2, true, true);
 			DomOutputParser reader = new DomOutputParser(
 					new mxGraphicsExportCanvas(g2));
 			reader.read((Element) root.getFirstChild().getNextSibling());
@@ -47,7 +47,7 @@ import org.w3c.dom.Node;
 	
 	// -------------
 	
-	Document doc = mxUtils.parseXml(xml);
+	Document doc = Utils.parseXml(xml);
 	Element root = doc.getDocumentElement();
 	DomOutputParser reader = new DomOutputParser(canvas);
 	reader.read(root.getFirstChild());

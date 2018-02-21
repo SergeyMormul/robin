@@ -18,14 +18,11 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.sciforce.robin.graph.util.mxEventObject;
-import com.sciforce.robin.graph.util.mxUndoableEdit;
-import com.sciforce.robin.graph.util.mxEvent;
-import com.sciforce.robin.graph.util.mxEventSource;
-import com.sciforce.robin.graph.util.mxPoint;
+import com.sciforce.robin.graph.util.*;
+import com.sciforce.robin.graph.util.Event;
 
 /**
- * Extends mxEventSource to implement a graph model. The graph model acts as
+ * Extends EventSource to implement a graph model. The graph model acts as
  * a wrapper around the cells which are in charge of storing the actual graph
  * datastructure. The model acts as a transactional wrapper with event
  * notification for all changes, whereas the cells contain the atomic
@@ -46,30 +43,30 @@ import com.sciforce.robin.graph.util.mxPoint;
  * 
  * This class fires the following events:
  * 
- * mxEvent.CHANGE fires when an undoable edit is dispatched. The <code>edit</code>
- * property contains the mxUndoableEdit. The <code>changes</code> property
+ * Event.CHANGE fires when an undoable edit is dispatched. The <code>edit</code>
+ * property contains the UndoableEdit. The <code>changes</code> property
  * contains the list of undoable changes inside the undoable edit. The changes
  * property is deprecated, please use edit.getChanges() instead.
  * 
- * mxEvent.EXECUTE fires between begin- and endUpdate and after an atomic
+ * Event.EXECUTE fires between begin- and endUpdate and after an atomic
  * change was executed in the model. The <code>change</code> property contains
  * the atomic change that was executed.
  * 
- * mxEvent.BEGIN_UPDATE fires after the updateLevel was incremented in
+ * Event.BEGIN_UPDATE fires after the updateLevel was incremented in
  * beginUpdate. This event contains no properties.
  * 
- * mxEvent.END_UPDATE fires after the updateLevel was decreased in endUpdate
+ * Event.END_UPDATE fires after the updateLevel was decreased in endUpdate
  * but before any notification or change dispatching. The <code>edit</code>
- * property contains the current mxUndoableEdit.
+ * property contains the current UndoableEdit.
  * 
- * mxEvent.BEFORE_UNDO fires before the change is dispatched after the update
+ * Event.BEFORE_UNDO fires before the change is dispatched after the update
  * level has reached 0 in endUpdate. The <code>edit</code> property contains
- * the current mxUndoableEdit.
+ * the current UndoableEdit.
  * 
- * mxEvent.UNDO fires after the change was dispatched in endUpdate. The
- * <code>edit</code> property contains the current mxUndoableEdit.
+ * Event.UNDO fires after the change was dispatched in endUpdate. The
+ * <code>edit</code> property contains the current UndoableEdit.
  */
-public class GraphModel extends mxEventSource implements IGraphModel,
+public class GraphModel extends EventSource implements IGraphModel,
 		Serializable
 {
 
@@ -109,7 +106,7 @@ public class GraphModel extends mxEventSource implements IGraphModel,
 	 * closed then a new object is created for this variable using
 	 * createUndoableEdit.
 	 */
-	protected transient mxUndoableEdit currentEdit;
+	protected transient UndoableEdit currentEdit;
 
 	/**
 	 * Counter for the depth of nested transactions. Each call to beginUpdate
@@ -263,7 +260,7 @@ public class GraphModel extends mxEventSource implements IGraphModel,
 	 */
 	public Object setRoot(Object root)
 	{
-		execute(new mxRootChange(this, root));
+		execute(new RrootChange(this, root));
 
 		return root;
 	}
@@ -288,15 +285,15 @@ public class GraphModel extends mxEventSource implements IGraphModel,
 	/**
 	 * Creates a new undoable edit.
 	 */
-	protected mxUndoableEdit createUndoableEdit()
+	protected UndoableEdit createUndoableEdit()
 	{
-		return new mxUndoableEdit(this)
+		return new UndoableEdit(this)
 		{
 			public void dispatch()
 			{
 				// LATER: Remove changes property (deprecated)
-				((GraphModel) source).fireEvent(new mxEventObject(
-						mxEvent.CHANGE, "edit", this, "changes", changes));
+				((GraphModel) source).fireEvent(new EventObject(
+						Event.CHANGE, "edit", this, "changes", changes));
 			}
 		};
 	}
@@ -438,7 +435,7 @@ public class GraphModel extends mxEventSource implements IGraphModel,
 		if (child != parent && parent != null && child != null)
 		{
 			boolean parentChanged = parent != getParent(child);
-			execute(new mxChildChange(this, parent, child, index));
+			execute(new ChildChange(this, parent, child, index));
 
 			// Maintains the edges parents by moving the edges
 			// into the nearest common ancestor of its
@@ -538,7 +535,7 @@ public class GraphModel extends mxEventSource implements IGraphModel,
 		}
 		else if (getParent(cell) != null)
 		{
-			execute(new mxChildChange(this, null, cell));
+			execute(new ChildChange(this, null, cell));
 		}
 
 		return cell;
@@ -638,7 +635,7 @@ public class GraphModel extends mxEventSource implements IGraphModel,
 	public Object setTerminal(Object edge, Object terminal, boolean isSource)
 	{
 		boolean terminalChanged = terminal != getTerminal(edge, isSource);
-		execute(new mxTerminalChange(this, edge, terminal, isSource));
+		execute(new TerminalChange(this, edge, terminal, isSource));
 
 		if (maintainEdgeParent && terminalChanged)
 		{
@@ -771,8 +768,8 @@ public class GraphModel extends mxEventSource implements IGraphModel,
 
 				if (geo != null)
 				{
-					mxPoint origin1 = getOrigin(getParent(edge));
-					mxPoint origin2 = getOrigin(cell);
+					Point origin1 = getOrigin(getParent(edge));
+					Point origin2 = getOrigin(cell);
 
 					double dx = origin2.getX() - origin1.getX();
 					double dy = origin2.getY() - origin1.getY();
@@ -791,9 +788,9 @@ public class GraphModel extends mxEventSource implements IGraphModel,
 	 * Returns the absolute, accumulated origin for the children inside the
 	 * given parent. 
 	 */
-	public mxPoint getOrigin(Object cell)
+	public Point getOrigin(Object cell)
 	{
-		mxPoint result = null;
+		Point result = null;
 
 		if (cell != null)
 		{
@@ -812,7 +809,7 @@ public class GraphModel extends mxEventSource implements IGraphModel,
 		}
 		else
 		{
-			result = new mxPoint();
+			result = new Point();
 		}
 
 		return result;
@@ -915,7 +912,7 @@ public class GraphModel extends mxEventSource implements IGraphModel,
 	 */
 	public Object setValue(Object cell, Object value)
 	{
-		execute(new mxValueChange(this, cell, value));
+		execute(new VlueChange(this, cell, value));
 
 		return value;
 	}
@@ -949,7 +946,7 @@ public class GraphModel extends mxEventSource implements IGraphModel,
 	{
 		if (geometry != getGeometry(cell))
 		{
-			execute(new mxGeometryChange(this, cell, geometry));
+			execute(new GeometryChange(this, cell, geometry));
 		}
 
 		return geometry;
@@ -982,7 +979,7 @@ public class GraphModel extends mxEventSource implements IGraphModel,
 	{
 		if (style == null || !style.equals(getStyle(cell)))
 		{
-			execute(new mxStyleChange(this, cell, style));
+			execute(new StyleChange(this, cell, style));
 		}
 
 		return style;
@@ -1016,7 +1013,7 @@ public class GraphModel extends mxEventSource implements IGraphModel,
 	{
 		if (collapsed != isCollapsed(cell))
 		{
-			execute(new mxCollapseChange(this, cell, collapsed));
+			execute(new CollapseChange(this, cell, collapsed));
 		}
 
 		return collapsed;
@@ -1051,14 +1048,14 @@ public class GraphModel extends mxEventSource implements IGraphModel,
 	{
 		if (visible != isVisible(cell))
 		{
-			execute(new mxVisibleChange(this, cell, visible));
+			execute(new VisibleChange(this, cell, visible));
 		}
 
 		return visible;
 	}
 
 	/**
-	 * Sets the visible state of the given Cell using mxVisibleChange and
+	 * Sets the visible state of the given Cell using VisibleChange and
 	 * adds the change to the current transaction.
 	 */
 	protected boolean visibleStateForCellChanged(Object cell, boolean visible)
@@ -1074,12 +1071,12 @@ public class GraphModel extends mxEventSource implements IGraphModel,
 	 * 
 	 * @param change Atomic change to be executed.
 	 */
-	public void execute(mxAtomicGraphModelChange change)
+	public void execute(AtomicGraphModelChange change)
 	{
 		change.execute();
 		beginUpdate();
 		currentEdit.add(change);
-		fireEvent(new mxEventObject(mxEvent.EXECUTE, "change", change));
+		fireEvent(new EventObject(Event.EXECUTE, "change", change));
 		endUpdate();
 	}
 
@@ -1089,7 +1086,7 @@ public class GraphModel extends mxEventSource implements IGraphModel,
 	public void beginUpdate()
 	{
 		updateLevel++;
-		fireEvent(new mxEventObject(mxEvent.BEGIN_UPDATE));
+		fireEvent(new EventObject(Event.BEGIN_UPDATE));
 	}
 
 	/* (non-Javadoc)
@@ -1102,18 +1099,18 @@ public class GraphModel extends mxEventSource implements IGraphModel,
 		if (!endingUpdate)
 		{
 			endingUpdate = updateLevel == 0;
-			fireEvent(new mxEventObject(mxEvent.END_UPDATE, "edit", currentEdit));
+			fireEvent(new EventObject(Event.END_UPDATE, "edit", currentEdit));
 
 			try
 			{
 				if (endingUpdate && !currentEdit.isEmpty())
 				{
-					fireEvent(new mxEventObject(mxEvent.BEFORE_UNDO, "edit",
+					fireEvent(new EventObject(Event.BEFORE_UNDO, "edit",
 							currentEdit));
-					mxUndoableEdit tmp = currentEdit;
+					UndoableEdit tmp = currentEdit;
 					currentEdit = createUndoableEdit();
 					tmp.dispatch();
-					fireEvent(new mxEventObject(mxEvent.UNDO, "edit", tmp));
+					fireEvent(new EventObject(Event.UNDO, "edit", tmp));
 				}
 			}
 			finally
@@ -1769,7 +1766,7 @@ public class GraphModel extends mxEventSource implements IGraphModel,
 	// Atomic changes
 	//
 
-	public static class mxRootChange extends mxAtomicGraphModelChange
+	public static class RrootChange extends AtomicGraphModelChange
 	{
 
 		/**
@@ -1780,7 +1777,7 @@ public class GraphModel extends mxEventSource implements IGraphModel,
 		/**
 		 * 
 		 */
-		public mxRootChange()
+		public RrootChange()
 		{
 			this(null, null);
 		}
@@ -1788,7 +1785,7 @@ public class GraphModel extends mxEventSource implements IGraphModel,
 		/**
 		 * 
 		 */
-		public mxRootChange(GraphModel model, Object root)
+		public RrootChange(GraphModel model, Object root)
 		{
 			super(model);
 			this.root = root;
@@ -1838,7 +1835,7 @@ public class GraphModel extends mxEventSource implements IGraphModel,
 
 	}
 
-	public static class mxChildChange extends mxAtomicGraphModelChange
+	public static class ChildChange extends AtomicGraphModelChange
 	{
 
 		/**
@@ -1854,7 +1851,7 @@ public class GraphModel extends mxEventSource implements IGraphModel,
 		/**
 		 * 
 		 */
-		public mxChildChange()
+		public ChildChange()
 		{
 			this(null, null, null, 0);
 		}
@@ -1862,7 +1859,7 @@ public class GraphModel extends mxEventSource implements IGraphModel,
 		/**
 		 * 
 		 */
-		public mxChildChange(GraphModel model, Object parent, Object child)
+		public ChildChange(GraphModel model, Object parent, Object child)
 		{
 			this(model, parent, child, 0);
 		}
@@ -1870,8 +1867,8 @@ public class GraphModel extends mxEventSource implements IGraphModel,
 		/**
 		 * 
 		 */
-		public mxChildChange(GraphModel model, Object parent, Object child,
-                             int index)
+		public ChildChange(GraphModel model, Object parent, Object child,
+						   int index)
 		{
 			super(model);
 			this.parent = parent;
@@ -2067,7 +2064,7 @@ public class GraphModel extends mxEventSource implements IGraphModel,
 
 	}
 
-	public static class mxTerminalChange extends mxAtomicGraphModelChange
+	public static class TerminalChange extends AtomicGraphModelChange
 	{
 
 		/**
@@ -2083,7 +2080,7 @@ public class GraphModel extends mxEventSource implements IGraphModel,
 		/**
 		 * 
 		 */
-		public mxTerminalChange()
+		public TerminalChange()
 		{
 			this(null, null, null, false);
 		}
@@ -2091,8 +2088,8 @@ public class GraphModel extends mxEventSource implements IGraphModel,
 		/**
 		 * 
 		 */
-		public mxTerminalChange(GraphModel model, Object cell,
-                                Object terminal, boolean source)
+		public TerminalChange(GraphModel model, Object cell,
+							  Object terminal, boolean source)
 		{
 			super(model);
 			this.cell = cell;
@@ -2177,7 +2174,7 @@ public class GraphModel extends mxEventSource implements IGraphModel,
 
 	}
 
-	public static class mxValueChange extends mxAtomicGraphModelChange
+	public static class VlueChange extends AtomicGraphModelChange
 	{
 
 		/**
@@ -2188,7 +2185,7 @@ public class GraphModel extends mxEventSource implements IGraphModel,
 		/**
 		 * 
 		 */
-		public mxValueChange()
+		public VlueChange()
 		{
 			this(null, null, null);
 		}
@@ -2196,7 +2193,7 @@ public class GraphModel extends mxEventSource implements IGraphModel,
 		/**
 		 * 
 		 */
-		public mxValueChange(GraphModel model, Object cell, Object value)
+		public VlueChange(GraphModel model, Object cell, Object value)
 		{
 			super(model);
 			this.cell = cell;
@@ -2264,7 +2261,7 @@ public class GraphModel extends mxEventSource implements IGraphModel,
 
 	}
 
-	public static class mxStyleChange extends mxAtomicGraphModelChange
+	public static class StyleChange extends AtomicGraphModelChange
 	{
 
 		/**
@@ -2280,7 +2277,7 @@ public class GraphModel extends mxEventSource implements IGraphModel,
 		/**
 		 * 
 		 */
-		public mxStyleChange()
+		public StyleChange()
 		{
 			this(null, null, null);
 		}
@@ -2288,7 +2285,7 @@ public class GraphModel extends mxEventSource implements IGraphModel,
 		/**
 		 * 
 		 */
-		public mxStyleChange(GraphModel model, Object cell, String style)
+		public StyleChange(GraphModel model, Object cell, String style)
 		{
 			super(model);
 			this.cell = cell;
@@ -2356,7 +2353,7 @@ public class GraphModel extends mxEventSource implements IGraphModel,
 
 	}
 
-	public static class mxGeometryChange extends mxAtomicGraphModelChange
+	public static class GeometryChange extends AtomicGraphModelChange
 	{
 
 		/**
@@ -2372,7 +2369,7 @@ public class GraphModel extends mxEventSource implements IGraphModel,
 		/**
 		 * 
 		 */
-		public mxGeometryChange()
+		public GeometryChange()
 		{
 			this(null, null, null);
 		}
@@ -2380,8 +2377,8 @@ public class GraphModel extends mxEventSource implements IGraphModel,
 		/**
 		 * 
 		 */
-		public mxGeometryChange(GraphModel model, Object cell,
-                                Geometry geometry)
+		public GeometryChange(GraphModel model, Object cell,
+							  Geometry geometry)
 		{
 			super(model);
 			this.cell = cell;
@@ -2449,7 +2446,7 @@ public class GraphModel extends mxEventSource implements IGraphModel,
 
 	}
 
-	public static class mxCollapseChange extends mxAtomicGraphModelChange
+	public static class CollapseChange extends AtomicGraphModelChange
 	{
 
 		/**
@@ -2465,7 +2462,7 @@ public class GraphModel extends mxEventSource implements IGraphModel,
 		/**
 		 * 
 		 */
-		public mxCollapseChange()
+		public CollapseChange()
 		{
 			this(null, null, false);
 		}
@@ -2473,8 +2470,8 @@ public class GraphModel extends mxEventSource implements IGraphModel,
 		/**
 		 * 
 		 */
-		public mxCollapseChange(GraphModel model, Object cell,
-                                boolean collapsed)
+		public CollapseChange(GraphModel model, Object cell,
+							  boolean collapsed)
 		{
 			super(model);
 			this.cell = cell;
@@ -2542,7 +2539,7 @@ public class GraphModel extends mxEventSource implements IGraphModel,
 
 	}
 
-	public static class mxVisibleChange extends mxAtomicGraphModelChange
+	public static class VisibleChange extends AtomicGraphModelChange
 	{
 
 		/**
@@ -2558,7 +2555,7 @@ public class GraphModel extends mxEventSource implements IGraphModel,
 		/**
 		 * 
 		 */
-		public mxVisibleChange()
+		public VisibleChange()
 		{
 			this(null, null, false);
 		}
@@ -2566,7 +2563,7 @@ public class GraphModel extends mxEventSource implements IGraphModel,
 		/**
 		 * 
 		 */
-		public mxVisibleChange(GraphModel model, Object cell, boolean visible)
+		public VisibleChange(GraphModel model, Object cell, boolean visible)
 		{
 			super(model);
 			this.cell = cell;

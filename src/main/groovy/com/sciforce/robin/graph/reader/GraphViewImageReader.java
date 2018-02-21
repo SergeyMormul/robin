@@ -16,8 +16,8 @@ import javax.xml.parsers.SAXParserFactory;
 import com.sciforce.robin.graph.canvas.Graphics2DCanvas;
 import com.sciforce.robin.graph.canvas.ICanvas;
 import com.sciforce.robin.graph.canvas.ImageCanvas;
-import com.sciforce.robin.graph.util.mxRectangle;
-import com.sciforce.robin.graph.util.mxUtils;
+import com.sciforce.robin.graph.util.Rectangle;
+import com.sciforce.robin.graph.util.Utils;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -54,7 +54,7 @@ public class GraphViewImageReader extends GraphViewReader
 	/**
 	 * Defines the clip to be drawn. Default is null.
 	 */
-	protected mxRectangle clip;
+	protected Rectangle clip;
 
 	/**
 	 * Constructs a new reader with a transparent background.
@@ -168,7 +168,7 @@ public class GraphViewImageReader extends GraphViewReader
 	/**
 	 * 
 	 */
-	public mxRectangle getClip()
+	public Rectangle getClip()
 	{
 		return clip;
 	}
@@ -176,7 +176,7 @@ public class GraphViewImageReader extends GraphViewReader
 	/**
 	 * 
 	 */
-	public void setClip(mxRectangle value)
+	public void setClip(Rectangle value)
 	{
 		this.clip = value;
 	}
@@ -194,7 +194,7 @@ public class GraphViewImageReader extends GraphViewReader
 		int dx = 0;
 		int dy = 0;
 
-		mxRectangle tmp = getClip();
+		Rectangle tmp = getClip();
 
 		if (tmp != null)
 		{
@@ -205,11 +205,11 @@ public class GraphViewImageReader extends GraphViewReader
 		}
 		else
 		{
-			int x = (int) Math.round(mxUtils.getDouble(attrs, "x"));
-			int y = (int) Math.round(mxUtils.getDouble(attrs, "y"));
-			width = (int) (Math.round(mxUtils.getDouble(attrs, "width")))
+			int x = (int) Math.round(Utils.getDouble(attrs, "x"));
+			int y = (int) Math.round(Utils.getDouble(attrs, "y"));
+			width = (int) (Math.round(Utils.getDouble(attrs, "width")))
 					+ border + 3;
-			height = (int) (Math.round(mxUtils.getDouble(attrs, "height")))
+			height = (int) (Math.round(Utils.getDouble(attrs, "height")))
 					+ border + 3;
 
 			if (isCropping())

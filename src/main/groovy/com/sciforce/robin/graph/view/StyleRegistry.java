@@ -7,7 +7,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 
-import com.sciforce.robin.graph.util.mxConstants;
+import com.sciforce.robin.graph.util.Constants;
 
 /**
  * Singleton class that acts as a global converter from string to object values
@@ -24,21 +24,21 @@ public class StyleRegistry
 	// Registers the known object styles
 	static
 	{
-		putValue(mxConstants.EDGESTYLE_ELBOW, EdgeStyle.ElbowConnector);
-		putValue(mxConstants.EDGESTYLE_ENTITY_RELATION,
+		putValue(Constants.EDGESTYLE_ELBOW, EdgeStyle.ElbowConnector);
+		putValue(Constants.EDGESTYLE_ENTITY_RELATION,
 				EdgeStyle.EntityRelation);
-		putValue(mxConstants.EDGESTYLE_LOOP, EdgeStyle.Loop);
-		putValue(mxConstants.EDGESTYLE_SIDETOSIDE, EdgeStyle.SideToSide);
-		putValue(mxConstants.EDGESTYLE_TOPTOBOTTOM, EdgeStyle.TopToBottom);
-		putValue(mxConstants.EDGESTYLE_ORTHOGONAL, EdgeStyle.OrthConnector);
-		putValue(mxConstants.EDGESTYLE_SEGMENT, EdgeStyle.SegmentConnector);
+		putValue(Constants.EDGESTYLE_LOOP, EdgeStyle.Loop);
+		putValue(Constants.EDGESTYLE_SIDETOSIDE, EdgeStyle.SideToSide);
+		putValue(Constants.EDGESTYLE_TOPTOBOTTOM, EdgeStyle.TopToBottom);
+		putValue(Constants.EDGESTYLE_ORTHOGONAL, EdgeStyle.OrthConnector);
+		putValue(Constants.EDGESTYLE_SEGMENT, EdgeStyle.SegmentConnector);
 
-		putValue(mxConstants.PERIMETER_ELLIPSE, Perimeter.EllipsePerimeter);
-		putValue(mxConstants.PERIMETER_RECTANGLE,
+		putValue(Constants.PERIMETER_ELLIPSE, Perimeter.EllipsePerimeter);
+		putValue(Constants.PERIMETER_RECTANGLE,
 				Perimeter.RectanglePerimeter);
-		putValue(mxConstants.PERIMETER_RHOMBUS, Perimeter.RhombusPerimeter);
-		putValue(mxConstants.PERIMETER_TRIANGLE, Perimeter.TrianglePerimeter);
-		putValue(mxConstants.PERIMETER_HEXAGON, Perimeter.HexagonPerimeter);
+		putValue(Constants.PERIMETER_RHOMBUS, Perimeter.RhombusPerimeter);
+		putValue(Constants.PERIMETER_TRIANGLE, Perimeter.TrianglePerimeter);
+		putValue(Constants.PERIMETER_HEXAGON, Perimeter.HexagonPerimeter);
 	}
 
 	/**

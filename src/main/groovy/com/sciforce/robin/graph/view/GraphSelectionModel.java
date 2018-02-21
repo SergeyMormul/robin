@@ -10,22 +10,22 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.sciforce.robin.graph.util.mxEvent;
-import com.sciforce.robin.graph.util.mxEventObject;
-import com.sciforce.robin.graph.util.mxEventSource;
-import com.sciforce.robin.graph.util.mxUndoableEdit;
+import com.sciforce.robin.graph.util.Event;
+import com.sciforce.robin.graph.util.EventObject;
+import com.sciforce.robin.graph.util.EventSource;
+import com.sciforce.robin.graph.util.UndoableEdit;
 
 /**
  * Implements the selection model for a graph.
  * 
  * This class fires the following events:
  * 
- * mxEvent.UNDO fires after the selection was changed in changeSelection. The
- * <code>edit</code> property contains the mxUndoableEdit which contains the
- * mxSelectionChange.
+ * Event.UNDO fires after the selection was changed in changeSelection. The
+ * <code>edit</code> property contains the UndoableEdit which contains the
+ * SelectionChange.
  * 
- * mxEvent.CHANGE fires after the selection changes by executing an
- * mxSelectionChange. The <code>added</code> and <code>removed</code>
+ * Event.CHANGE fires after the selection changes by executing an
+ * SelectionChange. The <code>added</code> and <code>removed</code>
  * properties contain Collections of cells that have been added to or removed
  * from the selection, respectively.
  * 
@@ -36,9 +36,9 @@ import com.sciforce.robin.graph.util.mxUndoableEdit;
  * 
  * <code>
  * addListener(
- *   mxEvent.CHANGE, new mxIEventListener()
+ *   Event.CHANGE, new mxIEventListener()
  *   {
- *     public void invoke(Object sender, mxEventObject evt)
+ *     public void invoke(Object sender, EventObject evt)
  *     {
  *       GraphSelectionModel model = (mxSelectionModel) sender;
  *       Collection added = (Collection) evt.getProperty("added");
@@ -48,7 +48,7 @@ import com.sciforce.robin.graph.util.mxUndoableEdit;
  *   });
  * </code>
  */
-public class GraphSelectionModel extends mxEventSource
+public class GraphSelectionModel extends EventSource
 {
 
 	/**
@@ -292,12 +292,12 @@ public class GraphSelectionModel extends mxEventSource
 		if ((added != null && !added.isEmpty())
 				|| (removed != null && !removed.isEmpty()))
 		{
-			mxSelectionChange change = new mxSelectionChange(this, added,
+			SelectionChange change = new SelectionChange(this, added,
 					removed);
 			change.execute();
-			mxUndoableEdit edit = new mxUndoableEdit(this, false);
+			UndoableEdit edit = new UndoableEdit(this, false);
 			edit.add(change);
-			fireEvent(new mxEventObject(mxEvent.UNDO, "edit", edit));
+			fireEvent(new EventObject(Event.UNDO, "edit", edit));
 		}
 	}
 
@@ -326,7 +326,7 @@ public class GraphSelectionModel extends mxEventSource
 	/**
 	 *
 	 */
-	public static class mxSelectionChange implements mxUndoableEdit.mxUndoableChange
+	public static class SelectionChange implements UndoableEdit.UndoableChange
 	{
 
 		/**
@@ -345,8 +345,8 @@ public class GraphSelectionModel extends mxEventSource
 		 * @param added
 		 * @param removed
 		 */
-		public mxSelectionChange(GraphSelectionModel model,
-				Collection<Object> added, Collection<Object> removed)
+		public SelectionChange(GraphSelectionModel model,
+							   Collection<Object> added, Collection<Object> removed)
 		{
 			this.model = model;
 			this.added = (added != null) ? new ArrayList<Object>(added) : null;
@@ -382,7 +382,7 @@ public class GraphSelectionModel extends mxEventSource
 			Collection<Object> tmp = added;
 			added = removed;
 			removed = tmp;
-			model.fireEvent(new mxEventObject(mxEvent.CHANGE, "added", added,
+			model.fireEvent(new EventObject(Event.CHANGE, "added", added,
 					"removed", removed));
 		}
 

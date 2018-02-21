@@ -5,7 +5,7 @@ package com.sciforce.robin.graph.analysis;
 
 import java.util.Map;
 
-import com.sciforce.robin.graph.util.mxUtils;
+import com.sciforce.robin.graph.util.Utils;
 
 /**
  * Constants for graph structure properties
@@ -80,7 +80,7 @@ public class GraphProperties
 	{
 		if (properties != null)
 		{
-			return mxUtils.isTrue(properties, TRAVERSE_VISIBLE, defaultValue);
+			return Utils.isTrue(properties, TRAVERSE_VISIBLE, defaultValue);
 		}
 
 		return false;
@@ -109,7 +109,7 @@ public class GraphProperties
 	{
 		if (properties != null)
 		{
-			return mxUtils.isTrue(properties, DIRECTED, defaultValue);
+			return Utils.isTrue(properties, DIRECTED, defaultValue);
 		}
 
 		return false;

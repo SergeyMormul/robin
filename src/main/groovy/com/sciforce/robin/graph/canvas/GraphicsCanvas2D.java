@@ -32,18 +32,18 @@ import java.util.logging.Logger;
 import javax.swing.CellRendererPane;
 import javax.swing.JLabel;
 
-import com.sciforce.robin.graph.util.mxConstants;
-import com.sciforce.robin.graph.util.mxLightweightLabel;
-import com.sciforce.robin.graph.util.mxUtils;
+import com.sciforce.robin.graph.util.Constants;
+import com.sciforce.robin.graph.util.LightweightLabel;
+import com.sciforce.robin.graph.util.Utils;
 
 /**
  * Used for exporting images. To render to an image from a given XML string,
  * graph size and background color, the following code is used:
  * 
  * <code>
- * BufferedImage image = mxUtils.createBufferedImage(width, height, background);
+ * BufferedImage image = Utils.createBufferedImage(width, height, background);
  * Graphics2D g2 = image.createGraphics();
- * mxUtils.setAntiAlias(g2, true, true);
+ * Utils.setAntiAlias(g2, true, true);
  * XMLReader reader = SAXParserFactory.newInstance().newSAXParser().getXMLReader();
  * reader.setContentHandler(new SaxOutputHandler(new GraphicsCanvas2D(g2)));
  * reader.parse(new InputSource(new StringReader(xml)));
@@ -383,7 +383,7 @@ public class GraphicsCanvas2D implements ICanvas2D
 	{
 		if (value != null && value.length() > 0)
 		{
-			state.dashPattern = mxUtils.parseDashPattern(value);
+			state.dashPattern = Utils.parseDashPattern(value);
 		}
 	}
 
@@ -558,19 +558,19 @@ public class GraphicsCanvas2D implements ICanvas2D
 		w *= state.scale;
 
 		if (direction == null || direction.length() == 0
-				|| direction.equals(mxConstants.DIRECTION_SOUTH))
+				|| direction.equals(Constants.DIRECTION_SOUTH))
 		{
 			y2 = (float) (y1 + h);
 		}
-		else if (direction.equals(mxConstants.DIRECTION_EAST))
+		else if (direction.equals(Constants.DIRECTION_EAST))
 		{
 			x2 = (float) (x1 + w);
 		}
-		else if (direction.equals(mxConstants.DIRECTION_NORTH))
+		else if (direction.equals(Constants.DIRECTION_NORTH))
 		{
 			y1 = (float) (y1 + h);
 		}
-		else if (direction.equals(mxConstants.DIRECTION_WEST))
+		else if (direction.equals(Constants.DIRECTION_WEST))
 		{
 			x1 = (float) (x1 + w);
 		}
@@ -598,7 +598,7 @@ public class GraphicsCanvas2D implements ICanvas2D
 	}
 
 	/**
-	 * Helper method that uses {@link mxUtils#parseColor(String)}.
+	 * Helper method that uses {@link Utils#parseColor(String)}.
 	 */
 	protected Color parseColor(String hex)
 	{
@@ -606,7 +606,7 @@ public class GraphicsCanvas2D implements ICanvas2D
 	};
 
 	/**
-	 * Helper method that uses {@link mxUtils#parseColor(String)}.
+	 * Helper method that uses {@link Utils#parseColor(String)}.
 	 */
 	protected Color parseColor(String hex, double alpha)
 	{
@@ -614,7 +614,7 @@ public class GraphicsCanvas2D implements ICanvas2D
 
 		if (result == null)
 		{
-			result = mxUtils.parseColor(hex, alpha);
+			result = Utils.parseColor(hex, alpha);
 			colorCache.put(hex + "-" + (int) (alpha * 255), result);
 		}
 
@@ -701,7 +701,7 @@ public class GraphicsCanvas2D implements ICanvas2D
 	 */
 	protected Image loadImage(String src)
 	{
-		return mxUtils.loadImage(src);
+		return Utils.loadImage(src);
 	}
 
 	/**
@@ -818,38 +818,38 @@ public class GraphicsCanvas2D implements ICanvas2D
 		css.append("color:" + state.fontColorValue + ";");
 		// KNOWN: Line-height ignored in JLabel
 		css.append("line-height:"
-				+ ((mxConstants.ABSOLUTE_LINE_HEIGHT)
-						? Math.round(state.fontSize * mxConstants.LINE_HEIGHT)
+				+ ((Constants.ABSOLUTE_LINE_HEIGHT)
+						? Math.round(state.fontSize * Constants.LINE_HEIGHT)
 								+ " " + HTML_UNIT
-						: mxConstants.LINE_HEIGHT)
+						: Constants.LINE_HEIGHT)
 				+ ";");
 
 		boolean setWidth = false;
 
-		if ((state.fontStyle & mxConstants.FONT_BOLD) == mxConstants.FONT_BOLD)
+		if ((state.fontStyle & Constants.FONT_BOLD) == Constants.FONT_BOLD)
 		{
 			css.append("font-weight:bold;");
 		}
 
 		if ((state.fontStyle
-				& mxConstants.FONT_ITALIC) == mxConstants.FONT_ITALIC)
+				& Constants.FONT_ITALIC) == Constants.FONT_ITALIC)
 		{
 			css.append("font-style:italic;");
 		}
 
 		if ((state.fontStyle
-				& mxConstants.FONT_UNDERLINE) == mxConstants.FONT_UNDERLINE)
+				& Constants.FONT_UNDERLINE) == Constants.FONT_UNDERLINE)
 		{
 			css.append("text-decoration:underline;");
 		}
 
 		if (align != null)
 		{
-			if (align.equals(mxConstants.ALIGN_CENTER))
+			if (align.equals(Constants.ALIGN_CENTER))
 			{
 				css.append("text-align:center;");
 			}
-			else if (align.equals(mxConstants.ALIGN_RIGHT))
+			else if (align.equals(Constants.ALIGN_RIGHT))
 			{
 				css.append("text-align:right;");
 			}
@@ -929,7 +929,7 @@ public class GraphicsCanvas2D implements ICanvas2D
 	 */
 	protected JLabel getTextRenderer()
 	{
-		return mxLightweightLabel.getSharedInstance();
+		return LightweightLabel.getSharedInstance();
 	}
 
 	/**
@@ -942,11 +942,11 @@ public class GraphicsCanvas2D implements ICanvas2D
 
 		if (align != null)
 		{
-			if (align.equals(mxConstants.ALIGN_CENTER))
+			if (align.equals(Constants.ALIGN_CENTER))
 			{
 				dx = -0.5;
 			}
-			else if (align.equals(mxConstants.ALIGN_RIGHT))
+			else if (align.equals(Constants.ALIGN_RIGHT))
 			{
 				dx = -1;
 			}
@@ -954,11 +954,11 @@ public class GraphicsCanvas2D implements ICanvas2D
 
 		if (valign != null)
 		{
-			if (valign.equals(mxConstants.ALIGN_MIDDLE))
+			if (valign.equals(Constants.ALIGN_MIDDLE))
 			{
 				dy = -0.5;
 			}
-			else if (valign.equals(mxConstants.ALIGN_BOTTOM))
+			else if (valign.equals(Constants.ALIGN_BOTTOM))
 			{
 				dy = -1;
 			}
@@ -1133,7 +1133,7 @@ public class GraphicsCanvas2D implements ICanvas2D
 			}
 
 			int textHeight = (int) Math.round(lines.length
-					* (fm.getFont().getSize() * mxConstants.LINE_HEIGHT));
+					* (fm.getFont().getSize() * Constants.LINE_HEIGHT));
 
 			if (clip && textHeight > h && h > 0)
 			{
@@ -1185,11 +1185,11 @@ public class GraphicsCanvas2D implements ICanvas2D
 
 				if (align != null)
 				{
-					if (align.equals(mxConstants.ALIGN_CENTER))
+					if (align.equals(Constants.ALIGN_CENTER))
 					{
 						dx = (textWidth - stringWidths[i]) / 2;
 					}
-					else if (align.equals(mxConstants.ALIGN_RIGHT))
+					else if (align.equals(Constants.ALIGN_RIGHT))
 					{
 						dx = textWidth - stringWidths[i];
 					}
@@ -1199,7 +1199,7 @@ public class GraphicsCanvas2D implements ICanvas2D
 				if (!lines[i].isEmpty())
 				{
 					if ((state.fontStyle
-							& mxConstants.FONT_UNDERLINE) == mxConstants.FONT_UNDERLINE)
+							& Constants.FONT_UNDERLINE) == Constants.FONT_UNDERLINE)
 					{
 						AttributedString as = new AttributedString(lines[i]);
 						as.addAttribute(TextAttribute.FONT, g2.getFont());
@@ -1217,7 +1217,7 @@ public class GraphicsCanvas2D implements ICanvas2D
 				}
 
 				y += (int) Math.round(
-						fm.getFont().getSize() * mxConstants.LINE_HEIGHT);
+						fm.getFont().getSize() * Constants.LINE_HEIGHT);
 			}
 		}
 	}
@@ -1515,10 +1515,10 @@ public class GraphicsCanvas2D implements ICanvas2D
 	{
 		int size = (int) Math.round(state.fontSize * state.scale);
 		int style = ((state.fontStyle
-				& mxConstants.FONT_BOLD) == mxConstants.FONT_BOLD) ? Font.BOLD
+				& Constants.FONT_BOLD) == Constants.FONT_BOLD) ? Font.BOLD
 						: Font.PLAIN;
 		style += ((state.fontStyle
-				& mxConstants.FONT_ITALIC) == mxConstants.FONT_ITALIC)
+				& Constants.FONT_ITALIC) == Constants.FONT_ITALIC)
 						? Font.ITALIC : Font.PLAIN;
 
 		if (lastFont == null || !lastFontFamily.equals(state.fontFamily)
@@ -1693,12 +1693,12 @@ public class GraphicsCanvas2D implements ICanvas2D
 		/**
 		 * 
 		 */
-		protected double fontSize = mxConstants.DEFAULT_FONTSIZE;
+		protected double fontSize = Constants.DEFAULT_FONTSIZE;
 
 		/**
 		 * 
 		 */
-		protected String fontFamily = mxConstants.DEFAULT_FONTFAMILIES;
+		protected String fontFamily = Constants.DEFAULT_FONTFAMILIES;
 
 		/**
 		 * 
@@ -1793,7 +1793,7 @@ public class GraphicsCanvas2D implements ICanvas2D
 		/**
 		 * 
 		 */
-		protected String shadowColorValue = mxConstants.W3C_SHADOWCOLOR;
+		protected String shadowColorValue = Constants.W3C_SHADOWCOLOR;
 
 		/**
 		 * 
@@ -1808,12 +1808,12 @@ public class GraphicsCanvas2D implements ICanvas2D
 		/**
 		 * 
 		 */
-		protected double shadowOffsetX = mxConstants.SHADOW_OFFSETX;
+		protected double shadowOffsetX = Constants.SHADOW_OFFSETX;
 
 		/**
 		 * 
 		 */
-		protected double shadowOffsetY = mxConstants.SHADOW_OFFSETY;
+		protected double shadowOffsetY = Constants.SHADOW_OFFSETY;
 
 		/**
 		 * Stores the actual state.

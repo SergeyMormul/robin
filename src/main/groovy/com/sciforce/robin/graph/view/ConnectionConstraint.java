@@ -3,7 +3,7 @@
  */
 package com.sciforce.robin.graph.view;
 
-import com.sciforce.robin.graph.util.mxPoint;
+import com.sciforce.robin.graph.util.Point;
 
 /**
  * Defines an object that contains the constraints about how to connect one
@@ -14,7 +14,7 @@ public class ConnectionConstraint
 	/**
 	 * Point that specifies the fixed location of the connection point.
 	 */
-	protected mxPoint point;
+	protected Point point;
 
 	/**
 	 * Boolean that specifies if the point should be projected onto the perimeter
@@ -33,7 +33,7 @@ public class ConnectionConstraint
 	/**
 	 * Constructs a connection constraint for the given point.
 	 */
-	public ConnectionConstraint(mxPoint point)
+	public ConnectionConstraint(Point point)
 	{
 		this(point, true);
 	}
@@ -42,12 +42,12 @@ public class ConnectionConstraint
 	 * Constructs a new connection constraint for the given point and boolean
 	 * arguments.
 	 * 
-	 * @param point Optional mxPoint that specifies the fixed location of the point
+	 * @param point Optional Point that specifies the fixed location of the point
 	 * in relative coordinates. Default is null.
 	 * @param perimeter Optional boolean that specifies if the fixed point should be
 	 * projected onto the perimeter of the terminal. Default is true.
 	 */
-	public ConnectionConstraint(mxPoint point, boolean perimeter)
+	public ConnectionConstraint(Point point, boolean perimeter)
 	{
 		setPoint(point);
 		setPerimeter(perimeter);
@@ -56,7 +56,7 @@ public class ConnectionConstraint
 	/**
 	 * Returns the point.
 	 */
-	public mxPoint getPoint()
+	public Point getPoint()
 	{
 		return point;
 	}
@@ -64,7 +64,7 @@ public class ConnectionConstraint
 	/**
 	 * Sets the point.
 	 */
-	public void setPoint(mxPoint value)
+	public void setPoint(Point value)
 	{
 		point = value;
 	}

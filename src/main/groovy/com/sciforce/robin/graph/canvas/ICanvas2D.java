@@ -3,7 +3,7 @@
  */
 package com.sciforce.robin.graph.canvas;
 
-import com.sciforce.robin.graph.util.mxConstants;
+import com.sciforce.robin.graph.util.Constants;
 
 /**
  * Requirements for implementing technologies:
@@ -67,10 +67,10 @@ public interface ICanvas2D
 	void setStrokeWidth(double value);
 
 	/**
-	 * Sets the stroke color. This should default to {@link mxConstants#NONE}
+	 * Sets the stroke color. This should default to {@link Constants#NONE}
 	 * if unset.
 	 * 
-	 * @param value Hex representation of the color or {@link mxConstants#NONE}.
+	 * @param value Hex representation of the color or {@link Constants#NONE}.
 	 */
 	void setStrokeColor(String value);
 
@@ -118,7 +118,7 @@ public interface ICanvas2D
 	void setMiterLimit(double value);
 
 	/**
-	 * Default value {@link mxConstants#DEFAULT_FONTSIZE}.
+	 * Default value {@link Constants#DEFAULT_FONTSIZE}.
 	 * 
 	 * @param value
 	 */
@@ -127,19 +127,19 @@ public interface ICanvas2D
 	/**
 	 * Default value "#000000".
 	 * 
-	 * @param value Hex representation of the color or {@link mxConstants#NONE}.
+	 * @param value Hex representation of the color or {@link Constants#NONE}.
 	 */
 	void setFontColor(String value);
 
 	/**
-	 * Default value {@link mxConstants#DEFAULT_FONTFAMILY}.
+	 * Default value {@link Constants#DEFAULT_FONTFAMILY}.
 	 * 
 	 * @param value
 	 */
 	void setFontFamily(String value);
 
 	/**
-	 * Default value 0. See {@link mxConstants#STYLE_FONTSTYLE}.
+	 * Default value 0. See {@link Constants#STYLE_FONTSTYLE}.
 	 * 
 	 * @param value
 	 */
@@ -148,14 +148,14 @@ public interface ICanvas2D
 	/**
 	 * Default value "#000000".
 	 * 
-	 * @param value Hex representation of the color or {@link mxConstants#NONE}.
+	 * @param value Hex representation of the color or {@link Constants#NONE}.
 	 */
 	void setFontBackgroundColor(String value);
 
 	/**
 	 * Default value "#000000".
 	 * 
-	 * @param value Hex representation of the color or {@link mxConstants#NONE}.
+	 * @param value Hex representation of the color or {@link Constants#NONE}.
 	 */
 	void setFontBorderColor(String value);
 
@@ -184,9 +184,9 @@ public interface ICanvas2D
 	void setStrokeAlpha(double value);
 
 	/**
-	 * Default value {@link mxConstants#NONE}.
+	 * Default value {@link Constants#NONE}.
 	 * 
-	 * @param value Hex representation of the color or {@link mxConstants#NONE}.
+	 * @param value Hex representation of the color or {@link Constants#NONE}.
 	 */
 	void setFillColor(String value);
 
@@ -200,7 +200,7 @@ public interface ICanvas2D
 	 * @param w
 	 * @param h
 	 * @param direction Direction may be null. Use default value
-	 * 		{@link mxConstants#DIRECTION_SOUTH}.
+	 * 		{@link Constants#DIRECTION_SOUTH}.
 	 */
 	void setGradient(String color1, String color2, double x, double y,
                      double w, double h, String direction, double alpha1, double alpha2);
@@ -213,23 +213,23 @@ public interface ICanvas2D
 	void setShadow(boolean enabled);
 
 	/**
-	 * Default value {@link mxConstants#NONE}.
+	 * Default value {@link Constants#NONE}.
 	 * 
-	 * @param value Hex representation of the color or {@link mxConstants#NONE}.
+	 * @param value Hex representation of the color or {@link Constants#NONE}.
 	 */
 	void setShadowColor(String value);
 
 	/**
-	 * Default value {@link mxConstants#NONE}.
+	 * Default value {@link Constants#NONE}.
 	 * 
-	 * @param value Hex representation of the color or {@link mxConstants#NONE}.
+	 * @param value Hex representation of the color or {@link Constants#NONE}.
 	 */
 	void setShadowAlpha(double value);
 
 	/**
-	 * Default value {@link mxConstants#NONE}.
+	 * Default value {@link Constants#NONE}.
 	 * 
-	 * @param value Hex representation of the color or {@link mxConstants#NONE}.
+	 * @param value Hex representation of the color or {@link Constants#NONE}.
 	 */
 	void setShadowOffset(double dx, double dy);
 

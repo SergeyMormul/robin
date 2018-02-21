@@ -7,13 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.sciforce.robin.graph.util.mxPoint;
-import com.sciforce.robin.graph.util.mxRectangle;
+import com.sciforce.robin.graph.util.Point;
+import com.sciforce.robin.graph.util.Rectangle;
 
 /**
  * Represents the current state of a cell in a given graph view.
  */
-public class CellState extends mxRectangle
+public class CellState extends Rectangle
 {
 	/**
 	 * 
@@ -45,19 +45,19 @@ public class CellState extends mxRectangle
 	/**
 	 * Holds the origin for all child cells.
 	 */
-	protected mxPoint origin = new mxPoint();
+	protected Point origin = new Point();
 
 	/**
 	 * List of mxPoints that represent the absolute points of an edge.
 	 */
-	protected List<mxPoint> absolutePoints;
+	protected List<Point> absolutePoints;
 
 	/**
 	 * Holds the absolute offset. For edges, this is the absolute coordinates
 	 * of the label position. For vertices, this is the offset of the label
 	 * relative to the top, left corner of the vertex.
 	 */
-	protected mxPoint absoluteOffset = new mxPoint();
+	protected Point absoluteOffset = new Point();
 
 	/**
 	 * Caches the distance between the end points and the length of an edge.
@@ -73,12 +73,12 @@ public class CellState extends mxRectangle
 	/**
 	 * Holds the rectangle which contains the label.
 	 */
-	protected mxRectangle labelBounds;
+	protected Rectangle labelBounds;
 
 	/**
 	 * Holds the largest rectangle which contains all rendering for this cell.
 	 */
-	protected mxRectangle boundingBox;
+	protected Rectangle boundingBox;
 
 	/**
 	 * Specifies if the state is invalid. Default is true.
@@ -210,7 +210,7 @@ public class CellState extends mxRectangle
 	 * 
 	 * @return the origin
 	 */
-	public mxPoint getOrigin()
+	public Point getOrigin()
 	{
 		return origin;
 	}
@@ -220,7 +220,7 @@ public class CellState extends mxRectangle
 	 * 
 	 * @param origin the origin to set
 	 */
-	public void setOrigin(mxPoint origin)
+	public void setOrigin(Point origin)
 	{
 		this.origin = origin;
 	}
@@ -228,9 +228,9 @@ public class CellState extends mxRectangle
 	/**
 	 * Returns the absolute point at the given index.
 	 * 
-	 * @return the mxPoint at the given index
+	 * @return the Point at the given index
 	 */
-	public mxPoint getAbsolutePoint(int index)
+	public Point getAbsolutePoint(int index)
 	{
 		return absolutePoints.get(index);
 	}
@@ -238,9 +238,9 @@ public class CellState extends mxRectangle
 	/**
 	 * Returns the absolute point at the given index.
 	 * 
-	 * @return the mxPoint at the given index
+	 * @return the Point at the given index
 	 */
-	public mxPoint setAbsolutePoint(int index, mxPoint point)
+	public Point setAbsolutePoint(int index, Point point)
 	{
 		return absolutePoints.set(index, point);
 	}
@@ -260,7 +260,7 @@ public class CellState extends mxRectangle
 	 * 
 	 * @return the absolutePoints
 	 */
-	public List<mxPoint> getAbsolutePoints()
+	public List<Point> getAbsolutePoints()
 	{
 		return absolutePoints;
 	}
@@ -270,7 +270,7 @@ public class CellState extends mxRectangle
 	 * 
 	 * @param absolutePoints the absolutePoints to set
 	 */
-	public void setAbsolutePoints(List<mxPoint> absolutePoints)
+	public void setAbsolutePoints(List<Point> absolutePoints)
 	{
 		this.absolutePoints = absolutePoints;
 	}
@@ -280,7 +280,7 @@ public class CellState extends mxRectangle
 	 * 
 	 * @return the absoluteOffset
 	 */
-	public mxPoint getAbsoluteOffset()
+	public Point getAbsoluteOffset()
 	{
 		return absoluteOffset;
 	}
@@ -290,7 +290,7 @@ public class CellState extends mxRectangle
 	 * 
 	 * @param absoluteOffset the absoluteOffset to set
 	 */
-	public void setAbsoluteOffset(mxPoint absoluteOffset)
+	public void setAbsoluteOffset(Point absoluteOffset)
 	{
 		this.absoluteOffset = absoluteOffset;
 	}
@@ -360,7 +360,7 @@ public class CellState extends mxRectangle
 	 * 
 	 * @return Returns the label bounds for this state.
 	 */
-	public mxRectangle getLabelBounds()
+	public Rectangle getLabelBounds()
 	{
 		return labelBounds;
 	}
@@ -370,7 +370,7 @@ public class CellState extends mxRectangle
 	 * 
 	 * @param labelBounds
 	 */
-	public void setLabelBounds(mxRectangle labelBounds)
+	public void setLabelBounds(Rectangle labelBounds)
 	{
 		this.labelBounds = labelBounds;
 	}
@@ -380,7 +380,7 @@ public class CellState extends mxRectangle
 	 * 
 	 * @return Returns the bounding box for this state.
 	 */
-	public mxRectangle getBoundingBox()
+	public Rectangle getBoundingBox()
 	{
 		return boundingBox;
 	}
@@ -390,7 +390,7 @@ public class CellState extends mxRectangle
 	 * 
 	 * @param boundingBox
 	 */
-	public void setBoundingBox(mxRectangle boundingBox)
+	public void setBoundingBox(Rectangle boundingBox)
 	{
 		this.boundingBox = boundingBox;
 	}
@@ -402,7 +402,7 @@ public class CellState extends mxRectangle
 	 * 
 	 * @return Returns the rectangle that defines the perimeter.
 	 */
-	public mxRectangle getPerimeterBounds()
+	public Rectangle getPerimeterBounds()
 	{
 		return getPerimeterBounds(0);
 	}
@@ -412,9 +412,9 @@ public class CellState extends mxRectangle
 	 * 
 	 * @return Returns the rectangle that defines the perimeter.
 	 */
-	public mxRectangle getPerimeterBounds(double border)
+	public Rectangle getPerimeterBounds(double border)
 	{
-		mxRectangle bounds = new mxRectangle(getRectangle());
+		Rectangle bounds = new Rectangle(getRectangle());
 
 		if (border != 0)
 		{
@@ -431,13 +431,13 @@ public class CellState extends mxRectangle
 	 * @param isSource Boolean that specifies if the first or last point should
 	 * be assigned.
 	 */
-	public void setAbsoluteTerminalPoint(mxPoint point, boolean isSource)
+	public void setAbsoluteTerminalPoint(Point point, boolean isSource)
 	{
 		if (isSource)
 		{
 			if (absolutePoints == null)
 			{
-				absolutePoints = new ArrayList<mxPoint>();
+				absolutePoints = new ArrayList<Point>();
 			}
 
 			if (absolutePoints.size() == 0)
@@ -453,7 +453,7 @@ public class CellState extends mxRectangle
 		{
 			if (absolutePoints == null)
 			{
-				absolutePoints = new ArrayList<mxPoint>();
+				absolutePoints = new ArrayList<Point>();
 				absolutePoints.add(null);
 				absolutePoints.add(point);
 			}
@@ -527,33 +527,33 @@ public class CellState extends mxRectangle
 
 		if (absolutePoints != null)
 		{
-			clone.absolutePoints = new ArrayList<mxPoint>();
+			clone.absolutePoints = new ArrayList<Point>();
 
 			for (int i = 0; i < absolutePoints.size(); i++)
 			{
-				clone.absolutePoints.add((mxPoint) absolutePoints.get(i)
+				clone.absolutePoints.add((Point) absolutePoints.get(i)
 						.clone());
 			}
 		}
 
 		if (origin != null)
 		{
-			clone.origin = (mxPoint) origin.clone();
+			clone.origin = (Point) origin.clone();
 		}
 
 		if (absoluteOffset != null)
 		{
-			clone.absoluteOffset = (mxPoint) absoluteOffset.clone();
+			clone.absoluteOffset = (Point) absoluteOffset.clone();
 		}
 
 		if (labelBounds != null)
 		{
-			clone.labelBounds = (mxRectangle) labelBounds.clone();
+			clone.labelBounds = (Rectangle) labelBounds.clone();
 		}
 
 		if (boundingBox != null)
 		{
-			clone.boundingBox = (mxRectangle) boundingBox.clone();
+			clone.boundingBox = (Rectangle) boundingBox.clone();
 		}
 
 		clone.terminalDistance = terminalDistance;

@@ -6,14 +6,14 @@ package com.sciforce.robin.graph.view;
 import java.util.List;
 
 import com.sciforce.robin.graph.model.IGraphModel;
-import com.sciforce.robin.graph.util.mxConstants;
-import com.sciforce.robin.graph.util.mxPoint;
-import com.sciforce.robin.graph.util.mxUtils;
+import com.sciforce.robin.graph.util.Constants;
+import com.sciforce.robin.graph.util.Point;
+import com.sciforce.robin.graph.util.Utils;
 import com.sciforce.robin.graph.model.Geometry;
 
 /**
  * Provides various edge styles to be used as the values for
- * mxConstants.STYLE_EDGE in a cell style. Alternatevly, the mxConstants.
+ * Constants.STYLE_EDGE in a cell style. Alternatevly, the Constants.
  * EDGESTYLE_* constants can be used to reference an edge style via the
  * StyleRegistry.
  */
@@ -44,7 +44,7 @@ public class EdgeStyle
 		 * edge.
 		 */
 		void apply(CellState state, CellState source, CellState target,
-				   List<mxPoint> points, List<mxPoint> result);
+                   List<Point> points, List<Point> result);
 
 	}
 
@@ -59,16 +59,16 @@ public class EdgeStyle
 		 * @see EdgeStyle.mxEdgeStyleFunction#apply(CellState, CellState, CellState, java.util.List, java.util.List)
 		 */
 		public void apply(CellState state, CellState source,
-						  CellState target, List<mxPoint> points, List<mxPoint> result)
+                          CellState target, List<Point> points, List<Point> result)
 		{
 			GraphView view = state.getView();
 			IGraphModel model = view.getGraph().getModel();
-			double segment = mxUtils.getDouble(state.getStyle(),
-					mxConstants.STYLE_SEGMENT, mxConstants.ENTITY_SEGMENT)
+			double segment = Utils.getDouble(state.getStyle(),
+					Constants.STYLE_SEGMENT, Constants.ENTITY_SEGMENT)
 					* state.view.getScale();
 
-			mxPoint p0 = state.getAbsolutePoint(0);
-			mxPoint pe = state
+			Point p0 = state.getAbsolutePoint(0);
+			Point pe = state
 					.getAbsolutePoint(state.getAbsolutePointCount() - 1);
 
 			boolean isSourceLeft = false;
@@ -81,11 +81,11 @@ public class EdgeStyle
 			}
 			else if (source != null)
 			{
-				int constraint = mxUtils.getPortConstraints(source, state, true, mxConstants.DIRECTION_MASK_NONE);
+				int constraint = Utils.getPortConstraints(source, state, true, Constants.DIRECTION_MASK_NONE);
 				
-				if (constraint != mxConstants.DIRECTION_MASK_NONE)
+				if (constraint != Constants.DIRECTION_MASK_NONE)
 				{
-					isSourceLeft = constraint == mxConstants.DIRECTION_MASK_WEST;
+					isSourceLeft = constraint == Constants.DIRECTION_MASK_WEST;
 				}
 				else
 				{
@@ -113,11 +113,11 @@ public class EdgeStyle
 			}
 			else if (target != null)
 			{
-				int constraint = mxUtils.getPortConstraints(target, state, false, mxConstants.DIRECTION_MASK_NONE);
+				int constraint = Utils.getPortConstraints(target, state, false, Constants.DIRECTION_MASK_NONE);
 				
-				if (constraint != mxConstants.DIRECTION_MASK_NONE)
+				if (constraint != Constants.DIRECTION_MASK_NONE)
 				{
-					isTargetLeft = constraint == mxConstants.DIRECTION_MASK_WEST;
+					isTargetLeft = constraint == Constants.DIRECTION_MASK_WEST;
 				}
 				else
 				{
@@ -148,25 +148,25 @@ public class EdgeStyle
 				double seg = segment;
 
 				double dx = (isSourceLeft) ? -seg : seg;
-				mxPoint dep = new mxPoint(x0 + dx, y0);
+				Point dep = new Point(x0 + dx, y0);
 				result.add(dep);
 
 				dx = (isTargetLeft) ? -seg : seg;
-				mxPoint arr = new mxPoint(xe + dx, ye);
+				Point arr = new Point(xe + dx, ye);
 
 				// Adds intermediate points if both go out on same side
 				if (isSourceLeft == isTargetLeft)
 				{
 					double x = (isSourceLeft) ? Math.min(x0, xe) - segment
 							: Math.max(x0, xe) + segment;
-					result.add(new mxPoint(x, y0));
-					result.add(new mxPoint(x, ye));
+					result.add(new Point(x, y0));
+					result.add(new Point(x, ye));
 				}
 				else if ((dep.getX() < arr.getX()) == isSourceLeft)
 				{
 					double midY = y0 + (ye - y0) / 2;
-					result.add(new mxPoint(dep.getX(), midY));
-					result.add(new mxPoint(arr.getX(), midY));
+					result.add(new Point(dep.getX(), midY));
+					result.add(new Point(arr.getX(), midY));
 				}
 
 				result.add(arr);
@@ -184,13 +184,13 @@ public class EdgeStyle
 		 * @see EdgeStyle.mxEdgeStyleFunction#apply(CellState, CellState, CellState, java.util.List, java.util.List)
 		 */
 		public void apply(CellState state, CellState source,
-						  CellState target, List<mxPoint> points, List<mxPoint> result)
+                          CellState target, List<Point> points, List<Point> result)
 		{
 			if (source != null)
 			{
 				GraphView view = state.getView();
 				Graph graph = view.getGraph();
-				mxPoint pt = (points != null && points.size() > 0) ? points
+				Point pt = (points != null && points.size() > 0) ? points
 						.get(0) : null;
 
 				if (pt != null)
@@ -208,16 +208,16 @@ public class EdgeStyle
 				double y = 0;
 				double dy = 0;
 
-				double seg = mxUtils.getDouble(state.getStyle(),
-						mxConstants.STYLE_SEGMENT, graph.getGridSize())
+				double seg = Utils.getDouble(state.getStyle(),
+						Constants.STYLE_SEGMENT, graph.getGridSize())
 						* view.getScale();
-				String dir = mxUtils
+				String dir = Utils
 						.getString(state.getStyle(),
-								mxConstants.STYLE_DIRECTION,
-								mxConstants.DIRECTION_WEST);
+								Constants.STYLE_DIRECTION,
+								Constants.DIRECTION_WEST);
 
-				if (dir.equals(mxConstants.DIRECTION_NORTH)
-						|| dir.equals(mxConstants.DIRECTION_SOUTH))
+				if (dir.equals(Constants.DIRECTION_NORTH)
+						|| dir.equals(Constants.DIRECTION_SOUTH))
 				{
 					x = view.getRoutingCenterX(source);
 					dx = seg;
@@ -238,15 +238,15 @@ public class EdgeStyle
 					}
 					else
 					{
-						if (dir.equals(mxConstants.DIRECTION_NORTH))
+						if (dir.equals(Constants.DIRECTION_NORTH))
 						{
 							y = source.getY() - 2 * dx;
 						}
-						else if (dir.equals(mxConstants.DIRECTION_SOUTH))
+						else if (dir.equals(Constants.DIRECTION_SOUTH))
 						{
 							y = source.getY() + source.getHeight() + 2 * dx;
 						}
-						else if (dir.equals(mxConstants.DIRECTION_EAST))
+						else if (dir.equals(Constants.DIRECTION_EAST))
 						{
 							x = source.getX() - 2 * dy;
 						}
@@ -265,8 +265,8 @@ public class EdgeStyle
 					dy = 0;
 				}
 
-				result.add(new mxPoint(x - dx, y - dy));
-				result.add(new mxPoint(x + dx, y + dy));
+				result.add(new Point(x - dx, y - dy));
+				result.add(new Point(x + dx, y + dy));
 			}
 		}
 	};
@@ -283,9 +283,9 @@ public class EdgeStyle
 		 * @see EdgeStyle.mxEdgeStyleFunction#apply(CellState, CellState, CellState, java.util.List, java.util.List)
 		 */
 		public void apply(CellState state, CellState source,
-						  CellState target, List<mxPoint> points, List<mxPoint> result)
+                          CellState target, List<Point> points, List<Point> result)
 		{
-			mxPoint pt = (points != null && points.size() > 0) ? points.get(0)
+			Point pt = (points != null && points.size() > 0) ? points.get(0)
 					: null;
 
 			boolean vertical = false;
@@ -330,9 +330,9 @@ public class EdgeStyle
 			}
 
 			if (!horizontal
-					&& (vertical || mxUtils.getString(state.getStyle(),
-							mxConstants.STYLE_ELBOW, "").equals(
-							mxConstants.ELBOW_VERTICAL)))
+					&& (vertical || Utils.getString(state.getStyle(),
+							Constants.STYLE_ELBOW, "").equals(
+							Constants.ELBOW_VERTICAL)))
 			{
 				EdgeStyle.TopToBottom.apply(state, source, target, points,
 						result);
@@ -355,13 +355,13 @@ public class EdgeStyle
 		 * @see EdgeStyle.mxEdgeStyleFunction#apply(CellState, CellState, CellState, java.util.List, java.util.List)
 		 */
 		public void apply(CellState state, CellState source,
-						  CellState target, List<mxPoint> points, List<mxPoint> result)
+                          CellState target, List<Point> points, List<Point> result)
 		{
 			GraphView view = state.getView();
-			mxPoint pt = ((points != null && points.size() > 0) ? points.get(0)
+			Point pt = ((points != null && points.size() > 0) ? points.get(0)
 					: null);
-			mxPoint p0 = state.getAbsolutePoint(0);
-			mxPoint pe = state
+			Point p0 = state.getAbsolutePoint(0);
+			Point pe = state
 					.getAbsolutePoint(state.getAbsolutePointCount() - 1);
 
 			if (pt != null)
@@ -411,12 +411,12 @@ public class EdgeStyle
 
 				if (!target.contains(x, y1) && !source.contains(x, y1))
 				{
-					result.add(new mxPoint(x, y1));
+					result.add(new Point(x, y1));
 				}
 
 				if (!target.contains(x, y2) && !source.contains(x, y2))
 				{
-					result.add(new mxPoint(x, y2));
+					result.add(new Point(x, y2));
 				}
 
 				if (result.size() == 1)
@@ -425,7 +425,7 @@ public class EdgeStyle
 					{
 						if (!target.contains(x, pt.getY()) && !source.contains(x, pt.getY()))
 						{
-							result.add(new mxPoint(x, pt.getY()));
+							result.add(new Point(x, pt.getY()));
 						}
 					}
 					else
@@ -434,7 +434,7 @@ public class EdgeStyle
 						double b = Math.min(source.getY() + source.getHeight(),
 								target.getY() + target.getHeight());
 
-						result.add(new mxPoint(x, t + (b - t) / 2));
+						result.add(new Point(x, t + (b - t) / 2));
 					}
 				}
 			}
@@ -451,13 +451,13 @@ public class EdgeStyle
 		 * @see EdgeStyle.mxEdgeStyleFunction#apply(CellState, CellState, CellState, java.util.List, java.util.List)
 		 */
 		public void apply(CellState state, CellState source,
-						  CellState target, List<mxPoint> points, List<mxPoint> result)
+                          CellState target, List<Point> points, List<Point> result)
 		{
 			GraphView view = state.getView();
-			mxPoint pt = ((points != null && points.size() > 0) ? points.get(0)
+			Point pt = ((points != null && points.size() > 0) ? points.get(0)
 					: null);
-			mxPoint p0 = state.getAbsolutePoint(0);
-			mxPoint pe = state
+			Point p0 = state.getAbsolutePoint(0);
+			Point pe = state
 					.getAbsolutePoint(state.getAbsolutePointCount() - 1);
 
 			if (pt != null)
@@ -497,7 +497,7 @@ public class EdgeStyle
 
 				if (!target.contains(x, y) && !source.contains(x, y))
 				{
-					result.add(new mxPoint(x, y));
+					result.add(new Point(x, y));
 				}
 
 				if (pt != null && pt.getX() >= target.getX()
@@ -512,7 +512,7 @@ public class EdgeStyle
 
 				if (!target.contains(x, y) && !source.contains(x, y))
 				{
-					result.add(new mxPoint(x, y));
+					result.add(new Point(x, y));
 				}
 
 				if (result.size() == 1)
@@ -521,7 +521,7 @@ public class EdgeStyle
 					{
 						if (!target.contains(pt.getX(), y) && !source.contains(pt.getX(), y))
 						{
-							result.add(new mxPoint(pt.getX(), y));
+							result.add(new Point(pt.getX(), y));
 						}
 					}
 					else
@@ -530,7 +530,7 @@ public class EdgeStyle
 						double r = Math.min(source.getX() + source.getWidth(),
 								target.getX() + target.getWidth());
 
-						result.add(new mxPoint(l + (r - l) / 2, y));
+						result.add(new Point(l + (r - l) / 2, y));
 					}
 				}
 			}
@@ -547,23 +547,23 @@ public class EdgeStyle
 		/* (non-Javadoc)
 		 * @see EdgeStyle.mxEdgeStyleFunction#apply(CellState, CellState, CellState, java.util.List, java.util.List)
 		 */
-		public void apply(CellState state, CellState source, CellState target, List<mxPoint> hints, List<mxPoint> result)
+		public void apply(CellState state, CellState source, CellState target, List<Point> hints, List<Point> result)
 		{
 			// Creates array of all way- and terminalpoints
-			List<mxPoint> pts = state.absolutePoints;
+			List<Point> pts = state.absolutePoints;
 			boolean horizontal = true;
-			mxPoint hint = null;
+			Point hint = null;
 
 			// Adds the first point
-			mxPoint pt = pts.get(0);
+			Point pt = pts.get(0);
 
 			if (pt == null && source != null)
 			{
-				pt = new mxPoint(state.view.getRoutingCenterX(source), state.view.getRoutingCenterY(source));
+				pt = new Point(state.view.getRoutingCenterX(source), state.view.getRoutingCenterY(source));
 			}
 			else if (pt != null)
 			{
-				pt = (mxPoint) pt.clone();
+				pt = (Point) pt.clone();
 			}
 
 			int lastInx = pts.size() - 1;
@@ -574,10 +574,10 @@ public class EdgeStyle
 				hint = state.view.transformControlPoint(state, hints.get(0));
 
 				CellState currentTerm = source;
-				mxPoint currentPt = pts.get(0);
+				Point currentPt = pts.get(0);
 				boolean hozChan = false;
 				boolean vertChan = false;
-				mxPoint currentHint = hint;
+				Point currentHint = hint;
 				int hintsLen = hints.size();
 
 				for (int i = 0; i < 2; i++)
@@ -622,13 +622,13 @@ public class EdgeStyle
 						&& ((pts.get(0) != null && pts.get(0).getY() != hint.getY()) || (pts.get(0) == null && source != null && (hint
 								.getY() < source.getY() || hint.getY() > source.getY() + source.getHeight()))))
 				{
-					result.add(new mxPoint(pt.getX(), hint.getY()));
+					result.add(new Point(pt.getX(), hint.getY()));
 				}
 				else if (!horizontal
 						&& ((pts.get(0) != null && pts.get(0).getX() != hint.getX()) || (pts.get(0) == null && source != null && (hint
 								.getX() < source.getX() || hint.getX() > source.getX() + source.getWidth()))))
 				{
-					result.add(new mxPoint(hint.getX(), pt.getY()));
+					result.add(new Point(hint.getX(), pt.getY()));
 				}
 
 				if (horizontal)
@@ -657,7 +657,7 @@ public class EdgeStyle
 						pt.setX(hint.getX());
 					}
 
-					result.add((mxPoint) pt.clone());
+					result.add((Point) pt.clone());
 				}
 			}
 			else
@@ -672,20 +672,20 @@ public class EdgeStyle
 
 			if (pt == null && target != null)
 			{
-				pt = new mxPoint(state.view.getRoutingCenterX(target), state.view.getRoutingCenterY(target));
+				pt = new Point(state.view.getRoutingCenterX(target), state.view.getRoutingCenterY(target));
 			}
 
 			if (horizontal
 					&& ((pts.get(lastInx) != null && pts.get(lastInx).getY() != hint.getY()) || (pts.get(lastInx) == null && target != null && (hint
 							.getY() < target.getY() || hint.getY() > target.getY() + target.getHeight()))))
 			{
-				result.add(new mxPoint(pt.getX(), hint.getY()));
+				result.add(new Point(pt.getX(), hint.getY()));
 			}
 			else if (!horizontal
 					&& ((pts.get(lastInx) != null && pts.get(lastInx).getX() != hint.getX()) || (pts.get(lastInx) == null && target != null && (hint
 							.getX() < target.getX() || hint.getX() > target.getX() + target.getWidth()))))
 			{
-				result.add(new mxPoint(hint.getX(), pt.getY()));
+				result.add(new Point(hint.getX(), pt.getY()));
 			}
 
 			// Removes bends inside the source terminal for floating ports
@@ -788,7 +788,7 @@ public class EdgeStyle
 		 * @see EdgeStyle.mxEdgeStyleFunction#apply(CellState, CellState, CellState, java.util.List, java.util.List)
 		 */
 		public void apply(CellState state, CellState source,
-						  CellState target, List<mxPoint> points, List<mxPoint> result)
+                          CellState target, List<Point> points, List<Point> result)
 		{
 			Graph graph = state.view.graph;
 			boolean sourceEdge = source == null ? false : graph.getModel().isEdge(source.cell);
@@ -808,9 +808,9 @@ public class EdgeStyle
 				// that the edge may connect to
 				// portConstraint -> [source, target];
 				int portConstraint[] = new int[2];
-				portConstraint[0] = mxUtils.getPortConstraints(source, state,
+				portConstraint[0] = Utils.getPortConstraints(source, state,
 						true);
-				portConstraint[1] = mxUtils.getPortConstraints(target, state,
+				portConstraint[1] = Utils.getPortConstraints(target, state,
 						false);
 
 				// dir -> [source, target] initial direction leaving vertices
@@ -877,10 +877,10 @@ public class EdgeStyle
 				}
 
 				// Check for connection constraints
-				mxPoint p0 = state.getAbsolutePoint(0);
-				mxPoint pe = state.getAbsolutePoint(state
+				Point p0 = state.getAbsolutePoint(0);
+				Point pe = state.getAbsolutePoint(state
 						.getAbsolutePointCount() - 1);
-				mxPoint currentTerm = p0;
+				Point currentTerm = p0;
 
 				// constraint[source, target] [x, y]
 				double constraint[][] = new double[][] { { 0.5, 0.5 },
@@ -895,11 +895,11 @@ public class EdgeStyle
 
 						if (constraint[i][0] < 0.01)
 						{
-							dir[i] = mxConstants.DIRECTION_MASK_WEST;
+							dir[i] = Constants.DIRECTION_MASK_WEST;
 						}
 						else if (constraint[i][0] > 0.99)
 						{
-							dir[i] = mxConstants.DIRECTION_MASK_EAST;
+							dir[i] = Constants.DIRECTION_MASK_EAST;
 						}
 
 						constraint[i][1] = (currentTerm.getY() - geo[i][1])
@@ -907,11 +907,11 @@ public class EdgeStyle
 
 						if (constraint[i][1] < 0.01)
 						{
-							dir[i] = mxConstants.DIRECTION_MASK_NORTH;
+							dir[i] = Constants.DIRECTION_MASK_NORTH;
 						}
 						else if (constraint[i][1] > 0.99)
 						{
-							dir[i] = mxConstants.DIRECTION_MASK_SOUTH;
+							dir[i] = Constants.DIRECTION_MASK_SOUTH;
 						}
 					}
 
@@ -941,13 +941,13 @@ public class EdgeStyle
 				int horPref[] = new int[2];
 				int vertPref[] = new int[2];
 
-				horPref[0] = sourceLeftDist >= sourceRightDist ? mxConstants.DIRECTION_MASK_WEST
-						: mxConstants.DIRECTION_MASK_EAST;
-				vertPref[0] = sourceTopDist >= sourceBottomDist ? mxConstants.DIRECTION_MASK_NORTH
-						: mxConstants.DIRECTION_MASK_SOUTH;
+				horPref[0] = sourceLeftDist >= sourceRightDist ? Constants.DIRECTION_MASK_WEST
+						: Constants.DIRECTION_MASK_EAST;
+				vertPref[0] = sourceTopDist >= sourceBottomDist ? Constants.DIRECTION_MASK_NORTH
+						: Constants.DIRECTION_MASK_SOUTH;
 
-				horPref[1] = mxUtils.reversePortConstraints(horPref[0]);
-				vertPref[1] = mxUtils.reversePortConstraints(vertPref[0]);
+				horPref[1] = Utils.reversePortConstraints(horPref[0]);
+				vertPref[1] = Utils.reversePortConstraints(vertPref[0]);
 
 				double preferredHorizDist = sourceLeftDist >= sourceRightDist ? sourceLeftDist
 						: sourceRightDist;
@@ -967,12 +967,12 @@ public class EdgeStyle
 
 					if ((horPref[i] & portConstraint[i]) == 0)
 					{
-						horPref[i] = mxUtils.reversePortConstraints(horPref[i]);
+						horPref[i] = Utils.reversePortConstraints(horPref[i]);
 					}
 
 					if ((vertPref[i] & portConstraint[i]) == 0)
 					{
-						vertPref[i] = mxUtils
+						vertPref[i] = Utils
 								.reversePortConstraints(vertPref[i]);
 					}
 
@@ -1060,10 +1060,10 @@ public class EdgeStyle
 
 					dir[i] = dirPref[i] & 0xF;
 
-					if (portConstraint[i] == mxConstants.DIRECTION_MASK_WEST
-							|| portConstraint[i] == mxConstants.DIRECTION_MASK_NORTH
-							|| portConstraint[i] == mxConstants.DIRECTION_MASK_EAST
-							|| portConstraint[i] == mxConstants.DIRECTION_MASK_SOUTH)
+					if (portConstraint[i] == Constants.DIRECTION_MASK_WEST
+							|| portConstraint[i] == Constants.DIRECTION_MASK_NORTH
+							|| portConstraint[i] == Constants.DIRECTION_MASK_EAST
+							|| portConstraint[i] == Constants.DIRECTION_MASK_SOUTH)
 					{
 						dir[i] = portConstraint[i];
 					}
@@ -1084,19 +1084,19 @@ public class EdgeStyle
 
 				switch (dir[0])
 				{
-					case mxConstants.DIRECTION_MASK_WEST:
+					case Constants.DIRECTION_MASK_WEST:
 						wayPoints1[0][0] -= scaledOrthBuffer;
 						wayPoints1[0][1] += constraint[0][1] * geo[0][3];
 						break;
-					case mxConstants.DIRECTION_MASK_SOUTH:
+					case Constants.DIRECTION_MASK_SOUTH:
 						wayPoints1[0][0] += constraint[0][0] * geo[0][2];
 						wayPoints1[0][1] += geo[0][3] + scaledOrthBuffer;
 						break;
-					case mxConstants.DIRECTION_MASK_EAST:
+					case Constants.DIRECTION_MASK_EAST:
 						wayPoints1[0][0] += geo[0][2] + scaledOrthBuffer;
 						wayPoints1[0][1] += constraint[0][1] * geo[0][3];
 						break;
-					case mxConstants.DIRECTION_MASK_NORTH:
+					case Constants.DIRECTION_MASK_NORTH:
 						wayPoints1[0][0] += constraint[0][0] * geo[0][2];
 						wayPoints1[0][1] -= scaledOrthBuffer;
 						break;
@@ -1104,7 +1104,7 @@ public class EdgeStyle
 
 				int currentIndex = 0;
 
-				int lastOrientation = (dir[0] & (mxConstants.DIRECTION_MASK_EAST | mxConstants.DIRECTION_MASK_WEST)) > 0 ? 0
+				int lastOrientation = (dir[0] & (Constants.DIRECTION_MASK_EAST | Constants.DIRECTION_MASK_WEST)) > 0 ? 0
 						: 1;
 				int currentOrientation = 0;
 
@@ -1114,7 +1114,7 @@ public class EdgeStyle
 
 					// Rotate the index of this direction by the quad
 					// to get the real direction
-					int directionIndex = nextDirection == mxConstants.DIRECTION_MASK_EAST ? 3
+					int directionIndex = nextDirection == Constants.DIRECTION_MASK_EAST ? 3
 							: nextDirection;
 
 					directionIndex += quad;
@@ -1220,7 +1220,7 @@ public class EdgeStyle
 
 				for (int i = 0; i <= currentIndex; i++)
 				{
-					result.add(new mxPoint(wayPoints1[i][0], wayPoints1[i][1]));
+					result.add(new Point(wayPoints1[i][0], wayPoints1[i][1]));
 				}
 
 			}
@@ -1237,9 +1237,9 @@ public class EdgeStyle
 		protected int[] getRoutePattern(int[] dir, double quad, double dx,
 				double dy)
 		{
-			int sourceIndex = dir[0] == mxConstants.DIRECTION_MASK_EAST ? 3
+			int sourceIndex = dir[0] == Constants.DIRECTION_MASK_EAST ? 3
 					: dir[0];
-			int targetIndex = dir[1] == mxConstants.DIRECTION_MASK_EAST ? 3
+			int targetIndex = dir[1] == Constants.DIRECTION_MASK_EAST ? 3
 					: dir[1];
 
 			sourceIndex -= quad;

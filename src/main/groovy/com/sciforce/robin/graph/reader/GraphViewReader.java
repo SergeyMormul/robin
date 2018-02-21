@@ -8,15 +8,15 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
-import com.sciforce.robin.graph.util.mxRectangle;
-import com.sciforce.robin.graph.util.mxUtils;
+import com.sciforce.robin.graph.util.Point;
+import com.sciforce.robin.graph.util.Rectangle;
+import com.sciforce.robin.graph.util.Utils;
 import com.sciforce.robin.graph.view.CellState;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import com.sciforce.robin.graph.canvas.ICanvas;
-import com.sciforce.robin.graph.util.mxPoint;
 
 /**
  * An abstract converter that renders display XML data onto a canvas.
@@ -109,7 +109,7 @@ public abstract class GraphViewReader extends DefaultHandler
 	{
 		if (canvas == null && tagName.equalsIgnoreCase("graph"))
 		{
-			scale = mxUtils.getDouble(attrs, "scale", 1);
+			scale = Utils.getDouble(attrs, "scale", 1);
 			canvas = createCanvas(attrs);
 
 			if (canvas != null)
@@ -148,13 +148,13 @@ public abstract class GraphViewReader extends DefaultHandler
 		Map<String, Object> style = state.getStyle();
 
 		// Parses the bounds
-		state.setX(mxUtils.getDouble(style, "x"));
-		state.setY(mxUtils.getDouble(style, "y"));
-		state.setWidth(mxUtils.getDouble(style, "width"));
-		state.setHeight(mxUtils.getDouble(style, "height"));
+		state.setX(Utils.getDouble(style, "x"));
+		state.setY(Utils.getDouble(style, "y"));
+		state.setWidth(Utils.getDouble(style, "width"));
+		state.setHeight(Utils.getDouble(style, "height"));
 
 		// Parses the absolute points list
-		List<mxPoint> pts = parsePoints(mxUtils.getString(style, "points"));
+		List<Point> pts = parsePoints(Utils.getString(style, "points"));
 
 		if (pts.size() > 0)
 		{
@@ -162,15 +162,15 @@ public abstract class GraphViewReader extends DefaultHandler
 		}
 
 		// Parses the label and label bounds
-		String label = mxUtils.getString(style, "label");
+		String label = Utils.getString(style, "label");
 
 		if (label != null && label.length() > 0)
 		{
-			mxPoint offset = new mxPoint(mxUtils.getDouble(style, "dx"),
-					mxUtils.getDouble(style, "dy"));
-			mxRectangle vertexBounds = (!edge) ? state : null;
-			state.setLabelBounds(mxUtils.getLabelPaintBounds(label, state
-					.getStyle(), mxUtils.isTrue(style, "html", false), offset,
+			Point offset = new Point(Utils.getDouble(style, "dx"),
+					Utils.getDouble(style, "dy"));
+			Rectangle vertexBounds = (!edge) ? state : null;
+			state.setLabelBounds(Utils.getLabelPaintBounds(label, state
+					.getStyle(), Utils.isTrue(style, "html", false), offset,
 					vertexBounds, scale));
 		}
 
@@ -183,9 +183,9 @@ public abstract class GraphViewReader extends DefaultHandler
 	 * @param pts String containing a list of points.
 	 * @return Returns the points as a list of mxPoints.
 	 */
-	public static List<mxPoint> parsePoints(String pts)
+	public static List<Point> parsePoints(String pts)
 	{
-		List<mxPoint> result = new ArrayList<mxPoint>();
+		List<Point> result = new ArrayList<Point>();
 
 		if (pts != null)
 		{
@@ -205,7 +205,7 @@ public abstract class GraphViewReader extends DefaultHandler
 					}
 					else
 					{
-						result.add(new mxPoint(Double.parseDouble(x), Double
+						result.add(new Point(Double.parseDouble(x), Double
 								.parseDouble(tmp)));
 						x = null;
 					}
@@ -217,7 +217,7 @@ public abstract class GraphViewReader extends DefaultHandler
 				}
 			}
 
-			result.add(new mxPoint(Double.parseDouble(x), Double
+			result.add(new Point(Double.parseDouble(x), Double
 					.parseDouble(tmp)));
 		}
 

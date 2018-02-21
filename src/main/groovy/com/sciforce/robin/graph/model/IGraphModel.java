@@ -3,8 +3,8 @@
  */
 package com.sciforce.robin.graph.model;
 
-import com.sciforce.robin.graph.util.mxEventSource;
-import com.sciforce.robin.graph.util.mxUndoableEdit;
+import com.sciforce.robin.graph.util.EventSource;
+import com.sciforce.robin.graph.util.UndoableEdit;
 
 /**
  * Defines the requirements for a graph model to be used with Graph.
@@ -15,7 +15,7 @@ public interface IGraphModel
 	/**
 	 * Defines the interface for an atomic change of the graph model.
 	 */
-	public abstract class mxAtomicGraphModelChange implements mxUndoableEdit.mxUndoableChange
+	public abstract class AtomicGraphModelChange implements UndoableEdit.UndoableChange
 	{
 		/**
 		 * Holds the model where the change happened.
@@ -25,7 +25,7 @@ public interface IGraphModel
 		/**
 		 * Constructs an empty atomic graph model change.
 		 */
-		public mxAtomicGraphModelChange()
+		public AtomicGraphModelChange()
 		{
 			this(null);
 		}
@@ -33,7 +33,7 @@ public interface IGraphModel
 		/**
 		 * Constructs an atomic graph model change for the given model.
 		 */
-		public mxAtomicGraphModelChange(IGraphModel model)
+		public AtomicGraphModelChange(IGraphModel model)
 		{
 			this.model = model;
 		}
@@ -317,20 +317,20 @@ public interface IGraphModel
 	 * Binds the specified function to the given event name. If no event name
 	 * is given, then the listener is registered for all events.
 	 */
-	void addListener(String eventName, mxEventSource.mxIEventListener listener);
+	void addListener(String eventName, EventSource.mxIEventListener listener);
 
 	/**
 	 * Function: removeListener
 	 *
 	 * Removes the given listener from the list of listeners.
 	 */
-	void removeListener(mxEventSource.mxIEventListener listener);
+	void removeListener(EventSource.mxIEventListener listener);
 
 	/**
 	 * Function: removeListener
 	 *
 	 * Removes the given listener from the list of listeners.
 	 */
-	void removeListener(mxEventSource.mxIEventListener listener, String eventName);
+	void removeListener(EventSource.mxIEventListener listener, String eventName);
 
 }

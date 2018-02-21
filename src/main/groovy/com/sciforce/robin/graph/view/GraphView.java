@@ -12,14 +12,8 @@ import java.util.Map;
 import com.sciforce.robin.graph.model.Geometry;
 import com.sciforce.robin.graph.model.GraphModel;
 import com.sciforce.robin.graph.model.IGraphModel;
-import com.sciforce.robin.graph.util.mxConstants;
-import com.sciforce.robin.graph.util.mxEvent;
-import com.sciforce.robin.graph.util.mxEventObject;
-import com.sciforce.robin.graph.util.mxEventSource;
-import com.sciforce.robin.graph.util.mxPoint;
-import com.sciforce.robin.graph.util.mxRectangle;
-import com.sciforce.robin.graph.util.mxUndoableEdit;
-import com.sciforce.robin.graph.util.mxUtils;
+import com.sciforce.robin.graph.util.*;
+import com.sciforce.robin.graph.util.Constants;
 
 /**
  * Implements a view for the graph. This class is in charge of computing the
@@ -31,36 +25,36 @@ import com.sciforce.robin.graph.util.mxUtils;
  * 
  * This class fires the following events:
  * 
- * mxEvent.UNDO fires after the root was changed in setCurrentRoot. The
- * <code>edit</code> property contains the mxUndoableEdit which contains the
- * mxCurrentRootChange.
+ * Event.UNDO fires after the root was changed in setCurrentRoot. The
+ * <code>edit</code> property contains the UndoableEdit which contains the
+ * CurrentRootChange.
  * 
- * mxEvent.SCALE_AND_TRANSLATE fires after the scale and transle have been
+ * Event.SCALE_AND_TRANSLATE fires after the scale and transle have been
  * changed in scaleAndTranslate. The <code>scale</code>,
  * <code>previousScale</code>, <code>translate</code> and
  * <code>previousTranslate</code> properties contain the new and previous scale
  * and translate, respectively.
  * 
- * mxEvent.SCALE fires after the scale was changed in setScale. The
+ * Event.SCALE fires after the scale was changed in setScale. The
  * <code>scale</code> and <code>previousScale</code> properties contain the new
  * and previous scale.
  * 
- * mxEvent.TRANSLATE fires after the translate was changed in setTranslate. The
+ * Event.TRANSLATE fires after the translate was changed in setTranslate. The
  * <code>translate</code> and <code>previousTranslate</code> properties contain
  * the new and previous value for translate.
  * 
- * mxEvent.UP and mxEvent.DOWN fire if the current root is changed by executing
- * a mxCurrentRootChange. The event name depends on the location of the root in
+ * Event.UP and Event.DOWN fire if the current root is changed by executing
+ * a CurrentRootChange. The event name depends on the location of the root in
  * the cell hierarchy with respect to the current root. The <code>root</code>
  * and <code>previous</code> properties contain the new and previous root,
  * respectively.
  */
-public class GraphView extends mxEventSource
+public class GraphView extends EventSource
 {
 	/**
 	 *
 	 */
-	private static mxPoint EMPTY_POINT = new mxPoint();
+	private static Point EMPTY_POINT = new Point();
 
 	/**
 	 * Reference to the enclosing graph.
@@ -75,7 +69,7 @@ public class GraphView extends mxEventSource
 	/**
 	 * Caches the current bounds of the graph.
 	 */
-	protected mxRectangle graphBounds = new mxRectangle();
+	protected Rectangle graphBounds = new Rectangle();
 
 	/**
 	 * Specifies the scale. Default is 1 (100%).
@@ -86,7 +80,7 @@ public class GraphView extends mxEventSource
 	 * Point that specifies the current translation. Default is a new empty
 	 * point.
 	 */
-	protected mxPoint translate = new mxPoint(0, 0);
+	protected Point translate = new Point(0, 0);
 
 	/**
 	 * Maps from cells to cell states.
@@ -135,7 +129,7 @@ public class GraphView extends mxEventSource
 	 * 
 	 * @return Returns the diagram bounds.
 	 */
-	public mxRectangle getGraphBounds()
+	public Rectangle getGraphBounds()
 	{
 		return graphBounds;
 	}
@@ -143,7 +137,7 @@ public class GraphView extends mxEventSource
 	/**
 	 * Sets the graph bounds.
 	 */
-	public void setGraphBounds(mxRectangle value)
+	public void setGraphBounds(Rectangle value)
 	{
 		graphBounds = value;
 	}
@@ -168,11 +162,11 @@ public class GraphView extends mxEventSource
 	{
 		if (currentRoot != root)
 		{
-			mxCurrentRootChange change = new mxCurrentRootChange(this, root);
+			CurrentRootChange change = new CurrentRootChange(this, root);
 			change.execute();
-			mxUndoableEdit edit = new mxUndoableEdit(this, false);
+			UndoableEdit edit = new UndoableEdit(this, false);
 			edit.add(change);
-			fireEvent(new mxEventObject(mxEvent.UNDO, "edit", edit));
+			fireEvent(new EventObject(Event.UNDO, "edit", edit));
 		}
 
 		return root;
@@ -198,7 +192,7 @@ public class GraphView extends mxEventSource
 				|| dy != translate.getY())
 		{
 			this.scale = scale;
-			translate = new mxPoint(dx, dy);
+			translate = new Point(dx, dy);
 
 			if (isEventsEnabled())
 			{
@@ -206,7 +200,7 @@ public class GraphView extends mxEventSource
 			}
 		}
 
-		fireEvent(new mxEventObject(mxEvent.SCALE_AND_TRANSLATE, "scale",
+		fireEvent(new EventObject(Event.SCALE_AND_TRANSLATE, "scale",
 				scale, "previousScale", previousScale, "translate", translate,
 				"previousTranslate", previousTranslate));
 	}
@@ -242,7 +236,7 @@ public class GraphView extends mxEventSource
 			}
 		}
 
-		fireEvent(new mxEventObject(mxEvent.SCALE, "scale", scale,
+		fireEvent(new EventObject(Event.SCALE, "scale", scale,
 				"previousScale", previousScale));
 	}
 
@@ -251,7 +245,7 @@ public class GraphView extends mxEventSource
 	 * 
 	 * @return Returns the translation.
 	 */
-	public mxPoint getTranslate()
+	public Point getTranslate()
 	{
 		return translate;
 	}
@@ -264,7 +258,7 @@ public class GraphView extends mxEventSource
 	 * @param value
 	 *            New translation to be used.
 	 */
-	public void setTranslate(mxPoint value)
+	public void setTranslate(Point value)
 	{
 		Object previousTranslate = translate.clone();
 
@@ -280,7 +274,7 @@ public class GraphView extends mxEventSource
 			}
 		}
 
-		fireEvent(new mxEventObject(mxEvent.TRANSLATE, "translate", translate,
+		fireEvent(new EventObject(Event.TRANSLATE, "translate", translate,
 				"previousTranslate", previousTranslate));
 	}
 
@@ -291,7 +285,7 @@ public class GraphView extends mxEventSource
 	 * @param cells
 	 * @return Returns the bounding box for the given cells.
 	 */
-	public mxRectangle getBounds(Object[] cells)
+	public Rectangle getBounds(Object[] cells)
 	{
 		return getBounds(cells, false);
 	}
@@ -303,7 +297,7 @@ public class GraphView extends mxEventSource
 	 * @param cells
 	 * @return Returns the bounding box for the given cells.
 	 */
-	public mxRectangle getBoundingBox(Object[] cells)
+	public Rectangle getBoundingBox(Object[] cells)
 	{
 		return getBounds(cells, true);
 	}
@@ -315,9 +309,9 @@ public class GraphView extends mxEventSource
 	 * @param cells
 	 * @return Returns the bounding box for the given cells.
 	 */
-	public mxRectangle getBounds(Object[] cells, boolean boundingBox)
+	public Rectangle getBounds(Object[] cells, boolean boundingBox)
 	{
-		mxRectangle result = null;
+		Rectangle result = null;
 
 		if (cells != null && cells.length > 0)
 		{
@@ -331,14 +325,14 @@ public class GraphView extends mxEventSource
 
 					if (state != null)
 					{
-						mxRectangle tmp = (boundingBox) ? state
+						Rectangle tmp = (boundingBox) ? state
 								.getBoundingBox() : state;
 
 						if (tmp != null)
 						{
 							if (result == null)
 							{
-								result = new mxRectangle(tmp);
+								result = new Rectangle(tmp);
 							}
 							else
 							{
@@ -449,15 +443,15 @@ public class GraphView extends mxEventSource
 	 */
 	public void validate()
 	{
-		mxRectangle graphBounds = getBoundingBox(validateCellState(validateCell((currentRoot != null) ? currentRoot
+		Rectangle graphBounds = getBoundingBox(validateCellState(validateCell((currentRoot != null) ? currentRoot
 				: graph.getModel().getRoot())));
-		setGraphBounds((graphBounds != null) ? graphBounds : new mxRectangle());
+		setGraphBounds((graphBounds != null) ? graphBounds : new Rectangle());
 	}
 
 	/**
 	 * Shortcut to validateCell with visible set to true.
 	 */
-	public mxRectangle getBoundingBox(CellState state)
+	public Rectangle getBoundingBox(CellState state)
 	{
 		return getBoundingBox(state, true);
 	}
@@ -471,15 +465,15 @@ public class GraphView extends mxEventSource
 	 * @param recurse
 	 *            Boolean indicating if the children should be included.
 	 */
-	public mxRectangle getBoundingBox(CellState state, boolean recurse)
+	public Rectangle getBoundingBox(CellState state, boolean recurse)
 	{
-		mxRectangle bbox = null;
+		Rectangle bbox = null;
 
 		if (state != null)
 		{
 			if (state.getBoundingBox() != null)
 			{
-				bbox = (mxRectangle) state.getBoundingBox().clone();
+				bbox = (Rectangle) state.getBoundingBox().clone();
 			}
 
 			if (recurse)
@@ -489,7 +483,7 @@ public class GraphView extends mxEventSource
 
 				for (int i = 0; i < childCount; i++)
 				{
-					mxRectangle bounds = getBoundingBox(
+					Rectangle bounds = getBoundingBox(
 							getState(model.getChildAt(state.getCell(), i)), true);
 
 					if (bounds != null)
@@ -653,7 +647,7 @@ public class GraphView extends mxEventSource
 						state.getOrigin().getY() + pState.getOrigin().getY());
 			}
 
-			mxPoint offset = graph.getChildOffsetForCell(state.getCell());
+			Point offset = graph.getChildOffsetForCell(state.getCell());
 
 			if (offset != null)
 			{
@@ -669,7 +663,7 @@ public class GraphView extends mxEventSource
 			{
 				if (!model.isEdge(state.getCell()))
 				{
-					mxPoint origin = state.getOrigin();
+					Point origin = state.getOrigin();
 					offset = geo.getOffset();
 
 					if (offset == null)
@@ -681,7 +675,7 @@ public class GraphView extends mxEventSource
 					{
 						if (model.isEdge(pState.getCell()))
 						{
-							mxPoint orig = getPoint(pState, geo);
+							Point orig = getPoint(pState, geo);
 							
 							if (orig != null)
 							{
@@ -704,7 +698,7 @@ public class GraphView extends mxEventSource
 					}
 					else
 					{
-						state.setAbsoluteOffset(new mxPoint(scale
+						state.setAbsoluteOffset(new Point(scale
 								* offset.getX(), scale * offset.getY()));
 						origin.setX(origin.getX() + geo.getX());
 						origin.setY(origin.getY() + geo.getY());
@@ -795,30 +789,30 @@ public class GraphView extends mxEventSource
 	 */
 	public void updateVertexLabelOffset(CellState state)
 	{
-		String horizontal = mxUtils.getString(state.getStyle(),
-				mxConstants.STYLE_LABEL_POSITION, mxConstants.ALIGN_CENTER);
+		String horizontal = Utils.getString(state.getStyle(),
+				Constants.STYLE_LABEL_POSITION, Constants.ALIGN_CENTER);
 
-		if (horizontal.equals(mxConstants.ALIGN_LEFT))
+		if (horizontal.equals(Constants.ALIGN_LEFT))
 		{
 			state.absoluteOffset.setX(state.absoluteOffset.getX()
 					- state.getWidth());
 		}
-		else if (horizontal.equals(mxConstants.ALIGN_RIGHT))
+		else if (horizontal.equals(Constants.ALIGN_RIGHT))
 		{
 			state.absoluteOffset.setX(state.absoluteOffset.getX()
 					+ state.getWidth());
 		}
 
-		String vertical = mxUtils.getString(state.getStyle(),
-				mxConstants.STYLE_VERTICAL_LABEL_POSITION,
-				mxConstants.ALIGN_MIDDLE);
+		String vertical = Utils.getString(state.getStyle(),
+				Constants.STYLE_VERTICAL_LABEL_POSITION,
+				Constants.ALIGN_MIDDLE);
 
-		if (vertical.equals(mxConstants.ALIGN_TOP))
+		if (vertical.equals(Constants.ALIGN_TOP))
 		{
 			state.absoluteOffset.setY(state.absoluteOffset.getY()
 					- state.getHeight());
 		}
-		else if (vertical.equals(mxConstants.ALIGN_BOTTOM))
+		else if (vertical.equals(Constants.ALIGN_BOTTOM))
 		{
 			state.absoluteOffset.setY(state.absoluteOffset.getY()
 					+ state.getHeight());
@@ -839,7 +833,7 @@ public class GraphView extends mxEventSource
 				&& label.length() > 0
 				&& !graph.isHtmlLabel(state.getCell())
 				&& !graph.getModel().isEdge(state.getCell())
-				&& mxUtils.getString(style, mxConstants.STYLE_WHITE_SPACE,
+				&& Utils.getString(style, Constants.STYLE_WHITE_SPACE,
 						"nowrap").equals("wrap"))
 		{
 			double w = getWordWrapWidth(state);
@@ -856,9 +850,9 @@ public class GraphView extends mxEventSource
 			// the wrapped lines are constant overing scaling, at the expense
 			// the
 			// label bounds will vary.
-			String[] lines = mxUtils.wordWrap(label,
-					mxUtils.getFontMetrics(mxUtils.getFont(state.getStyle())),
-					w * mxConstants.LABEL_SCALE_BUFFER);
+			String[] lines = Utils.wordWrap(label,
+					Utils.getFontMetrics(Utils.getFont(state.getStyle())),
+					w * Constants.LABEL_SCALE_BUFFER);
 
 			if (lines.length > 0)
 			{
@@ -882,28 +876,28 @@ public class GraphView extends mxEventSource
 	public double getWordWrapWidth(CellState state)
 	{
 		Map<String, Object> style = state.getStyle();
-		boolean horizontal = mxUtils.isTrue(style,
-				mxConstants.STYLE_HORIZONTAL, true);
+		boolean horizontal = Utils.isTrue(style,
+				Constants.STYLE_HORIZONTAL, true);
 		double w = 0;
 
 		// Computes the available width for the wrapped label
 		if (horizontal)
 		{
-			w = (state.getWidth() / scale) - 2 * mxConstants.LABEL_INSET - 2
-					* mxUtils.getDouble(style, mxConstants.STYLE_SPACING)
-					- mxUtils.getDouble(style, mxConstants.STYLE_SPACING_LEFT)
-					- mxUtils.getDouble(style, mxConstants.STYLE_SPACING_RIGHT);
+			w = (state.getWidth() / scale) - 2 * Constants.LABEL_INSET - 2
+					* Utils.getDouble(style, Constants.STYLE_SPACING)
+					- Utils.getDouble(style, Constants.STYLE_SPACING_LEFT)
+					- Utils.getDouble(style, Constants.STYLE_SPACING_RIGHT);
 		}
 		else
 		{
 			w = (state.getHeight() / scale)
 					- 2
-					* mxConstants.LABEL_INSET
+					* Constants.LABEL_INSET
 					- 2
-					* mxUtils.getDouble(style, mxConstants.STYLE_SPACING)
-					- mxUtils.getDouble(style, mxConstants.STYLE_SPACING_TOP)
-					+ mxUtils
-							.getDouble(style, mxConstants.STYLE_SPACING_BOTTOM);
+					* Utils.getDouble(style, Constants.STYLE_SPACING)
+					- Utils.getDouble(style, Constants.STYLE_SPACING_TOP)
+					+ Utils
+							.getDouble(style, Constants.STYLE_SPACING_BOTTOM);
 		}
 
 		return w;
@@ -916,18 +910,18 @@ public class GraphView extends mxEventSource
 	{
 		Object cell = state.getCell();
 		Map<String, Object> style = state.getStyle();
-		String overflow = mxUtils.getString(style, mxConstants.STYLE_OVERFLOW,
+		String overflow = Utils.getString(style, Constants.STYLE_OVERFLOW,
 				"");
 
 		if (overflow.equals("fill"))
 		{
-			state.setLabelBounds(new mxRectangle(state));
+			state.setLabelBounds(new Rectangle(state));
 		}
 		else if (state.getLabel() != null)
 		{
 			// For edges, the width of the geometry is used for wrapping HTML
 			// labels or no wrapping is applied if the width is set to 0
-			mxRectangle vertexBounds = state;
+			Rectangle vertexBounds = state;
 
 			if (graph.getModel().isEdge(cell))
 			{
@@ -935,7 +929,7 @@ public class GraphView extends mxEventSource
 
 				if (geo != null && geo.getWidth() > 0)
 				{
-					vertexBounds = new mxRectangle(0, 0, geo.getWidth()
+					vertexBounds = new Rectangle(0, 0, geo.getWidth()
 							* this.getScale(), 0);
 				}
 				else
@@ -944,7 +938,7 @@ public class GraphView extends mxEventSource
 				}
 			}
 
-			state.setLabelBounds(mxUtils.getLabelPaintBounds(state.getLabel(),
+			state.setLabelBounds(Utils.getLabelPaintBounds(state.getLabel(),
 					style, graph.isHtmlLabel(cell), state.getAbsoluteOffset(),
 					vertexBounds, scale, graph.getModel().isEdge(cell)));
 
@@ -962,10 +956,10 @@ public class GraphView extends mxEventSource
 	 * @param state
 	 *            Cell state whose bounding box should be updated.
 	 */
-	public mxRectangle updateBoundingBox(CellState state)
+	public Rectangle updateBoundingBox(CellState state)
 	{
 		// Gets the cell bounds and adds shadows and markers
-		mxRectangle rect = new mxRectangle(state);
+		Rectangle rect = new Rectangle(state);
 		Map<String, Object> style = state.getStyle();
 
 		// Adds extra pixels for the marker and stroke assuming
@@ -973,7 +967,7 @@ public class GraphView extends mxEventSource
 		// and the first pixel is drawn inside the bounds
 		double strokeWidth = Math.max(
 				1,
-				Math.round(mxUtils.getInt(style, mxConstants.STYLE_STROKEWIDTH,
+				Math.round(Utils.getInt(style, Constants.STYLE_STROKEWIDTH,
 						1) * scale));
 		strokeWidth -= Math.max(1, strokeWidth / 2);
 
@@ -981,20 +975,20 @@ public class GraphView extends mxEventSource
 		{
 			int ms = 0;
 
-			if (style.containsKey(mxConstants.STYLE_ENDARROW)
-					|| style.containsKey(mxConstants.STYLE_STARTARROW))
+			if (style.containsKey(Constants.STYLE_ENDARROW)
+					|| style.containsKey(Constants.STYLE_STARTARROW))
 			{
-				ms = (int) Math.round(mxConstants.DEFAULT_MARKERSIZE * scale);
+				ms = (int) Math.round(Constants.DEFAULT_MARKERSIZE * scale);
 			}
 
 			// Adds the strokewidth
 			rect.grow(ms + strokeWidth);
 
 			// Adds worst case border for an arrow shape
-			if (mxUtils.getString(style, mxConstants.STYLE_SHAPE, "").equals(
-					mxConstants.SHAPE_ARROW))
+			if (Utils.getString(style, Constants.STYLE_SHAPE, "").equals(
+					Constants.SHAPE_ARROW))
 			{
-				rect.grow(mxConstants.ARROW_WIDTH / 2);
+				rect.grow(Constants.ARROW_WIDTH / 2);
 			}
 		}
 		else
@@ -1003,48 +997,48 @@ public class GraphView extends mxEventSource
 		}
 
 		// Adds extra pixels for the shadow
-		if (mxUtils.isTrue(style, mxConstants.STYLE_SHADOW))
+		if (Utils.isTrue(style, Constants.STYLE_SHADOW))
 		{
-			rect.setWidth(rect.getWidth() + mxConstants.SHADOW_OFFSETX);
-			rect.setHeight(rect.getHeight() + mxConstants.SHADOW_OFFSETY);
+			rect.setWidth(rect.getWidth() + Constants.SHADOW_OFFSETX);
+			rect.setHeight(rect.getHeight() + Constants.SHADOW_OFFSETY);
 		}
 
 		// Adds oversize images in labels
-		if (mxUtils.getString(style, mxConstants.STYLE_SHAPE, "").equals(
-				mxConstants.SHAPE_LABEL))
+		if (Utils.getString(style, Constants.STYLE_SHAPE, "").equals(
+				Constants.SHAPE_LABEL))
 		{
-			if (mxUtils.getString(style, mxConstants.STYLE_IMAGE) != null)
+			if (Utils.getString(style, Constants.STYLE_IMAGE) != null)
 			{
-				double w = mxUtils.getInt(style, mxConstants.STYLE_IMAGE_WIDTH,
-						mxConstants.DEFAULT_IMAGESIZE) * scale;
-				double h = mxUtils.getInt(style,
-						mxConstants.STYLE_IMAGE_HEIGHT,
-						mxConstants.DEFAULT_IMAGESIZE)
+				double w = Utils.getInt(style, Constants.STYLE_IMAGE_WIDTH,
+						Constants.DEFAULT_IMAGESIZE) * scale;
+				double h = Utils.getInt(style,
+						Constants.STYLE_IMAGE_HEIGHT,
+						Constants.DEFAULT_IMAGESIZE)
 						* scale;
 
 				double x = state.getX();
 				double y = 0;
 
-				String imgAlign = mxUtils.getString(style,
-						mxConstants.STYLE_IMAGE_ALIGN, mxConstants.ALIGN_LEFT);
-				String imgValign = mxUtils.getString(style,
-						mxConstants.STYLE_IMAGE_VERTICAL_ALIGN,
-						mxConstants.ALIGN_MIDDLE);
+				String imgAlign = Utils.getString(style,
+						Constants.STYLE_IMAGE_ALIGN, Constants.ALIGN_LEFT);
+				String imgValign = Utils.getString(style,
+						Constants.STYLE_IMAGE_VERTICAL_ALIGN,
+						Constants.ALIGN_MIDDLE);
 
-				if (imgAlign.equals(mxConstants.ALIGN_RIGHT))
+				if (imgAlign.equals(Constants.ALIGN_RIGHT))
 				{
 					x += state.getWidth() - w;
 				}
-				else if (imgAlign.equals(mxConstants.ALIGN_CENTER))
+				else if (imgAlign.equals(Constants.ALIGN_CENTER))
 				{
 					x += (state.getWidth() - w) / 2;
 				}
 
-				if (imgValign.equals(mxConstants.ALIGN_TOP))
+				if (imgValign.equals(Constants.ALIGN_TOP))
 				{
 					y = state.getY();
 				}
-				else if (imgValign.equals(mxConstants.ALIGN_BOTTOM))
+				else if (imgValign.equals(Constants.ALIGN_BOTTOM))
 				{
 					y = state.getY() + state.getHeight() - h;
 				}
@@ -1054,14 +1048,14 @@ public class GraphView extends mxEventSource
 					y = state.getY() + (state.getHeight() - h) / 2;
 				}
 
-				rect.add(new mxRectangle(x, y, w, h));
+				rect.add(new Rectangle(x, y, w, h));
 			}
 		}
 
 		// Adds the rotated bounds to the bounding box if the
 		// shape is rotated
-		double rotation = mxUtils.getDouble(style, mxConstants.STYLE_ROTATION);
-		mxRectangle bbox = mxUtils.getBoundingBox(rect, rotation);
+		double rotation = Utils.getDouble(style, Constants.STYLE_ROTATION);
+		Rectangle bbox = Utils.getBoundingBox(rect, rotation);
 
 		// Add the rotated bounding box to the non-rotated so
 		// that all handles are also covered
@@ -1105,7 +1099,7 @@ public class GraphView extends mxEventSource
 										 CellState terminal, boolean source,
 										 ConnectionConstraint constraint)
 	{
-		mxPoint pt = null;
+		Point pt = null;
 
 		if (constraint != null)
 		{
@@ -1114,13 +1108,13 @@ public class GraphView extends mxEventSource
 
 		if (pt == null && terminal == null)
 		{
-			mxPoint orig = edge.getOrigin();
+			Point orig = edge.getOrigin();
 			Geometry geo = graph.getCellGeometry(edge.getCell());
 			pt = geo.getTerminalPoint(source);
 
 			if (pt != null)
 			{
-				pt = new mxPoint(scale
+				pt = new Point(scale
 						* (translate.getX() + pt.getX() + orig.getX()), scale
 						* (translate.getY() + pt.getY() + orig.getY()));
 			}
@@ -1142,12 +1136,12 @@ public class GraphView extends mxEventSource
 	 * @param target
 	 *            Cell state that represents the target terminal.
 	 */
-	public void updatePoints(CellState edge, List<mxPoint> points,
+	public void updatePoints(CellState edge, List<Point> points,
 							 CellState source, CellState target)
 	{
 		if (edge != null)
 		{
-			List<mxPoint> pts = new ArrayList<mxPoint>();
+			List<Point> pts = new ArrayList<Point>();
 			pts.add(edge.getAbsolutePoint(0));
 			EdgeStyle.mxEdgeStyleFunction edgeStyle = getEdgeStyle(edge, points, source,
 					target);
@@ -1175,11 +1169,11 @@ public class GraphView extends mxEventSource
 	/**
 	 * Transforms the given control point to an absolute point.
 	 */
-	public mxPoint transformControlPoint(CellState state, mxPoint pt)
+	public Point transformControlPoint(CellState state, Point pt)
 	{
-		mxPoint origin = state.getOrigin();
+		Point origin = state.getOrigin();
 
-		return new mxPoint(scale
+		return new Point(scale
 				* (pt.getX() + translate.getX() + origin.getX()), scale
 				* (pt.getY() + translate.getY() + origin.getY()));
 	}
@@ -1189,23 +1183,23 @@ public class GraphView extends mxEventSource
 	 * for the given state, control points and terminals.
 	 */
 	public EdgeStyle.mxEdgeStyleFunction getEdgeStyle(CellState edge,
-													  List<mxPoint> points, Object source, Object target)
+                                                      List<Point> points, Object source, Object target)
 	{
 		Object edgeStyle = null;
 
 		if (source != null && source == target)
 		{
-			edgeStyle = edge.getStyle().get(mxConstants.STYLE_LOOP);
+			edgeStyle = edge.getStyle().get(Constants.STYLE_LOOP);
 
 			if (edgeStyle == null)
 			{
 				edgeStyle = graph.getDefaultLoopStyle();
 			}
 		}
-		else if (!mxUtils.isTrue(edge.getStyle(),
-				mxConstants.STYLE_NOEDGESTYLE, false))
+		else if (!Utils.isTrue(edge.getStyle(),
+				Constants.STYLE_NOEDGESTYLE, false))
 		{
-			edgeStyle = edge.getStyle().get(mxConstants.STYLE_EDGE);
+			edgeStyle = edge.getStyle().get(Constants.STYLE_EDGE);
 		}
 
 		// Converts string values to objects
@@ -1216,7 +1210,7 @@ public class GraphView extends mxEventSource
 
 			if (tmp == null)
 			{
-				tmp = mxUtils.eval(str);
+				tmp = Utils.eval(str);
 			}
 
 			edgeStyle = tmp;
@@ -1244,8 +1238,8 @@ public class GraphView extends mxEventSource
 	public void updateFloatingTerminalPoints(CellState state,
 											 CellState source, CellState target)
 	{
-		mxPoint p0 = state.getAbsolutePoint(0);
-		mxPoint pe = state.getAbsolutePoint(state.getAbsolutePointCount() - 1);
+		Point p0 = state.getAbsolutePoint(0);
+		Point pe = state.getAbsolutePoint(state.getAbsolutePointCount() - 1);
 
 		if (pe == null && target != null)
 		{
@@ -1275,13 +1269,13 @@ public class GraphView extends mxEventSource
 											CellState start, CellState end, boolean source)
 	{
 		start = getTerminalPort(edge, start, source);
-		mxPoint next = getNextPoint(edge, end, source);
-		double border = mxUtils.getDouble(edge.getStyle(),
-				mxConstants.STYLE_PERIMETER_SPACING);
-		border += mxUtils.getDouble(edge.getStyle(),
-				(source) ? mxConstants.STYLE_SOURCE_PERIMETER_SPACING
-						: mxConstants.STYLE_TARGET_PERIMETER_SPACING);
-		mxPoint pt = getPerimeterPoint(start, next, graph.isOrthogonal(edge),
+		Point next = getNextPoint(edge, end, source);
+		double border = Utils.getDouble(edge.getStyle(),
+				Constants.STYLE_PERIMETER_SPACING);
+		border += Utils.getDouble(edge.getStyle(),
+				(source) ? Constants.STYLE_SOURCE_PERIMETER_SPACING
+						: Constants.STYLE_TARGET_PERIMETER_SPACING);
+		Point pt = getPerimeterPoint(start, next, graph.isOrthogonal(edge),
 				border);
 		edge.setAbsoluteTerminalPoint(pt, source);
 	}
@@ -1293,9 +1287,9 @@ public class GraphView extends mxEventSource
 	public CellState getTerminalPort(CellState state, CellState terminal,
 									 boolean source)
 	{
-		String key = (source) ? mxConstants.STYLE_SOURCE_PORT
-				: mxConstants.STYLE_TARGET_PORT;
-		String id = mxUtils.getString(state.style, key);
+		String key = (source) ? Constants.STYLE_SOURCE_PORT
+				: Constants.STYLE_TARGET_PORT;
+		String id = Utils.getString(state.style, key);
 
 		if (id != null && graph.getModel() instanceof GraphModel)
 		{
@@ -1317,8 +1311,8 @@ public class GraphView extends mxEventSource
 	 * between the perimeter and the line between the center of the shape and
 	 * the given point.
 	 */
-	public mxPoint getPerimeterPoint(CellState terminal, mxPoint next,
-									 boolean orthogonal)
+	public Point getPerimeterPoint(CellState terminal, Point next,
+                                   boolean orthogonal)
 	{
 		return getPerimeterPoint(terminal, next, orthogonal, 0);
 	}
@@ -1340,10 +1334,10 @@ public class GraphView extends mxEventSource
 	 * @param border
 	 *            Optional border between the perimeter and the shape.
 	 */
-	public mxPoint getPerimeterPoint(CellState terminal, mxPoint next,
-									 boolean orthogonal, double border)
+	public Point getPerimeterPoint(CellState terminal, Point next,
+                                   boolean orthogonal, double border)
 	{
-		mxPoint point = null;
+		Point point = null;
 
 		if (terminal != null)
 		{
@@ -1351,7 +1345,7 @@ public class GraphView extends mxEventSource
 
 			if (perimeter != null && next != null)
 			{
-				mxRectangle bounds = getPerimeterBounds(terminal, border);
+				Rectangle bounds = getPerimeterBounds(terminal, border);
 
 				if (bounds.getWidth() > 0 || bounds.getHeight() > 0)
 				{
@@ -1375,8 +1369,8 @@ public class GraphView extends mxEventSource
 	 */
 	public double getRoutingCenterX(CellState state)
 	{
-		float f = (state.getStyle() != null) ? mxUtils.getFloat(
-				state.getStyle(), mxConstants.STYLE_ROUTING_CENTER_X) : 0;
+		float f = (state.getStyle() != null) ? Utils.getFloat(
+				state.getStyle(), Constants.STYLE_ROUTING_CENTER_X) : 0;
 
 		return state.getCenterX() + f * state.getWidth();
 	}
@@ -1388,8 +1382,8 @@ public class GraphView extends mxEventSource
 	 */
 	public double getRoutingCenterY(CellState state)
 	{
-		float f = (state.getStyle() != null) ? mxUtils.getFloat(
-				state.getStyle(), mxConstants.STYLE_ROUTING_CENTER_Y) : 0;
+		float f = (state.getStyle() != null) ? Utils.getFloat(
+				state.getStyle(), Constants.STYLE_ROUTING_CENTER_Y) : 0;
 
 		return state.getCenterY() + f * state.getHeight();
 	}
@@ -1397,12 +1391,12 @@ public class GraphView extends mxEventSource
 	/**
 	 * Returns the perimeter bounds for the given terminal, edge pair.
 	 */
-	public mxRectangle getPerimeterBounds(CellState terminal, double border)
+	public Rectangle getPerimeterBounds(CellState terminal, double border)
 	{
 		if (terminal != null)
 		{
-			border += mxUtils.getDouble(terminal.getStyle(),
-					mxConstants.STYLE_PERIMETER_SPACING);
+			border += Utils.getDouble(terminal.getStyle(),
+					Constants.STYLE_PERIMETER_SPACING);
 		}
 
 		return terminal.getPerimeterBounds(border * scale);
@@ -1413,7 +1407,7 @@ public class GraphView extends mxEventSource
 	 */
 	public Perimeter.mxPerimeterFunction getPerimeterFunction(CellState state)
 	{
-		Object perimeter = state.getStyle().get(mxConstants.STYLE_PERIMETER);
+		Object perimeter = state.getStyle().get(Constants.STYLE_PERIMETER);
 
 		// Converts string values to objects
 		if (perimeter instanceof String)
@@ -1423,7 +1417,7 @@ public class GraphView extends mxEventSource
 
 			if (tmp == null)
 			{
-				tmp = mxUtils.eval(str);
+				tmp = Utils.eval(str);
 			}
 
 			perimeter = tmp;
@@ -1450,11 +1444,11 @@ public class GraphView extends mxEventSource
 	 *            should be returned.
 	 * @return Returns the nearest point of the opposite side.
 	 */
-	public mxPoint getNextPoint(CellState edge, CellState opposite,
-								boolean source)
+	public Point getNextPoint(CellState edge, CellState opposite,
+                              boolean source)
 	{
-		List<mxPoint> pts = edge.getAbsolutePoints();
-		mxPoint point = null;
+		List<Point> pts = edge.getAbsolutePoints();
+		Point point = null;
 
 		if (pts != null && pts.size() >= 2)
 		{
@@ -1466,7 +1460,7 @@ public class GraphView extends mxEventSource
 
 		if (point == null && opposite != null)
 		{
-			point = new mxPoint(opposite.getCenterX(), opposite.getCenterY());
+			point = new Point(opposite.getCenterX(), opposite.getCenterY());
 		}
 
 		return point;
@@ -1517,9 +1511,9 @@ public class GraphView extends mxEventSource
 	 */
 	public void updateEdgeBounds(CellState state)
 	{
-		List<mxPoint> points = state.getAbsolutePoints();
-		mxPoint p0 = points.get(0);
-		mxPoint pe = points.get(points.size() - 1);
+		List<Point> points = state.getAbsolutePoints();
+		Point p0 = points.get(0);
+		Point pe = points.get(points.size() - 1);
 
 		if (p0.getX() != pe.getX() || p0.getY() != pe.getY())
 		{
@@ -1534,7 +1528,7 @@ public class GraphView extends mxEventSource
 
 		double length = 0;
 		double[] segments = new double[points.size() - 1];
-		mxPoint pt = p0;
+		Point pt = p0;
 
 		double minX = pt.getX();
 		double minY = pt.getY();
@@ -1543,7 +1537,7 @@ public class GraphView extends mxEventSource
 
 		for (int i = 1; i < points.size(); i++)
 		{
-			mxPoint tmp = points.get(i);
+			Point tmp = points.get(i);
 
 			if (tmp != null)
 			{
@@ -1575,7 +1569,7 @@ public class GraphView extends mxEventSource
 	/**
 	 * Returns the absolute center point along the given edge.
 	 */
-	public mxPoint getPoint(CellState state)
+	public Point getPoint(CellState state)
 	{
 		return getPoint(state, null);
 	}
@@ -1591,7 +1585,7 @@ public class GraphView extends mxEventSource
 	 * @return Returns the mxpoint that represents the absolute location of the
 	 *         given relative geometry.
 	 */
-	public mxPoint getPoint(CellState state, Geometry geometry)
+	public Point getPoint(CellState state, Geometry geometry)
 	{
 		double x = state.getCenterX();
 		double y = state.getCenterY();
@@ -1614,8 +1608,8 @@ public class GraphView extends mxEventSource
 			}
 
 			double factor = (segment == 0) ? 0 : (dist - length) / segment;
-			mxPoint p0 = state.getAbsolutePoint(index - 1);
-			mxPoint pe = state.getAbsolutePoint(index);
+			Point p0 = state.getAbsolutePoint(index - 1);
+			Point pe = state.getAbsolutePoint(index);
 
 			if (p0 != null && pe != null)
 			{
@@ -1626,7 +1620,7 @@ public class GraphView extends mxEventSource
 				if (geometry != null)
 				{
 					gy = geometry.getY();
-					mxPoint offset = geometry.getOffset();
+					Point offset = geometry.getOffset();
 
 					if (offset != null)
 					{
@@ -1646,7 +1640,7 @@ public class GraphView extends mxEventSource
 		}
 		else if (geometry != null)
 		{
-			mxPoint offset = geometry.getOffset();
+			Point offset = geometry.getOffset();
 
 			if (offset != null)
 			{
@@ -1655,14 +1649,14 @@ public class GraphView extends mxEventSource
 			}
 		}
 
-		return new mxPoint(x, y);
+		return new Point(x, y);
 	}
 
 	/**
 	 * Gets the relative point that describes the given, absolute label position
 	 * for the given edge state.
 	 */
-	public mxPoint getRelativePoint(CellState edgeState, double x, double y)
+	public Point getRelativePoint(CellState edgeState, double x, double y)
 	{
 		IGraphModel model = graph.getModel();
 		Geometry geometry = model.getGeometry(edgeState.getCell());
@@ -1677,8 +1671,8 @@ public class GraphView extends mxEventSource
 				double[] segments = edgeState.getSegments();
 
 				// Works which line segment the point of the label is closest to
-				mxPoint p0 = edgeState.getAbsolutePoint(0);
-				mxPoint pe = edgeState.getAbsolutePoint(1);
+				Point p0 = edgeState.getAbsolutePoint(0);
+				Point pe = edgeState.getAbsolutePoint(1);
 				Line2D line = new Line2D.Double(p0.getPoint(), pe.getPoint());
 				double minDist = line.ptSegDistSq(x, y);
 
@@ -1756,13 +1750,13 @@ public class GraphView extends mxEventSource
 				}
 
 				// Constructs the relative point for the label
-				return new mxPoint(
+				return new Point(
 						Math.round(((totalLength / 2 - length - projlen) / totalLength)
 								* -2), Math.round(yDistance / scale));
 			}
 		}
 
-		return new mxPoint();
+		return new Point();
 	}
 
 	/**
@@ -1876,7 +1870,7 @@ public class GraphView extends mxEventSource
 	/**
 	 * Action to change the current root in a view.
 	 */
-	public static class mxCurrentRootChange implements mxUndoableEdit.mxUndoableChange
+	public static class CurrentRootChange implements UndoableEdit.UndoableChange
 	{
 
 		/**
@@ -1897,7 +1891,7 @@ public class GraphView extends mxEventSource
 		/**
 		 * Constructs a change of the current root in the given view.
 		 */
-		public mxCurrentRootChange(GraphView view, Object root)
+		public CurrentRootChange(GraphView view, Object root)
 		{
 			this.view = view;
 			this.root = root;
@@ -1963,12 +1957,12 @@ public class GraphView extends mxEventSource
 			view.currentRoot = previous;
 			previous = tmp;
 
-			mxPoint translate = view.graph.getTranslateForRoot(view
+			Point translate = view.graph.getTranslateForRoot(view
 					.getCurrentRoot());
 
 			if (translate != null)
 			{
-				view.translate = new mxPoint(-translate.getX(),
+				view.translate = new Point(-translate.getX(),
 						translate.getY());
 			}
 
@@ -1976,8 +1970,8 @@ public class GraphView extends mxEventSource
 			view.reload();
 			up = !up;
 
-			String eventName = (up) ? mxEvent.UP : mxEvent.DOWN;
-			view.fireEvent(new mxEventObject(eventName, "root",
+			String eventName = (up) ? Event.UP : Event.DOWN;
+			view.fireEvent(new EventObject(eventName, "root",
 					view.currentRoot, "previous", previous));
 		}
 

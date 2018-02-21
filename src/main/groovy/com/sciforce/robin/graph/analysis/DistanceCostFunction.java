@@ -3,7 +3,7 @@
  */
 package com.sciforce.robin.graph.analysis;
 
-import com.sciforce.robin.graph.util.mxPoint;
+import com.sciforce.robin.graph.util.Point;
 import com.sciforce.robin.graph.view.CellState;
 
 /**
@@ -23,11 +23,11 @@ public class DistanceCostFunction implements ICostFunction
 
 		if (pointCount > 0)
 		{
-			mxPoint last = state.getAbsolutePoint(0);
+			Point last = state.getAbsolutePoint(0);
 
 			for (int i = 1; i < pointCount; i++)
 			{
-				mxPoint point = state.getAbsolutePoint(i);
+				Point point = state.getAbsolutePoint(i);
 				cost += point.getPoint().distance(last.getPoint());
 				last = point;
 			}

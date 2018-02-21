@@ -7,9 +7,9 @@ import java.awt.image.BufferedImage;
 import java.util.Hashtable;
 import java.util.Map;
 
-import com.sciforce.robin.graph.util.mxConstants;
-import com.sciforce.robin.graph.util.mxUtils;
-import com.sciforce.robin.graph.util.mxPoint;
+import com.sciforce.robin.graph.util.Constants;
+import com.sciforce.robin.graph.util.Utils;
+import com.sciforce.robin.graph.util.Point;
 
 public abstract class BasicCanvas implements ICanvas
 {
@@ -34,7 +34,7 @@ public abstract class BasicCanvas implements ICanvas
 	/**
 	 * Specifies the current translation. Default is (0,0).
 	 */
-	protected mxPoint translate = new mxPoint();
+	protected Point translate = new Point();
 
 	/**
 	 * Specifies the current scale. Default is 1.
@@ -56,13 +56,13 @@ public abstract class BasicCanvas implements ICanvas
 	 */
 	public void setTranslate(double dx, double dy)
 	{
-		translate = new mxPoint(dx, dy);
+		translate = new Point(dx, dy);
 	}
 
 	/**
 	 * Returns the current translate.
 	 */
-	public mxPoint getTranslate()
+	public Point getTranslate()
 	{
 		return translate;
 	}
@@ -126,7 +126,7 @@ public abstract class BasicCanvas implements ICanvas
 
 		if (img == null)
 		{
-			img = mxUtils.loadImage(image);
+			img = Utils.loadImage(image);
 
 			if (img != null)
 			{
@@ -151,7 +151,7 @@ public abstract class BasicCanvas implements ICanvas
 	 */
 	public String getImageForStyle(Map<String, Object> style)
 	{
-		String filename = mxUtils.getString(style, mxConstants.STYLE_IMAGE);
+		String filename = Utils.getString(style, Constants.STYLE_IMAGE);
 
 		if (filename != null && !filename.startsWith("/") && !filename.startsWith("file:/"))
 		{

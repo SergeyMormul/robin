@@ -3,7 +3,7 @@
  */
 package com.sciforce.robin.graph.canvas;
 
-import com.sciforce.robin.graph.util.mxPoint;
+import com.sciforce.robin.graph.util.Point;
 import com.sciforce.robin.graph.view.CellState;
 
 /**
@@ -22,7 +22,7 @@ public interface ICanvas
 	 * 
 	 * @return Returns the current translation.
 	 */
-	mxPoint getTranslate();
+	Point getTranslate();
 
 	/**
 	 * Sets the scale for the following drawing requests.

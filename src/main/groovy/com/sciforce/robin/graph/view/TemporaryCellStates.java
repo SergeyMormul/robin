@@ -5,7 +5,7 @@ package com.sciforce.robin.graph.view;
 
 import java.util.Hashtable;
 
-import com.sciforce.robin.graph.util.mxRectangle;
+import com.sciforce.robin.graph.util.Rectangle;
 
 public class TemporaryCellStates
 {
@@ -22,7 +22,7 @@ public class TemporaryCellStates
 	/**
 	 * 
 	 */
-	protected mxRectangle oldBounds;
+	protected Rectangle oldBounds;
 
 	/**
 	 * 
@@ -63,13 +63,13 @@ public class TemporaryCellStates
 
 		if (cells != null)
 		{
-			mxRectangle bbox = null;
+			Rectangle bbox = null;
 
 			// Validates the vertices and edges without adding them to
 			// the model so that the original cells are not modified
 			for (int i = 0; i < cells.length; i++)
 			{
-				mxRectangle bounds = view.getBoundingBox(view.validateCellState(view.validateCell(cells[i])));
+				Rectangle bounds = view.getBoundingBox(view.validateCellState(view.validateCell(cells[i])));
 				
 				if (bbox == null)
 				{
@@ -83,7 +83,7 @@ public class TemporaryCellStates
 			
 			if (bbox == null)
 			{
-				bbox = new mxRectangle();
+				bbox = new Rectangle();
 			}
 
 			view.setGraphBounds(bbox);

@@ -4,8 +4,6 @@
 package com.sciforce.robin.graph.view;
 
 import java.awt.Graphics;
-import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.Shape;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -27,20 +25,11 @@ import com.sciforce.robin.graph.canvas.Graphics2DCanvas;
 import com.sciforce.robin.graph.canvas.ICanvas;
 import com.sciforce.robin.graph.canvas.ImageCanvas;
 import com.sciforce.robin.graph.model.*;
+import com.sciforce.robin.graph.util.*;
 import org.w3c.dom.Element;
 
 import com.sciforce.robin.graph.model.Cell;
-import com.sciforce.robin.graph.util.mxConstants;
-import com.sciforce.robin.graph.util.mxEvent;
-import com.sciforce.robin.graph.util.mxEventObject;
-import com.sciforce.robin.graph.util.mxEventSource;
-import com.sciforce.robin.graph.util.mxImageBundle;
-import com.sciforce.robin.graph.util.mxPoint;
-import com.sciforce.robin.graph.util.mxRectangle;
-import com.sciforce.robin.graph.util.mxResources;
-import com.sciforce.robin.graph.util.mxStyleUtils;
-import com.sciforce.robin.graph.util.mxUndoableEdit;
-import com.sciforce.robin.graph.util.mxUtils;
+import com.sciforce.robin.graph.util.Constants;
 
 /**
  * Implements a graph object that allows to create diagrams from a graph model
@@ -51,119 +40,119 @@ import com.sciforce.robin.graph.util.mxUtils;
  * XML document (doc) and File (file):
  * 
  * <code>
- * Image img = mxCellRenderer.createBufferedImage(
+ * Image img = CellRenderer.createBufferedImage(
  * 		graph, null, 1, Color.WHITE, false, null);
  * ImageIO.write(img, "png", file);
  * </code>
  * 
  * If the XML is given as a string rather than a document, the document can
- * be obtained using mxUtils.parse.
+ * be obtained using Utils.parse.
  * 
  * This class fires the following events:
  * 
- * mxEvent.ROOT fires if the root in the model has changed. This event has no
+ * Event.ROOT fires if the root in the model has changed. This event has no
  * properties.
  * 
- * mxEvent.ALIGN_CELLS fires between begin- and endUpdate in alignCells. The
+ * Event.ALIGN_CELLS fires between begin- and endUpdate in alignCells. The
  * <code>cells</code> and <code>align</code> properties contain the respective
  * arguments that were passed to alignCells.
  * 
- * mxEvent.FLIP_EDGE fires between begin- and endUpdate in flipEdge. The
+ * Event.FLIP_EDGE fires between begin- and endUpdate in flipEdge. The
  * <code>edge</code> property contains the edge passed to flipEdge.
  * 
- * mxEvent.ORDER_CELLS fires between begin- and endUpdate in orderCells. The
+ * Event.ORDER_CELLS fires between begin- and endUpdate in orderCells. The
  * <code>cells</code> and <code>back</code> properties contain the respective
  * arguments that were passed to orderCells.
  *
- * mxEvent.CELLS_ORDERED fires between begin- and endUpdate in cellsOrdered.
+ * Event.CELLS_ORDERED fires between begin- and endUpdate in cellsOrdered.
  * The <code>cells</code> and <code>back</code> arguments contain the
  * respective arguments that were passed to cellsOrdered.
  * 
- * mxEvent.GROUP_CELLS fires between begin- and endUpdate in groupCells. The
+ * Event.GROUP_CELLS fires between begin- and endUpdate in groupCells. The
  * <code>group</code>, <code>cells</code> and <code>border</code> arguments
  * contain the respective arguments that were passed to groupCells.
  * 
- * mxEvent.UNGROUP_CELLS fires between begin- and endUpdate in ungroupCells.
+ * Event.UNGROUP_CELLS fires between begin- and endUpdate in ungroupCells.
  * The <code>cells</code> property contains the array of cells that was passed
  * to ungroupCells.
  * 
- * mxEvent.REMOVE_CELLS_FROM_PARENT fires between begin- and endUpdate in
+ * Event.REMOVE_CELLS_FROM_PARENT fires between begin- and endUpdate in
  * removeCellsFromParent. The <code>cells</code> property contains the array of
  * cells that was passed to removeCellsFromParent.
  * 
- * mxEvent.ADD_CELLS fires between begin- and endUpdate in addCells. The
+ * Event.ADD_CELLS fires between begin- and endUpdate in addCells. The
  * <code>cells</code>, <code>parent</code>, <code>index</code>,
  * <code>source</code> and <code>target</code> properties contain the
  * respective arguments that were passed to addCells.
  * 
- * mxEvent.CELLS_ADDED fires between begin- and endUpdate in cellsAdded. The
+ * Event.CELLS_ADDED fires between begin- and endUpdate in cellsAdded. The
  * <code>cells</code>, <code>parent</code>, <code>index</code>,
  * <code>source</code>, <code>target</code> and <code>absolute</code>
  * properties contain the respective arguments that were passed to cellsAdded.
  * 
- * mxEvent.REMOVE_CELLS fires between begin- and endUpdate in removeCells. The
+ * Event.REMOVE_CELLS fires between begin- and endUpdate in removeCells. The
  * <code>cells</code> and <code>includeEdges</code> arguments contain the
  * respective arguments that were passed to removeCells.
  * 
- * mxEvent.CELLS_REMOVED fires between begin- and endUpdate in cellsRemoved.
+ * Event.CELLS_REMOVED fires between begin- and endUpdate in cellsRemoved.
  * The <code>cells</code> argument contains the array of cells that was
  * removed.
  * 
- * mxEvent.SPLIT_EDGE fires between begin- and endUpdate in splitEdge. The
+ * Event.SPLIT_EDGE fires between begin- and endUpdate in splitEdge. The
  * <code>edge</code> property contains the edge to be splitted, the
  * <code>cells</code>, <code>newEdge</code>, <code>dx</code> and
  * <code>dy</code> properties contain the respective arguments that were passed
  * to splitEdge.
  * 
- * mxEvent.TOGGLE_CELLS fires between begin- and endUpdate in toggleCells. The
+ * Event.TOGGLE_CELLS fires between begin- and endUpdate in toggleCells. The
  * <code>show</code>, <code>cells</code> and <code>includeEdges</code>
  * properties contain the respective arguments that were passed to toggleCells.
  * 
- * mxEvent.FOLD_CELLS fires between begin- and endUpdate in foldCells. The
+ * Event.FOLD_CELLS fires between begin- and endUpdate in foldCells. The
  * <code>collapse</code>, <code>cells</code> and <code>recurse</code>
  * properties contain the respective arguments that were passed to foldCells.
  * 
- * mxEvent.CELLS_FOLDED fires between begin- and endUpdate in cellsFolded. The
+ * Event.CELLS_FOLDED fires between begin- and endUpdate in cellsFolded. The
  * <code>collapse</code>, <code>cells</code> and <code>recurse</code>
  * properties contain the respective arguments that were passed to cellsFolded.
  * 
- * mxEvent.UPDATE_CELL_SIZE fires between begin- and endUpdate in
+ * Event.UPDATE_CELL_SIZE fires between begin- and endUpdate in
  * updateCellSize. The <code>cell</code> and <code>ignoreChildren</code>
  * properties contain the respective arguments that were passed to
  * updateCellSize.
  * 
- * mxEvent.RESIZE_CELLS fires between begin- and endUpdate in resizeCells. The
+ * Event.RESIZE_CELLS fires between begin- and endUpdate in resizeCells. The
  * <code>cells</code> and <code>bounds</code> properties contain the respective
  * arguments that were passed to resizeCells.
  * 
- * mxEvent.CELLS_RESIZED fires between begin- and endUpdate in cellsResized.
+ * Event.CELLS_RESIZED fires between begin- and endUpdate in cellsResized.
  * The <code>cells</code> and <code>bounds</code> properties contain the
  * respective arguments that were passed to cellsResized.
  * 
- * mxEvent.MOVE_CELLS fires between begin- and endUpdate in moveCells. The
+ * Event.MOVE_CELLS fires between begin- and endUpdate in moveCells. The
  * <code>cells</code>, <code>dx</code>, <code>dy</code>, <code>clone</code>,
  * <code>target</code> and <code>location</code> properties contain the
  * respective arguments that were passed to moveCells.
  * 
- * mxEvent.CELLS_MOVED fires between begin- and endUpdate in cellsMoved. The
+ * Event.CELLS_MOVED fires between begin- and endUpdate in cellsMoved. The
  * <code>cells</code>, <code>dx</code>, <code>dy</code> and
  * <code>disconnect</code> properties contain the respective arguments that
  * were passed to cellsMoved.
  * 
- * mxEvent.CONNECT_CELL fires between begin- and endUpdate in connectCell. The
+ * Event.CONNECT_CELL fires between begin- and endUpdate in connectCell. The
  * <code>edge</code>, <code>terminal</code> and <code>source</code> properties
  * contain the respective arguments that were passed to connectCell.
  * 
- * mxEvent.CELL_CONNECTED fires between begin- and endUpdate in cellConnected.
+ * Event.CELL_CONNECTED fires between begin- and endUpdate in cellConnected.
  * The <code>edge</code>, <code>terminal</code> and <code>source</code>
  * properties contain the respective arguments that were passed to
  * cellConnected.
  * 
- * mxEvent.REPAINT fires if a repaint was requested by calling repaint. The
- * <code>region</code> property contains the optional mxRectangle that was
+ * Event.REPAINT fires if a repaint was requested by calling repaint. The
+ * <code>region</code> property contains the optional Rectangle that was
  * passed to repaint to define the dirty region.
  */
-public class Graph extends mxEventSource
+public class Graph extends EventSource
 {
 
 	private static final Logger log = Logger.getLogger(Graph.class.getName());
@@ -175,7 +164,7 @@ public class Graph extends mxEventSource
 	{
 		try
 		{
-			mxResources.add("com.sciforce.robin.mx.mxgraph.resources.graph");
+			Resources.add("com.sciforce.robin.mx.mxgraph.resources.graph");
 		}
 		catch (Exception e)
 		{
@@ -349,17 +338,17 @@ public class Graph extends mxEventSource
 	protected boolean autoSizeCells = false;
 
 	/**
-	 * <mxRectangle> that specifies the area in which all cells in the
+	 * <Rectangle> that specifies the area in which all cells in the
 	 * diagram should be placed. Uses in getMaximumGraphBounds. Use a width
 	 * or height of 0 if you only want to give a upper, left corner.
 	 */
-	protected mxRectangle maximumGraphBounds = null;
+	protected Rectangle maximumGraphBounds = null;
 
 	/**
-	 * mxRectangle that specifies the minimum size of the graph canvas inside
+	 * Rectangle that specifies the minimum size of the graph canvas inside
 	 * the scrollpane.
 	 */
-	protected mxRectangle minimumGraphSize = null;
+	protected Rectangle minimumGraphSize = null;
 
 	/**
 	 * Border to be added to the bottom and right side when the container is
@@ -510,19 +499,19 @@ public class Graph extends mxEventSource
 	/**
 	 * Holds the current automatic origin.
 	 */
-	protected mxPoint origin = new mxPoint();
+	protected Point origin = new Point();
 
 	/**
 	 * Holds the list of bundles.
 	 */
-	protected static List<mxImageBundle> imageBundles = new LinkedList<mxImageBundle>();
+	protected static List<ImageBundle> imageBundles = new LinkedList<ImageBundle>();
 
 	/**
 	 * Fires repaint events for full repaints.
 	 */
 	protected mxIEventListener fullRepaintHandler = new mxIEventListener()
 	{
-		public void invoke(Object sender, mxEventObject evt)
+		public void invoke(Object sender, EventObject evt)
 		{
 			repaint();
 		}
@@ -533,7 +522,7 @@ public class Graph extends mxEventSource
 	 */
 	protected mxIEventListener updateOriginHandler = new mxIEventListener()
 	{
-		public void invoke(Object sender, mxEventObject evt)
+		public void invoke(Object sender, EventObject evt)
 		{
 			if (isAutoOrigin())
 			{
@@ -547,10 +536,10 @@ public class Graph extends mxEventSource
 	 */
 	protected mxIEventListener graphModelChangeHandler = new mxIEventListener()
 	{
-		public void invoke(Object sender, mxEventObject evt)
+		public void invoke(Object sender, EventObject evt)
 		{
-			mxRectangle dirty = graphModelChanged((IGraphModel) sender,
-					(List<mxUndoableEdit.mxUndoableChange>) ((mxUndoableEdit) evt
+			Rectangle dirty = graphModelChanged((IGraphModel) sender,
+					(List<UndoableEdit.UndoableChange>) ((UndoableEdit) evt
 							.getProperty("edit")).getChanges());
 			repaint(dirty);
 		}
@@ -640,7 +629,7 @@ public class Graph extends mxEventSource
 
 	/**
 	 * Sets the graph model that contains the data, and fires an
-	 * mxEvent.CHANGE followed by an mxEvent.REPAINT event.
+	 * Event.CHANGE followed by an Event.REPAINT event.
 	 * 
 	 * @param value Model that contains the graph data
 	 */
@@ -659,7 +648,7 @@ public class Graph extends mxEventSource
 			view.revalidate();
 		}
 
-		model.addListener(mxEvent.CHANGE, graphModelChangeHandler);
+		model.addListener(Event.CHANGE, graphModelChangeHandler);
 		changeSupport.firePropertyChange("model", oldModel, model);
 		repaint();
 	}
@@ -696,13 +685,13 @@ public class Graph extends mxEventSource
 		}
 
 		// Listens to changes in the view
-		view.addListener(mxEvent.SCALE, fullRepaintHandler);
-		view.addListener(mxEvent.SCALE, updateOriginHandler);
-		view.addListener(mxEvent.TRANSLATE, fullRepaintHandler);
-		view.addListener(mxEvent.SCALE_AND_TRANSLATE, fullRepaintHandler);
-		view.addListener(mxEvent.SCALE_AND_TRANSLATE, updateOriginHandler);
-		view.addListener(mxEvent.UP, fullRepaintHandler);
-		view.addListener(mxEvent.DOWN, fullRepaintHandler);
+		view.addListener(Event.SCALE, fullRepaintHandler);
+		view.addListener(Event.SCALE, updateOriginHandler);
+		view.addListener(Event.TRANSLATE, fullRepaintHandler);
+		view.addListener(Event.SCALE_AND_TRANSLATE, fullRepaintHandler);
+		view.addListener(Event.SCALE_AND_TRANSLATE, updateOriginHandler);
+		view.addListener(Event.UP, fullRepaintHandler);
+		view.addListener(Event.DOWN, fullRepaintHandler);
 
 		changeSupport.firePropertyChange("view", oldView, view);
 	}
@@ -733,46 +722,46 @@ public class Graph extends mxEventSource
 	/**
 	 * Returns the cells to be selected for the given list of changes.
 	 */
-	public Object[] getSelectionCellsForChanges(List<mxUndoableEdit.mxUndoableChange> changes)
+	public Object[] getSelectionCellsForChanges(List<UndoableEdit.UndoableChange> changes)
 	{
 		List<Object> cells = new ArrayList<Object>();
-		Iterator<mxUndoableEdit.mxUndoableChange> it = changes.iterator();
+		Iterator<UndoableEdit.UndoableChange> it = changes.iterator();
 
 		while (it.hasNext())
 		{
 			Object change = it.next();
 
-			if (change instanceof GraphModel.mxChildChange)
+			if (change instanceof GraphModel.ChildChange)
 			{
-				cells.add(((GraphModel.mxChildChange) change).getChild());
+				cells.add(((GraphModel.ChildChange) change).getChild());
 			}
-			else if (change instanceof GraphModel.mxTerminalChange)
+			else if (change instanceof GraphModel.TerminalChange)
 			{
-				cells.add(((GraphModel.mxTerminalChange) change).getCell());
+				cells.add(((GraphModel.TerminalChange) change).getCell());
 			}
-			else if (change instanceof GraphModel.mxValueChange)
+			else if (change instanceof GraphModel.VlueChange)
 			{
-				cells.add(((GraphModel.mxValueChange) change).getCell());
+				cells.add(((GraphModel.VlueChange) change).getCell());
 			}
-			else if (change instanceof GraphModel.mxStyleChange)
+			else if (change instanceof GraphModel.StyleChange)
 			{
-				cells.add(((GraphModel.mxStyleChange) change).getCell());
+				cells.add(((GraphModel.StyleChange) change).getCell());
 			}
-			else if (change instanceof GraphModel.mxGeometryChange)
+			else if (change instanceof GraphModel.GeometryChange)
 			{
-				cells.add(((GraphModel.mxGeometryChange) change).getCell());
+				cells.add(((GraphModel.GeometryChange) change).getCell());
 			}
-			else if (change instanceof GraphModel.mxCollapseChange)
+			else if (change instanceof GraphModel.CollapseChange)
 			{
-				cells.add(((GraphModel.mxCollapseChange) change).getCell());
+				cells.add(((GraphModel.CollapseChange) change).getCell());
 			}
-			else if (change instanceof GraphModel.mxVisibleChange)
+			else if (change instanceof GraphModel.VisibleChange)
 			{
-				GraphModel.mxVisibleChange vc = (GraphModel.mxVisibleChange) change;
+				GraphModel.VisibleChange vc = (GraphModel.VisibleChange) change;
 
 				if (vc.isVisible())
 				{
-					cells.add(((GraphModel.mxVisibleChange) change).getCell());
+					cells.add(((GraphModel.VisibleChange) change).getCell());
 				}
 			}
 		}
@@ -784,8 +773,8 @@ public class Graph extends mxEventSource
 	 * Called when the graph model changes. Invokes processChange on each
 	 * item of the given array to update the view accordingly.
 	 */
-	public mxRectangle graphModelChanged(IGraphModel sender,
-			List<mxUndoableEdit.mxUndoableChange> changes)
+	public Rectangle graphModelChanged(IGraphModel sender,
+									   List<UndoableEdit.UndoableChange> changes)
 	{
 		int thresh = getChangesRepaintThreshold();
 		boolean ignoreDirty = thresh > 0 && changes.size() > thresh;
@@ -793,11 +782,11 @@ public class Graph extends mxEventSource
 		// Ignores dirty rectangle if there was a root change
 		if (!ignoreDirty)
 		{
-			Iterator<mxUndoableEdit.mxUndoableChange> it = changes.iterator();
+			Iterator<UndoableEdit.UndoableChange> it = changes.iterator();
 
 			while (it.hasNext())
 			{
-				if (it.next() instanceof GraphModel.mxRootChange)
+				if (it.next() instanceof GraphModel.RrootChange)
 				{
 					ignoreDirty = true;
 					break;
@@ -805,7 +794,7 @@ public class Graph extends mxEventSource
 			}
 		}
 
-		mxRectangle dirty = processChanges(changes, true, ignoreDirty);
+		Rectangle dirty = processChanges(changes, true, ignoreDirty);
 		view.validate();
 
 		if (isAutoOrigin())
@@ -815,7 +804,7 @@ public class Graph extends mxEventSource
 
 		if (!ignoreDirty)
 		{
-			mxRectangle tmp = processChanges(changes, false, ignoreDirty);
+			Rectangle tmp = processChanges(changes, false, ignoreDirty);
 
 			if (tmp != null)
 			{
@@ -844,7 +833,7 @@ public class Graph extends mxEventSource
 	 */
 	protected void updateOrigin()
 	{
-		mxRectangle bounds = getGraphBounds();
+		Rectangle bounds = getGraphBounds();
 
 		if (bounds != null)
 		{
@@ -860,9 +849,9 @@ public class Graph extends mxEventSource
 				origin.setX(origin.getX() + x0);
 				origin.setY(origin.getY() + y0);
 
-				mxPoint t = getView().getTranslate();
+				Point t = getView().getTranslate();
 				getView().setTranslate(
-						new mxPoint(t.getX() - x0, t.getY() - y0));
+						new Point(t.getX() - x0, t.getY() - y0));
 			}
 			else if ((x > 0 || y > 0)
 					&& (origin.getX() < 0 || origin.getY() < 0))
@@ -873,9 +862,9 @@ public class Graph extends mxEventSource
 				origin.setX(origin.getX() + dx);
 				origin.setY(origin.getY() + dy);
 
-				mxPoint t = getView().getTranslate();
+				Point t = getView().getTranslate();
 				getView().setTranslate(
-						new mxPoint(t.getX() - dx, t.getY() - dy));
+						new Point(t.getX() - dx, t.getY() - dy));
 			}
 		}
 	}
@@ -883,22 +872,22 @@ public class Graph extends mxEventSource
 	/**
 	 * Returns the cells that have been removed from the model.
 	 */
-	public Object[] getRemovedCellsForChanges(List<mxUndoableEdit.mxUndoableChange> changes)
+	public Object[] getRemovedCellsForChanges(List<UndoableEdit.UndoableChange> changes)
 	{
 		List<Object> result = new ArrayList<Object>();
-		Iterator<mxUndoableEdit.mxUndoableChange> it = changes.iterator();
+		Iterator<UndoableEdit.UndoableChange> it = changes.iterator();
 
 		while (it.hasNext())
 		{
 			Object change = it.next();
 
-			if (change instanceof GraphModel.mxRootChange)
+			if (change instanceof GraphModel.RrootChange)
 			{
 				break;
 			}
-			else if (change instanceof GraphModel.mxChildChange)
+			else if (change instanceof GraphModel.ChildChange)
 			{
-				GraphModel.mxChildChange cc = (GraphModel.mxChildChange) change;
+				GraphModel.ChildChange cc = (GraphModel.ChildChange) change;
 
 				if (cc.getParent() == null)
 				{
@@ -906,9 +895,9 @@ public class Graph extends mxEventSource
 							cc.getChild()));
 				}
 			}
-			else if (change instanceof GraphModel.mxVisibleChange)
+			else if (change instanceof GraphModel.VisibleChange)
 			{
-				Object cell = ((GraphModel.mxVisibleChange) change).getCell();
+				Object cell = ((GraphModel.VisibleChange) change).getCell();
 				result.addAll(GraphModel.getDescendants(model, cell));
 			}
 		}
@@ -921,15 +910,15 @@ public class Graph extends mxEventSource
 	 * repainted in the buffer. A return value of null means no repaint
 	 * is required.
 	 */
-	public mxRectangle processChanges(List<mxUndoableEdit.mxUndoableChange> changes,
-			boolean invalidate, boolean ignoreDirty)
+	public Rectangle processChanges(List<UndoableEdit.UndoableChange> changes,
+									boolean invalidate, boolean ignoreDirty)
 	{
-		mxRectangle bounds = null;
-		Iterator<mxUndoableEdit.mxUndoableChange> it = changes.iterator();
+		Rectangle bounds = null;
+		Iterator<UndoableEdit.UndoableChange> it = changes.iterator();
 
 		while (it.hasNext())
 		{
-			mxRectangle rect = processChange(it.next(), invalidate, ignoreDirty);
+			Rectangle rect = processChange(it.next(), invalidate, ignoreDirty);
 
 			if (bounds == null)
 			{
@@ -949,19 +938,19 @@ public class Graph extends mxEventSource
 	 * in <view>. This fires a <root> event if the root has changed in the
 	 * model.
 	 */
-	public mxRectangle processChange(mxUndoableEdit.mxUndoableChange change,
-			boolean invalidate, boolean ignoreDirty)
+	public Rectangle processChange(UndoableEdit.UndoableChange change,
+								   boolean invalidate, boolean ignoreDirty)
 	{
-		mxRectangle result = null;
+		Rectangle result = null;
 
-		if (change instanceof GraphModel.mxRootChange)
+		if (change instanceof GraphModel.RrootChange)
 		{
 			result = (ignoreDirty) ? null : getGraphBounds();
 
 			if (invalidate)
 			{
 				clearSelection();
-				removeStateForCell(((GraphModel.mxRootChange) change).getPrevious());
+				removeStateForCell(((GraphModel.RrootChange) change).getPrevious());
 
 				if (isResetViewOnRootChange())
 				{
@@ -979,11 +968,11 @@ public class Graph extends mxEventSource
 
 			}
 
-			fireEvent(new mxEventObject(mxEvent.ROOT));
+			fireEvent(new EventObject(Event.ROOT));
 		}
-		else if (change instanceof GraphModel.mxChildChange)
+		else if (change instanceof GraphModel.ChildChange)
 		{
-			GraphModel.mxChildChange cc = (GraphModel.mxChildChange) change;
+			GraphModel.ChildChange cc = (GraphModel.ChildChange) change;
 
 			// Repaints the parent area if it is a rendered cell (vertex or
 			// edge) otherwise only the child area is repainted, same holds
@@ -1033,9 +1022,9 @@ public class Graph extends mxEventSource
 				}
 			}
 		}
-		else if (change instanceof GraphModel.mxTerminalChange)
+		else if (change instanceof GraphModel.TerminalChange)
 		{
-			Object cell = ((GraphModel.mxTerminalChange) change).getCell();
+			Object cell = ((GraphModel.TerminalChange) change).getCell();
 
 			if (!ignoreDirty)
 			{
@@ -1047,9 +1036,9 @@ public class Graph extends mxEventSource
 				view.invalidate(cell);
 			}
 		}
-		else if (change instanceof GraphModel.mxValueChange)
+		else if (change instanceof GraphModel.VlueChange)
 		{
-			Object cell = ((GraphModel.mxValueChange) change).getCell();
+			Object cell = ((GraphModel.VlueChange) change).getCell();
 
 			if (!ignoreDirty)
 			{
@@ -1061,9 +1050,9 @@ public class Graph extends mxEventSource
 				view.clear(cell, false, false);
 			}
 		}
-		else if (change instanceof GraphModel.mxStyleChange)
+		else if (change instanceof GraphModel.StyleChange)
 		{
-			Object cell = ((GraphModel.mxStyleChange) change).getCell();
+			Object cell = ((GraphModel.StyleChange) change).getCell();
 
 			if (!ignoreDirty)
 			{
@@ -1080,9 +1069,9 @@ public class Graph extends mxEventSource
 				view.invalidate(cell);
 			}
 		}
-		else if (change instanceof GraphModel.mxGeometryChange)
+		else if (change instanceof GraphModel.GeometryChange)
 		{
-			Object cell = ((GraphModel.mxGeometryChange) change).getCell();
+			Object cell = ((GraphModel.GeometryChange) change).getCell();
 
 			if (!ignoreDirty)
 			{
@@ -1094,13 +1083,13 @@ public class Graph extends mxEventSource
 				view.invalidate(cell);
 			}
 		}
-		else if (change instanceof GraphModel.mxCollapseChange)
+		else if (change instanceof GraphModel.CollapseChange)
 		{
-			Object cell = ((GraphModel.mxCollapseChange) change).getCell();
+			Object cell = ((GraphModel.CollapseChange) change).getCell();
 
 			if (!ignoreDirty)
 			{
-				result = getBoundingBox(((GraphModel.mxCollapseChange) change).getCell(),
+				result = getBoundingBox(((GraphModel.CollapseChange) change).getCell(),
 						true, true);
 			}
 
@@ -1109,13 +1098,13 @@ public class Graph extends mxEventSource
 				removeStateForCell(cell);
 			}
 		}
-		else if (change instanceof GraphModel.mxVisibleChange)
+		else if (change instanceof GraphModel.VisibleChange)
 		{
-			Object cell = ((GraphModel.mxVisibleChange) change).getCell();
+			Object cell = ((GraphModel.VisibleChange) change).getCell();
 
 			if (!ignoreDirty)
 			{
-				result = getBoundingBox(((GraphModel.mxVisibleChange) change).getCell(),
+				result = getBoundingBox(((GraphModel.VisibleChange) change).getCell(),
 						true, true);
 			}
 
@@ -1182,19 +1171,19 @@ public class Graph extends mxEventSource
 
 	/**
 	 * Tries to resolve the value for the image style in the image bundles and
-	 * turns short data URIs as defined in mxImageBundle to data URIs as
+	 * turns short data URIs as defined in ImageBundle to data URIs as
 	 * defined in RFC 2397 of the IETF.
 	 */
 	protected Map<String, Object> postProcessCellStyle(Map<String, Object> style)
 	{
 		if (style != null)
 		{
-			String key = mxUtils.getString(style, mxConstants.STYLE_IMAGE);
+			String key = Utils.getString(style, Constants.STYLE_IMAGE);
 			String image = getImageFromBundles(key);
 
 			if (image != null)
 			{
-				style.put(mxConstants.STYLE_IMAGE, image);
+				style.put(Constants.STYLE_IMAGE, image);
 			}
 			else
 			{
@@ -1212,7 +1201,7 @@ public class Graph extends mxEventSource
 							+ image.substring(comma + 1);
 				}
 
-				style.put(mxConstants.STYLE_IMAGE, image);
+				style.put(Constants.STYLE_IMAGE, image);
 			}
 		}
 
@@ -1292,7 +1281,7 @@ public class Graph extends mxEventSource
 	/**
 	 * Toggles the boolean value for the given key in the style of the given
 	 * cells. If no cells are specified, then the selection cells are used. For
-	 * example, this can be used to toggle mxConstants.STYLE_ROUNDED or any
+	 * example, this can be used to toggle Constants.STYLE_ROUNDED or any
 	 * other style with a boolean value.
 	 * 
 	 * @param key String representing the key of the boolean style to be toggled.
@@ -1315,7 +1304,7 @@ public class Graph extends mxEventSource
 
 			if (style != null)
 			{
-				String value = (mxUtils.isTrue(style, key, defaultValue)) ? "0"
+				String value = (Utils.isTrue(style, key, defaultValue)) ? "0"
 						: "1";
 				setCellStyles(key, value, cells);
 			}
@@ -1353,7 +1342,7 @@ public class Graph extends mxEventSource
 			cells = getSelectionCells();
 		}
 
-		mxStyleUtils.setCellStyles(model, cells, key, value);
+		StyleUtils.setCellStyles(model, cells, key, value);
 
 		return cells;
 	}
@@ -1427,12 +1416,12 @@ public class Graph extends mxEventSource
 
 				if (style != null)
 				{
-					int current = mxUtils.getInt(style, key);
+					int current = Utils.getInt(style, key);
 					value = !((current & flag) == flag);
 				}
 			}
 
-			mxStyleUtils.setCellStyleFlags(model, cells, key, flag, value);
+			StyleUtils.setCellStyleFlags(model, cells, key, flag, value);
 		}
 
 		return cells;
@@ -1441,7 +1430,7 @@ public class Graph extends mxEventSource
 	/**
 	 * Adds the specified bundle.
 	 */
-	public void addImageBundle(mxImageBundle bundle)
+	public void addImageBundle(ImageBundle bundle)
 	{
 		imageBundles.add(bundle);
 	}
@@ -1449,7 +1438,7 @@ public class Graph extends mxEventSource
 	/**
 	 * Removes the specified bundle.
 	 */
-	public void removeImageBundle(mxImageBundle bundle)
+	public void removeImageBundle(ImageBundle bundle)
 	{
 		imageBundles.remove(bundle);
 	}
@@ -1462,7 +1451,7 @@ public class Graph extends mxEventSource
 	{
 		if (key != null)
 		{
-			Iterator<mxImageBundle> it = imageBundles.iterator();
+			Iterator<ImageBundle> it = imageBundles.iterator();
 
 			while (it.hasNext())
 			{
@@ -1481,7 +1470,7 @@ public class Graph extends mxEventSource
 	/**
 	 * Returns the image bundles
 	 */
-	public List<mxImageBundle> getImageBundles()
+	public List<ImageBundle> getImageBundles()
 	{
 		return imageBundles;
 	}
@@ -1489,7 +1478,7 @@ public class Graph extends mxEventSource
 	/**
 	 * Returns the image bundles
 	 */
-	public void getImageBundles(List<mxImageBundle> value)
+	public void getImageBundles(List<ImageBundle> value)
 	{
 		imageBundles = value;
 	}
@@ -1503,7 +1492,7 @@ public class Graph extends mxEventSource
 	 * given alignment.
 	 * 
 	 * @param align Specifies the alignment. Possible values are all constants
-	 * in mxConstants with an ALIGN prefix.
+	 * in Constants with an ALIGN prefix.
 	 */
 	public Object[] alignCells(String align)
 	{
@@ -1515,7 +1504,7 @@ public class Graph extends mxEventSource
 	 * alignment.
 	 * 
 	 * @param align Specifies the alignment. Possible values are all constants
-	 * in mxConstants with an ALIGN prefix.
+	 * in Constants with an ALIGN prefix.
 	 * @param cells Array of cells to be aligned.
 	 */
 	public Object[] alignCells(String align, Object[] cells)
@@ -1528,7 +1517,7 @@ public class Graph extends mxEventSource
 	 * alignment using the optional parameter as the coordinate.
 	 * 
 	 * @param align Specifies the alignment. Possible values are all constants
-	 * in mxConstants with an ALIGN prefix.
+	 * in Constants with an ALIGN prefix.
 	 * @param cells Array of cells to be aligned.
 	 * @param param Optional coordinate for the alignment.
 	 */
@@ -1553,29 +1542,29 @@ public class Graph extends mxEventSource
 						if (param == null)
 						{
 							if (align == null
-									|| align.equals(mxConstants.ALIGN_LEFT))
+									|| align.equals(Constants.ALIGN_LEFT))
 							{
 								param = geo.getX();
 							}
-							else if (align.equals(mxConstants.ALIGN_CENTER))
+							else if (align.equals(Constants.ALIGN_CENTER))
 							{
 								param = geo.getX() + geo.getWidth() / 2;
 								break;
 							}
-							else if (align.equals(mxConstants.ALIGN_RIGHT))
+							else if (align.equals(Constants.ALIGN_RIGHT))
 							{
 								param = geo.getX() + geo.getWidth();
 							}
-							else if (align.equals(mxConstants.ALIGN_TOP))
+							else if (align.equals(Constants.ALIGN_TOP))
 							{
 								param = geo.getY();
 							}
-							else if (align.equals(mxConstants.ALIGN_MIDDLE))
+							else if (align.equals(Constants.ALIGN_MIDDLE))
 							{
 								param = geo.getY() + geo.getHeight() / 2;
 								break;
 							}
-							else if (align.equals(mxConstants.ALIGN_BOTTOM))
+							else if (align.equals(Constants.ALIGN_BOTTOM))
 							{
 								param = geo.getY() + geo.getHeight();
 							}
@@ -1586,20 +1575,20 @@ public class Graph extends mxEventSource
 									.valueOf(param));
 
 							if (align == null
-									|| align.equals(mxConstants.ALIGN_LEFT))
+									|| align.equals(Constants.ALIGN_LEFT))
 							{
 								param = Math.min(tmp, geo.getX());
 							}
-							else if (align.equals(mxConstants.ALIGN_RIGHT))
+							else if (align.equals(Constants.ALIGN_RIGHT))
 							{
 								param = Math.max(tmp,
 										geo.getX() + geo.getWidth());
 							}
-							else if (align.equals(mxConstants.ALIGN_TOP))
+							else if (align.equals(Constants.ALIGN_TOP))
 							{
 								param = Math.min(tmp, geo.getY());
 							}
-							else if (align.equals(mxConstants.ALIGN_BOTTOM))
+							else if (align.equals(Constants.ALIGN_BOTTOM))
 							{
 								param = Math.max(tmp,
 										geo.getY() + geo.getHeight());
@@ -1624,27 +1613,27 @@ public class Graph extends mxEventSource
 						geo = (Geometry) geo.clone();
 
 						if (align == null
-								|| align.equals(mxConstants.ALIGN_LEFT))
+								|| align.equals(Constants.ALIGN_LEFT))
 						{
 							geo.setX(tmp);
 						}
-						else if (align.equals(mxConstants.ALIGN_CENTER))
+						else if (align.equals(Constants.ALIGN_CENTER))
 						{
 							geo.setX(tmp - geo.getWidth() / 2);
 						}
-						else if (align.equals(mxConstants.ALIGN_RIGHT))
+						else if (align.equals(Constants.ALIGN_RIGHT))
 						{
 							geo.setX(tmp - geo.getWidth());
 						}
-						else if (align.equals(mxConstants.ALIGN_TOP))
+						else if (align.equals(Constants.ALIGN_TOP))
 						{
 							geo.setY(tmp);
 						}
-						else if (align.equals(mxConstants.ALIGN_MIDDLE))
+						else if (align.equals(Constants.ALIGN_MIDDLE))
 						{
 							geo.setY(tmp - geo.getHeight() / 2);
 						}
-						else if (align.equals(mxConstants.ALIGN_BOTTOM))
+						else if (align.equals(Constants.ALIGN_BOTTOM))
 						{
 							geo.setY(tmp - geo.getHeight());
 						}
@@ -1658,7 +1647,7 @@ public class Graph extends mxEventSource
 					}
 				}
 
-				fireEvent(new mxEventObject(mxEvent.ALIGN_CELLS, "cells",
+				fireEvent(new EventObject(Event.ALIGN_CELLS, "cells",
 						cells, "align", align));
 			}
 			finally
@@ -1699,7 +1688,7 @@ public class Graph extends mxEventSource
 
 				// Removes all existing control points
 				resetEdge(edge);
-				fireEvent(new mxEventObject(mxEvent.FLIP_EDGE, "edge", edge));
+				fireEvent(new EventObject(Event.FLIP_EDGE, "edge", edge));
 			}
 			finally
 			{
@@ -1726,7 +1715,7 @@ public class Graph extends mxEventSource
 
 	/**
 	 * Moves the given cells to the front or back. The change is carried out
-	 * using cellsOrdered. This method fires mxEvent.ORDER_CELLS while the
+	 * using cellsOrdered. This method fires Event.ORDER_CELLS while the
 	 * transaction is in progress.
 	 * 
 	 * @param back Specifies if the cells should be moved to back.
@@ -1737,14 +1726,14 @@ public class Graph extends mxEventSource
 	{
 		if (cells == null)
 		{
-			cells = mxUtils.sortCells(getSelectionCells(), true);
+			cells = Utils.sortCells(getSelectionCells(), true);
 		}
 
 		model.beginUpdate();
 		try
 		{
 			cellsOrdered(cells, back);
-			fireEvent(new mxEventObject(mxEvent.ORDER_CELLS, "cells", cells,
+			fireEvent(new EventObject(Event.ORDER_CELLS, "cells", cells,
 					"back", back));
 		}
 		finally
@@ -1757,7 +1746,7 @@ public class Graph extends mxEventSource
 
 	/**
 	 * Moves the given cells to the front or back. This method fires
-	 * mxEvent.CELLS_ORDERED while the transaction is in progress.
+	 * Event.CELLS_ORDERED while the transaction is in progress.
 	 * 
 	 * @param cells Array of cells whose order should be changed.
 	 * @param back Specifies if the cells should be moved to back.
@@ -1784,7 +1773,7 @@ public class Graph extends mxEventSource
 					}
 				}
 
-				fireEvent(new mxEventObject(mxEvent.CELLS_ORDERED, "cells",
+				fireEvent(new EventObject(Event.CELLS_ORDERED, "cells",
 						cells, "back", back));
 			}
 			finally
@@ -1833,7 +1822,7 @@ public class Graph extends mxEventSource
 	/**
 	 * Adds the cells into the given group. The change is carried out using
 	 * cellsAdded, cellsMoved and cellsResized. This method fires
-	 * mxEvent.GROUP_CELLS while the transaction is in progress. Returns the
+	 * Event.GROUP_CELLS while the transaction is in progress. Returns the
 	 * new group. A group is only created if there is at least one entry in the
 	 * given array of cells.
 	 * 
@@ -1848,7 +1837,7 @@ public class Graph extends mxEventSource
 	{
 		if (cells == null)
 		{
-			cells = mxUtils.sortCells(getSelectionCells(), true);
+			cells = Utils.sortCells(getSelectionCells(), true);
 		}
 
 		cells = getCellsForGroup(cells);
@@ -1858,7 +1847,7 @@ public class Graph extends mxEventSource
 			group = createGroupCell(cells);
 		}
 
-		mxRectangle bounds = getBoundsForGroup(group, cells, border);
+		Rectangle bounds = getBoundsForGroup(group, cells, border);
 
 		if (cells.length > 0 && bounds != null)
 		{
@@ -1890,9 +1879,9 @@ public class Graph extends mxEventSource
 				cellsAdded(new Object[] { group }, parent, index, null, null,
 						false, false);
 				cellsResized(new Object[] { group },
-						new mxRectangle[] { bounds });
+						new Rectangle[] { bounds });
 
-				fireEvent(new mxEventObject(mxEvent.GROUP_CELLS, "group",
+				fireEvent(new EventObject(Event.GROUP_CELLS, "group",
 						group, "cells", cells, "border", border));
 			}
 			finally
@@ -1936,16 +1925,16 @@ public class Graph extends mxEventSource
 	 * vertices in the given children array. Edges are ignored. If the group
 	 * cell is a swimlane the title region is added to the bounds.
 	 */
-	public mxRectangle getBoundsForGroup(Object group, Object[] children,
-			double border)
+	public Rectangle getBoundsForGroup(Object group, Object[] children,
+									   double border)
 	{
-		mxRectangle result = getBoundingBoxFromGeometry(children);
+		Rectangle result = getBoundingBoxFromGeometry(children);
 
 		if (result != null)
 		{
 			if (isSwimlane(group))
 			{
-				mxRectangle size = getStartSize(group);
+				Rectangle size = getStartSize(group);
 
 				result.setX(result.getX() - size.getWidth());
 				result.setY(result.getY() - size.getHeight());
@@ -2041,7 +2030,7 @@ public class Graph extends mxEventSource
 				}
 
 				cellsRemoved(addAllEdges(cells));
-				fireEvent(new mxEventObject(mxEvent.UNGROUP_CELLS, "cells",
+				fireEvent(new EventObject(Event.UNGROUP_CELLS, "cells",
 						cells));
 			}
 			finally
@@ -2083,7 +2072,7 @@ public class Graph extends mxEventSource
 			int index = model.getChildCount(parent);
 
 			cellsAdded(cells, parent, index, null, null, true);
-			fireEvent(new mxEventObject(mxEvent.REMOVE_CELLS_FROM_PARENT,
+			fireEvent(new EventObject(Event.REMOVE_CELLS_FROM_PARENT,
 					"cells", cells));
 		}
 		finally
@@ -2155,13 +2144,13 @@ public class Graph extends mxEventSource
 
 					if (children != null && children.length > 0)
 					{
-						mxRectangle childBounds = getBoundingBoxFromGeometry(children);
+						Rectangle childBounds = getBoundingBoxFromGeometry(children);
 
 						if (childBounds.getWidth() > 0
 								&& childBounds.getHeight() > 0)
 						{
-							mxRectangle size = (isSwimlane(cells[i])) ? getStartSize(cells[i])
-									: new mxRectangle();
+							Rectangle size = (isSwimlane(cells[i])) ? getStartSize(cells[i])
+									: new Rectangle();
 
 							geo = (Geometry) geo.clone();
 
@@ -2246,7 +2235,7 @@ public class Graph extends mxEventSource
 			if (!tmp.isEmpty())
 			{
 				double scale = view.getScale();
-				mxPoint trans = view.getTranslate();
+				Point trans = view.getTranslate();
 				clones = model.cloneCells(cells, true);
 
 				for (int i = 0; i < cells.length; i++)
@@ -2287,9 +2276,9 @@ public class Graph extends mxEventSource
 
 									if (src == null)
 									{
-										mxPoint pt = state.getAbsolutePoint(0);
+										Point pt = state.getAbsolutePoint(0);
 										g.setTerminalPoint(
-												new mxPoint(pt.getX() / scale
+												new Point(pt.getX() / scale
 														- trans.getX(), pt
 														.getY()
 														/ scale
@@ -2307,11 +2296,11 @@ public class Graph extends mxEventSource
 
 									if (trg == null)
 									{
-										mxPoint pt = state
+										Point pt = state
 												.getAbsolutePoint(state
 														.getAbsolutePointCount() - 1);
 										g.setTerminalPoint(
-												new mxPoint(pt.getX() / scale
+												new Point(pt.getX() / scale
 														- trans.getX(), pt
 														.getY()
 														/ scale
@@ -2319,16 +2308,16 @@ public class Graph extends mxEventSource
 									}
 
 									// Translates the control points
-									List<mxPoint> points = g.getPoints();
+									List<Point> points = g.getPoints();
 
 									if (points != null)
 									{
-										Iterator<mxPoint> it = points
+										Iterator<Point> it = points
 												.iterator();
 
 										while (it.hasNext())
 										{
-											mxPoint pt = it.next();
+											Point pt = it.next();
 											pt.setX(pt.getX() + dx);
 											pt.setY(pt.getY() + dy);
 										}
@@ -2618,7 +2607,7 @@ public class Graph extends mxEventSource
 	/**
 	 * Adds the cells to the parent at the given index, connecting each cell to
 	 * the optional source and target terminal. The change is carried out using
-	 * cellsAdded. This method fires mxEvent.ADD_CELLS while the transaction
+	 * cellsAdded. This method fires Event.ADD_CELLS while the transaction
 	 * is in progress.
 	 * 
 	 * @param cells Array of cells to be added.
@@ -2646,7 +2635,7 @@ public class Graph extends mxEventSource
 		try
 		{
 			cellsAdded(cells, parent, index, source, target, false, true);
-			fireEvent(new mxEventObject(mxEvent.ADD_CELLS, "cells", cells,
+			fireEvent(new EventObject(Event.ADD_CELLS, "cells", cells,
 					"parent", parent, "index", index, "source", source,
 					"target", target));
 		}
@@ -2660,7 +2649,7 @@ public class Graph extends mxEventSource
 
 	/**
 	 * Adds the specified cells to the given parent. This method fires
-	 * mxEvent.CELLS_ADDED while the transaction is in progress.
+	 * Event.CELLS_ADDED while the transaction is in progress.
 	 */
 	public void cellsAdded(Object[] cells, Object parent, Integer index,
 			Object source, Object target, boolean absolute)
@@ -2670,7 +2659,7 @@ public class Graph extends mxEventSource
 
 	/**
 	 * Adds the specified cells to the given parent. This method fires
-	 * mxEvent.CELLS_ADDED while the transaction is in progress.
+	 * Event.CELLS_ADDED while the transaction is in progress.
 	 */
 	public void cellsAdded(Object[] cells, Object parent, Integer index,
 			Object source, Object target, boolean absolute, boolean constrain)
@@ -2682,9 +2671,9 @@ public class Graph extends mxEventSource
 			{
 				CellState parentState = (absolute) ? view.getState(parent)
 						: null;
-				mxPoint o1 = (parentState != null) ? parentState.getOrigin()
+				Point o1 = (parentState != null) ? parentState.getOrigin()
 						: null;
-				mxPoint zero = new mxPoint(0, 0);
+				Point zero = new Point(0, 0);
 
 				for (int i = 0; i < cells.length; i++)
 				{
@@ -2701,7 +2690,7 @@ public class Graph extends mxEventSource
 								&& parent != previous)
 						{
 							CellState oldState = view.getState(previous);
-							mxPoint o2 = (oldState != null) ? oldState
+							Point o2 = (oldState != null) ? oldState
 									.getOrigin() : zero;
 							Geometry geo = model.getGeometry(cells[i]);
 
@@ -2760,7 +2749,7 @@ public class Graph extends mxEventSource
 					}
 				}
 
-				fireEvent(new mxEventObject(mxEvent.CELLS_ADDED, "cells",
+				fireEvent(new EventObject(Event.CELLS_ADDED, "cells",
 						cells, "parent", parent, "index", index, "source",
 						source, "target", target, "absolute", absolute));
 
@@ -2796,7 +2785,7 @@ public class Graph extends mxEventSource
 	/**
 	 * Removes the given cells from the graph including all connected edges if
 	 * includeEdges is true. The change is carried out using cellsRemoved. This
-	 * method fires mxEvent.REMOVE_CELLS while the transaction is in progress.
+	 * method fires Event.REMOVE_CELLS while the transaction is in progress.
 	 * 
 	 * @param cells Array of cells to remove. If null is specified then the
 	 * selection cells which are deletable are used.
@@ -2820,7 +2809,7 @@ public class Graph extends mxEventSource
 		try
 		{
 			cellsRemoved(cells);
-			fireEvent(new mxEventObject(mxEvent.REMOVE_CELLS, "cells", cells,
+			fireEvent(new EventObject(Event.REMOVE_CELLS, "cells", cells,
 					"includeEdges", includeEdges));
 		}
 		finally
@@ -2833,7 +2822,7 @@ public class Graph extends mxEventSource
 
 	/**
 	 * Removes the given cells from the model. This method fires
-	 * mxEvent.CELLS_REMOVED while the transaction is in progress.
+	 * Event.CELLS_REMOVED while the transaction is in progress.
 	 * 
 	 * @param cells Array of cells to remove.
 	 */
@@ -2842,7 +2831,7 @@ public class Graph extends mxEventSource
 		if (cells != null && cells.length > 0)
 		{
 			double scale = view.getScale();
-			mxPoint tr = view.getTranslate();
+			Point tr = view.getTranslate();
 
 			model.beginUpdate();
 			try
@@ -2884,9 +2873,9 @@ public class Graph extends mxEventSource
 									geo = (Geometry) geo.clone();
 									int n = (source) ? 0 : state
 											.getAbsolutePointCount() - 1;
-									mxPoint pt = state.getAbsolutePoint(n);
+									Point pt = state.getAbsolutePoint(n);
 
-									geo.setTerminalPoint(new mxPoint(pt.getX()
+									geo.setTerminalPoint(new Point(pt.getX()
 											/ scale - tr.getX(), pt.getY()
 											/ scale - tr.getY()), source);
 									model.setTerminal(edges[j], null, source);
@@ -2899,7 +2888,7 @@ public class Graph extends mxEventSource
 					model.remove(cells[i]);
 				}
 
-				fireEvent(new mxEventObject(mxEvent.CELLS_REMOVED, "cells",
+				fireEvent(new EventObject(Event.CELLS_REMOVED, "cells",
 						cells));
 			}
 			finally
@@ -2928,7 +2917,7 @@ public class Graph extends mxEventSource
 	/**
 	 * Splits the given edge by adding a newEdge between the previous source
 	 * and the given cell and reconnecting the source of the given edge to the
-	 * given cell. Fires mxEvent.SPLIT_EDGE while the transaction is in
+	 * given cell. Fires Event.SPLIT_EDGE while the transaction is in
 	 * progress.
 	 * 
 	 * @param edge Object that represents the edge to be splitted.
@@ -2956,7 +2945,7 @@ public class Graph extends mxEventSource
 			cellsAdded(new Object[] { newEdge }, parent,
 					model.getChildCount(parent), source, cells[0], false);
 			cellConnected(edge, cells[0], true, null);
-			fireEvent(new mxEventObject(mxEvent.SPLIT_EDGE, "edge", edge,
+			fireEvent(new EventObject(Event.SPLIT_EDGE, "edge", edge,
 					"cells", cells, "newEdge", newEdge, "dx", dx, "dy", dy));
 		}
 		finally
@@ -2999,7 +2988,7 @@ public class Graph extends mxEventSource
 	/**
 	 * Sets the visible state of the specified cells and all connected edges
 	 * if includeEdges is true. The change is carried out using cellsToggled.
-	 * This method fires mxEvent.TOGGLE_CELLS while the transaction is in
+	 * This method fires Event.TOGGLE_CELLS while the transaction is in
 	 * progress.
 	 *
 	 * @param show Boolean that specifies the visible state to be assigned.
@@ -3025,7 +3014,7 @@ public class Graph extends mxEventSource
 		try
 		{
 			cellsToggled(cells, show);
-			fireEvent(new mxEventObject(mxEvent.TOGGLE_CELLS, "show", show,
+			fireEvent(new EventObject(Event.TOGGLE_CELLS, "show", show,
 					"cells", cells, "includeEdges", includeEdges));
 		}
 		finally
@@ -3104,7 +3093,7 @@ public class Graph extends mxEventSource
 	/**
 	 * Sets the collapsed state of the specified cells and all descendants
 	 * if recurse is true. The change is carried out using cellsFolded.
-	 * This method fires mxEvent.FOLD_CELLS while the transaction is in
+	 * This method fires Event.FOLD_CELLS while the transaction is in
 	 * progress. Returns the cells whose collapsed state was changed.
 	 * 
 	 * @param collapse Boolean indicating the collapsed state to be assigned.
@@ -3127,7 +3116,7 @@ public class Graph extends mxEventSource
 		try
 		{
 			cellsFolded(cells, collapse, recurse, checkFoldable);
-			fireEvent(new mxEventObject(mxEvent.FOLD_CELLS, "cells", cells,
+			fireEvent(new EventObject(Event.FOLD_CELLS, "cells", cells,
 					"collapse", collapse, "recurse", recurse));
 		}
 		finally
@@ -3148,7 +3137,7 @@ public class Graph extends mxEventSource
 
 	/**
 	 * Sets the collapsed state of the specified cells. This method fires
-	 * mxEvent.CELLS_FOLDED while the transaction is in progress. Returns the
+	 * Event.CELLS_FOLDED while the transaction is in progress. Returns the
 	 * cells whose collapsed state was changed.
 	 * 
 	 * @param cells Array of cells whose collapsed state should be set.
@@ -3188,7 +3177,7 @@ public class Graph extends mxEventSource
 					}
 				}
 
-				fireEvent(new mxEventObject(mxEvent.CELLS_FOLDED, "cells",
+				fireEvent(new EventObject(Event.CELLS_FOLDED, "cells",
 						cells, "collapse", collapse, "recurse", recurse));
 			}
 			finally
@@ -3242,7 +3231,7 @@ public class Graph extends mxEventSource
 		{
 			if (geo.getAlternateBounds() == null)
 			{
-				mxRectangle bounds = null;
+				Rectangle bounds = null;
 
 				if (isCollapseToPreferredSize())
 				{
@@ -3250,7 +3239,7 @@ public class Graph extends mxEventSource
 
 					if (isSwimlane(cell))
 					{
-						mxRectangle size = getStartSize(cell);
+						Rectangle size = getStartSize(cell);
 
 						bounds.setHeight(Math.max(bounds.getHeight(),
 								size.getHeight()));
@@ -3264,7 +3253,7 @@ public class Graph extends mxEventSource
 					bounds = geo;
 				}
 
-				geo.setAlternateBounds(new mxRectangle(geo.getX(), geo.getY(),
+				geo.setAlternateBounds(new Rectangle(geo.getX(), geo.getY(),
 						bounds.getWidth(), bounds.getHeight()));
 			}
 			else
@@ -3334,7 +3323,7 @@ public class Graph extends mxEventSource
 	/**
 	 * Updates the size of the given cell in the model using
 	 * getPreferredSizeForCell to get the new size. This function
-	 * fires mxEvent.UPDATE_CELL_SIZE.
+	 * fires Event.UPDATE_CELL_SIZE.
 	 * 
 	 * @param cell Cell for which the size should be changed.
 	 */
@@ -3344,7 +3333,7 @@ public class Graph extends mxEventSource
 		try
 		{
 			cellSizeUpdated(cell, ignoreChildren);
-			fireEvent(new mxEventObject(mxEvent.UPDATE_CELL_SIZE, "cell", cell,
+			fireEvent(new EventObject(Event.UPDATE_CELL_SIZE, "cell", cell,
 					"ignoreChildren", ignoreChildren));
 		}
 		finally
@@ -3368,7 +3357,7 @@ public class Graph extends mxEventSource
 			model.beginUpdate();
 			try
 			{
-				mxRectangle size = getPreferredSizeForCell(cell);
+				Rectangle size = getPreferredSizeForCell(cell);
 				Geometry geo = model.getGeometry(cell);
 
 				if (size != null && geo != null)
@@ -3388,11 +3377,11 @@ public class Graph extends mxEventSource
 							cellStyle = "";
 						}
 
-						if (mxUtils.isTrue(style, mxConstants.STYLE_HORIZONTAL,
+						if (Utils.isTrue(style, Constants.STYLE_HORIZONTAL,
 								true))
 						{
-							cellStyle = mxStyleUtils.setStyle(cellStyle,
-									mxConstants.STYLE_STARTSIZE,
+							cellStyle = StyleUtils.setStyle(cellStyle,
+									Constants.STYLE_STARTSIZE,
 									String.valueOf(size.getHeight() + 8));
 
 							if (collapsed)
@@ -3404,8 +3393,8 @@ public class Graph extends mxEventSource
 						}
 						else
 						{
-							cellStyle = mxStyleUtils.setStyle(cellStyle,
-									mxConstants.STYLE_STARTSIZE,
+							cellStyle = StyleUtils.setStyle(cellStyle,
+									Constants.STYLE_STARTSIZE,
 									String.valueOf(size.getWidth() + 8));
 
 							if (collapsed)
@@ -3426,12 +3415,12 @@ public class Graph extends mxEventSource
 
 					if (!ignoreChildren && !collapsed)
 					{
-						mxRectangle bounds = view.getBounds(GraphModel
+						Rectangle bounds = view.getBounds(GraphModel
 								.getChildren(model, cell));
 
 						if (bounds != null)
 						{
-							mxPoint tr = view.getTranslate();
+							Point tr = view.getTranslate();
 							double scale = view.getScale();
 
 							double width = (bounds.getX() + bounds.getWidth())
@@ -3445,7 +3434,7 @@ public class Graph extends mxEventSource
 					}
 
 					cellsResized(new Object[] { cell },
-							new mxRectangle[] { geo });
+							new Rectangle[] { geo });
 				}
 			}
 			finally
@@ -3457,13 +3446,13 @@ public class Graph extends mxEventSource
 
 	/**
 	 * Returns the preferred width and height of the given <Cell> as an
-	 * <mxRectangle>.
+	 * <Rectangle>.
 	 * 
 	 * @param cell <Cell> for which the preferred size should be returned.
 	 */
-	public mxRectangle getPreferredSizeForCell(Object cell)
+	public Rectangle getPreferredSizeForCell(Object cell)
 	{
-		mxRectangle result = null;
+		Rectangle result = null;
 
 		if (cell != null)
 		{
@@ -3478,41 +3467,41 @@ public class Graph extends mxEventSource
 
 				// Adds dimension of image if shape is a label
 				if (getImage(state) != null
-						|| mxUtils.getString(style, mxConstants.STYLE_IMAGE) != null)
+						|| Utils.getString(style, Constants.STYLE_IMAGE) != null)
 				{
-					if (mxUtils.getString(style, mxConstants.STYLE_SHAPE, "")
-							.equals(mxConstants.SHAPE_LABEL))
+					if (Utils.getString(style, Constants.STYLE_SHAPE, "")
+							.equals(Constants.SHAPE_LABEL))
 					{
-						if (mxUtils.getString(style,
-								mxConstants.STYLE_VERTICAL_ALIGN, "").equals(
-								mxConstants.ALIGN_MIDDLE))
+						if (Utils.getString(style,
+								Constants.STYLE_VERTICAL_ALIGN, "").equals(
+								Constants.ALIGN_MIDDLE))
 						{
-							dx += mxUtils.getDouble(style,
-									mxConstants.STYLE_IMAGE_WIDTH,
-									mxConstants.DEFAULT_IMAGESIZE);
+							dx += Utils.getDouble(style,
+									Constants.STYLE_IMAGE_WIDTH,
+									Constants.DEFAULT_IMAGESIZE);
 						}
 
-						if (mxUtils.getString(style, mxConstants.STYLE_ALIGN,
-								"").equals(mxConstants.ALIGN_CENTER))
+						if (Utils.getString(style, Constants.STYLE_ALIGN,
+								"").equals(Constants.ALIGN_CENTER))
 						{
-							dy += mxUtils.getDouble(style,
-									mxConstants.STYLE_IMAGE_HEIGHT,
-									mxConstants.DEFAULT_IMAGESIZE);
+							dy += Utils.getDouble(style,
+									Constants.STYLE_IMAGE_HEIGHT,
+									Constants.DEFAULT_IMAGESIZE);
 						}
 					}
 				}
 
 				// Adds spacings
-				double spacing = mxUtils.getDouble(style,
-						mxConstants.STYLE_SPACING);
+				double spacing = Utils.getDouble(style,
+						Constants.STYLE_SPACING);
 				dx += 2 * spacing;
-				dx += mxUtils.getDouble(style, mxConstants.STYLE_SPACING_LEFT);
-				dx += mxUtils.getDouble(style, mxConstants.STYLE_SPACING_RIGHT);
+				dx += Utils.getDouble(style, Constants.STYLE_SPACING_LEFT);
+				dx += Utils.getDouble(style, Constants.STYLE_SPACING_RIGHT);
 
 				dy += 2 * spacing;
-				dy += mxUtils.getDouble(style, mxConstants.STYLE_SPACING_TOP);
-				dy += mxUtils
-						.getDouble(style, mxConstants.STYLE_SPACING_BOTTOM);
+				dy += Utils.getDouble(style, Constants.STYLE_SPACING_TOP);
+				dy += Utils
+						.getDouble(style, Constants.STYLE_SPACING_BOTTOM);
 
 				// LATER: Add space for collapse/expand icon if applicable
 
@@ -3521,12 +3510,12 @@ public class Graph extends mxEventSource
 
 				if (value != null && value.length() > 0)
 				{
-					mxRectangle size = mxUtils.getLabelSize(value, style,
+					Rectangle size = Utils.getLabelSize(value, style,
 							isHtmlLabel(cell), 1);
 					double width = size.getWidth() + dx;
 					double height = size.getHeight() + dy;
 
-					if (!mxUtils.isTrue(style, mxConstants.STYLE_HORIZONTAL,
+					if (!Utils.isTrue(style, Constants.STYLE_HORIZONTAL,
 							true))
 					{
 						double tmp = height;
@@ -3541,12 +3530,12 @@ public class Graph extends mxEventSource
 						height = snap(height + gridSize / 2);
 					}
 
-					result = new mxRectangle(0, 0, width, height);
+					result = new Rectangle(0, 0, width, height);
 				}
 				else
 				{
 					double gs2 = 4 * gridSize;
-					result = new mxRectangle(0, 0, gs2, gs2);
+					result = new Rectangle(0, 0, gs2, gs2);
 				}
 			}
 		}
@@ -3559,28 +3548,28 @@ public class Graph extends mxEventSource
 	 * cell which was passed to the function.
 	 * 
 	 * @param cell <Cell> whose bounds should be changed.
-	 * @param bounds <mxRectangle> that represents the new bounds.
+	 * @param bounds <Rectangle> that represents the new bounds.
 	 */
-	public Object resizeCell(Object cell, mxRectangle bounds)
+	public Object resizeCell(Object cell, Rectangle bounds)
 	{
-		return resizeCells(new Object[] { cell }, new mxRectangle[] { bounds })[0];
+		return resizeCells(new Object[] { cell }, new Rectangle[] { bounds })[0];
 	}
 
 	/**
-	 * Sets the bounds of the given cells and fires a mxEvent.RESIZE_CELLS
+	 * Sets the bounds of the given cells and fires a Event.RESIZE_CELLS
 	 * event. while the transaction is in progress. Returns the cells which
 	 * have been passed to the function.
 	 * 
 	 * @param cells Array of cells whose bounds should be changed.
 	 * @param bounds Array of rectangles that represents the new bounds.
 	 */
-	public Object[] resizeCells(Object[] cells, mxRectangle[] bounds)
+	public Object[] resizeCells(Object[] cells, Rectangle[] bounds)
 	{
 		model.beginUpdate();
 		try
 		{
 			cellsResized(cells, bounds);
-			fireEvent(new mxEventObject(mxEvent.RESIZE_CELLS, "cells", cells,
+			fireEvent(new EventObject(Event.RESIZE_CELLS, "cells", cells,
 					"bounds", bounds));
 		}
 		finally
@@ -3592,14 +3581,14 @@ public class Graph extends mxEventSource
 	}
 
 	/**
-	 * Sets the bounds of the given cells and fires a <mxEvent.CELLS_RESIZED>
+	 * Sets the bounds of the given cells and fires a <Event.CELLS_RESIZED>
 	 * event. If extendParents is true, then the parent is extended if a child
 	 * size is changed so that it overlaps with the parent.
 	 * 
 	 * @param cells Array of <mxCells> whose bounds should be changed.
 	 * @param bounds Array of <mxRectangles> that represents the new bounds.
 	 */
-	public void cellsResized(Object[] cells, mxRectangle[] bounds)
+	public void cellsResized(Object[] cells, Rectangle[] bounds)
 	{
 		if (cells != null && bounds != null && cells.length == bounds.length)
 		{
@@ -3608,7 +3597,7 @@ public class Graph extends mxEventSource
 			{
 				for (int i = 0; i < cells.length; i++)
 				{
-					mxRectangle tmp = bounds[i];
+					Rectangle tmp = bounds[i];
 					Geometry geo = model.getGeometry(cells[i]);
 
 					if (geo != null
@@ -3621,7 +3610,7 @@ public class Graph extends mxEventSource
 
 						if (geo.isRelative())
 						{
-							mxPoint offset = geo.getOffset();
+							Point offset = geo.getOffset();
 
 							if (offset != null)
 							{
@@ -3660,7 +3649,7 @@ public class Graph extends mxEventSource
 				}
 
 				// RENAME BOUNDSARRAY TO BOUNDS
-				fireEvent(new mxEventObject(mxEvent.CELLS_RESIZED, "cells",
+				fireEvent(new EventObject(Event.CELLS_RESIZED, "cells",
 						cells, "bounds", bounds));
 			}
 			finally
@@ -3699,7 +3688,7 @@ public class Graph extends mxEventSource
 							geo.getY() + geo.getHeight()));
 
 					cellsResized(new Object[] { parent },
-							new mxRectangle[] { p });
+							new Rectangle[] { p });
 				}
 			}
 		}
@@ -3731,7 +3720,7 @@ public class Graph extends mxEventSource
 	 * Moves or clones the specified cells and moves the cells or clones by the
 	 * given amount, adding them to the optional target cell. The location is
 	 * the position of the mouse pointer as the mouse was released. The change
-	 * is carried out using cellsMoved. This method fires mxEvent.MOVE_CELLS
+	 * is carried out using cellsMoved. This method fires Event.MOVE_CELLS
 	 * while the transaction is in progress.
 	 * 
 	 * @param cells Array of cells to be moved, cloned or added to the target.
@@ -3743,7 +3732,7 @@ public class Graph extends mxEventSource
 	 * @return Returns the cells that were moved.
 	 */
 	public Object[] moveCells(Object[] cells, double dx, double dy,
-			boolean clone, Object target, Point location)
+							  boolean clone, Object target, java.awt.Point location)
 	{
 		if (cells != null && (dx != 0 || dy != 0 || clone || target != null))
 		{
@@ -3780,7 +3769,7 @@ public class Graph extends mxEventSource
 					cellsAdded(cells, target, index, null, null, true);
 				}
 
-				fireEvent(new mxEventObject(mxEvent.MOVE_CELLS, "cells", cells,
+				fireEvent(new EventObject(Event.MOVE_CELLS, "cells", cells,
 						"dx", dx, "dy", dy, "clone", clone, "target", target,
 						"location", location));
 			}
@@ -3796,7 +3785,7 @@ public class Graph extends mxEventSource
 	/**
 	 * Moves the specified cells by the given vector, disconnecting the cells
 	 * using disconnectGraph if disconnect is true. This method fires
-	 * mxEvent.CELLS_MOVED while the transaction is in progress.
+	 * Event.CELLS_MOVED while the transaction is in progress.
 	 */
 	public void cellsMoved(Object[] cells, double dx, double dy,
 			boolean disconnect, boolean constrain)
@@ -3826,7 +3815,7 @@ public class Graph extends mxEventSource
 					resetEdges(cells);
 				}
 
-				fireEvent(new mxEventObject(mxEvent.CELLS_MOVED, "cells",
+				fireEvent(new EventObject(Event.CELLS_MOVED, "cells",
 						cells, "dx", dx, "dy", dy, "disconnect", disconnect));
 			}
 			finally
@@ -3860,11 +3849,11 @@ public class Graph extends mxEventSource
 			{
 				if (geo.getOffset() == null)
 				{
-					geo.setOffset(new mxPoint(dx, dy));
+					geo.setOffset(new Point(dx, dy));
 				}
 				else
 				{
-					mxPoint offset = geo.getOffset();
+					Point offset = geo.getOffset();
 
 					offset.setX(offset.getX() + dx);
 					offset.setY(offset.getY() + dy);
@@ -3876,9 +3865,9 @@ public class Graph extends mxEventSource
 	}
 
 	/**
-	 * Returns the mxRectangle inside which a cell is to be kept.
+	 * Returns the Rectangle inside which a cell is to be kept.
 	 */
-	public mxRectangle getCellContainmentArea(Object cell)
+	public Rectangle getCellContainmentArea(Object cell)
 	{
 		if (cell != null && !model.isEdge(cell))
 		{
@@ -3901,7 +3890,7 @@ public class Graph extends mxEventSource
 
 					if (isSwimlane(parent))
 					{
-						mxRectangle size = getStartSize(parent);
+						Rectangle size = getStartSize(parent);
 
 						x = size.getWidth();
 						w -= size.getWidth();
@@ -3909,7 +3898,7 @@ public class Graph extends mxEventSource
 						h -= size.getHeight();
 					}
 
-					return new mxRectangle(x, y, w, h);
+					return new Rectangle(x, y, w, h);
 				}
 			}
 		}
@@ -3920,7 +3909,7 @@ public class Graph extends mxEventSource
 	/**
 	 * @return the maximumGraphBounds
 	 */
-	public mxRectangle getMaximumGraphBounds()
+	public Rectangle getMaximumGraphBounds()
 	{
 		return maximumGraphBounds;
 	}
@@ -3928,9 +3917,9 @@ public class Graph extends mxEventSource
 	/**
 	 * @param value the maximumGraphBounds to set
 	 */
-	public void setMaximumGraphBounds(mxRectangle value)
+	public void setMaximumGraphBounds(Rectangle value)
 	{
-		mxRectangle oldValue = maximumGraphBounds;
+		Rectangle oldValue = maximumGraphBounds;
 		maximumGraphBounds = value;
 
 		changeSupport.firePropertyChange("maximumGraphBounds", oldValue,
@@ -3950,7 +3939,7 @@ public class Graph extends mxEventSource
 		if (cell != null)
 		{
 			Geometry geo = model.getGeometry(cell);
-			mxRectangle area = (isConstrainChild(cell)) ? getCellContainmentArea(cell)
+			Rectangle area = (isConstrainChild(cell)) ? getCellContainmentArea(cell)
 					: getMaximumGraphBounds();
 
 			if (geo != null && area != null)
@@ -4049,7 +4038,7 @@ public class Graph extends mxEventSource
 		if (geo != null)
 		{
 			// Resets the control points
-			List<mxPoint> points = geo.getPoints();
+			List<Point> points = geo.getPoints();
 
 			if (points != null && !points.isEmpty())
 			{
@@ -4089,20 +4078,20 @@ public class Graph extends mxEventSource
 	public ConnectionConstraint getConnectionConstraint(CellState edge,
 														CellState terminal, boolean source)
 	{
-		mxPoint point = null;
+		Point point = null;
 		Object x = edge.getStyle()
-				.get((source) ? mxConstants.STYLE_EXIT_X
-						: mxConstants.STYLE_ENTRY_X);
+				.get((source) ? Constants.STYLE_EXIT_X
+						: Constants.STYLE_ENTRY_X);
 
 		if (x != null)
 		{
 			Object y = edge.getStyle().get(
-					(source) ? mxConstants.STYLE_EXIT_Y
-							: mxConstants.STYLE_ENTRY_Y);
+					(source) ? Constants.STYLE_EXIT_Y
+							: Constants.STYLE_ENTRY_Y);
 
 			if (y != null)
 			{
-				point = new mxPoint(Double.parseDouble(x.toString()),
+				point = new Point(Double.parseDouble(x.toString()),
 						Double.parseDouble(y.toString()));
 			}
 		}
@@ -4111,9 +4100,9 @@ public class Graph extends mxEventSource
 
 		if (point != null)
 		{
-			perimeter = mxUtils.isTrue(edge.style,
-					(source) ? mxConstants.STYLE_EXIT_PERIMETER
-							: mxConstants.STYLE_ENTRY_PERIMETER, true);
+			perimeter = Utils.isTrue(edge.style,
+					(source) ? Constants.STYLE_EXIT_PERIMETER
+							: Constants.STYLE_ENTRY_PERIMETER, true);
 		}
 
 		return new ConnectionConstraint(point, perimeter);
@@ -4142,35 +4131,35 @@ public class Graph extends mxEventSource
 				// FIXME, constraint can't be null, we've checked that above
 				if (constraint == null || constraint.point == null)
 				{
-					setCellStyles((source) ? mxConstants.STYLE_EXIT_X
-							: mxConstants.STYLE_ENTRY_X, null, cells);
-					setCellStyles((source) ? mxConstants.STYLE_EXIT_Y
-							: mxConstants.STYLE_ENTRY_Y, null, cells);
-					setCellStyles((source) ? mxConstants.STYLE_EXIT_PERIMETER
-							: mxConstants.STYLE_ENTRY_PERIMETER, null, cells);
+					setCellStyles((source) ? Constants.STYLE_EXIT_X
+							: Constants.STYLE_ENTRY_X, null, cells);
+					setCellStyles((source) ? Constants.STYLE_EXIT_Y
+							: Constants.STYLE_ENTRY_Y, null, cells);
+					setCellStyles((source) ? Constants.STYLE_EXIT_PERIMETER
+							: Constants.STYLE_ENTRY_PERIMETER, null, cells);
 				}
 				else if (constraint.point != null)
 				{
-					setCellStyles((source) ? mxConstants.STYLE_EXIT_X
-							: mxConstants.STYLE_ENTRY_X,
+					setCellStyles((source) ? Constants.STYLE_EXIT_X
+							: Constants.STYLE_ENTRY_X,
 							String.valueOf(constraint.point.getX()), cells);
-					setCellStyles((source) ? mxConstants.STYLE_EXIT_Y
-							: mxConstants.STYLE_ENTRY_Y,
+					setCellStyles((source) ? Constants.STYLE_EXIT_Y
+							: Constants.STYLE_ENTRY_Y,
 							String.valueOf(constraint.point.getY()), cells);
 
 					// Only writes 0 since 1 is default
 					if (!constraint.perimeter)
 					{
 						setCellStyles(
-								(source) ? mxConstants.STYLE_EXIT_PERIMETER
-										: mxConstants.STYLE_ENTRY_PERIMETER,
+								(source) ? Constants.STYLE_EXIT_PERIMETER
+										: Constants.STYLE_ENTRY_PERIMETER,
 								"0", cells);
 					}
 					else
 					{
 						setCellStyles(
-								(source) ? mxConstants.STYLE_EXIT_PERIMETER
-										: mxConstants.STYLE_ENTRY_PERIMETER,
+								(source) ? Constants.STYLE_EXIT_PERIMETER
+										: Constants.STYLE_ENTRY_PERIMETER,
 								null, cells);
 					}
 				}
@@ -4191,14 +4180,14 @@ public class Graph extends mxEventSource
 	 * @param constraint Connection constraint that represents the connection point
 	 * constraint as returned by getConnectionConstraint.
 	 */
-	public mxPoint getConnectionPoint(CellState vertex,
-			ConnectionConstraint constraint)
+	public Point getConnectionPoint(CellState vertex,
+									ConnectionConstraint constraint)
 	{
-		mxPoint point = null;
+		Point point = null;
 
 		if (vertex != null && constraint.point != null)
 		{
-			point = new mxPoint(vertex.getX() + constraint.getPoint().getX()
+			point = new Point(vertex.getX() + constraint.getPoint().getX()
 					* vertex.getWidth(), vertex.getY()
 					+ constraint.getPoint().getY() * vertex.getHeight());
 		}
@@ -4213,7 +4202,7 @@ public class Graph extends mxEventSource
 
 	/**
 	 * Connects the specified end of the given edge to the given terminal
-	 * using cellConnected and fires mxEvent.CONNECT_CELL while the transaction
+	 * using cellConnected and fires Event.CONNECT_CELL while the transaction
 	 * is in progress.
 	 */
 	public Object connectCell(Object edge, Object terminal, boolean source)
@@ -4223,7 +4212,7 @@ public class Graph extends mxEventSource
 
 	/**
 	 * Connects the specified end of the given edge to the given terminal
-	 * using cellConnected and fires mxEvent.CONNECT_CELL while the transaction
+	 * using cellConnected and fires Event.CONNECT_CELL while the transaction
 	 * is in progress.
 	 * 
 	 * @param edge Edge whose terminal should be updated.
@@ -4240,7 +4229,7 @@ public class Graph extends mxEventSource
 		{
 			Object previous = model.getTerminal(edge, source);
 			cellConnected(edge, terminal, source, constraint);
-			fireEvent(new mxEventObject(mxEvent.CONNECT_CELL, "edge", edge,
+			fireEvent(new EventObject(Event.CONNECT_CELL, "edge", edge,
 					"terminal", terminal, "source", source, "previous",
 					previous));
 		}
@@ -4255,7 +4244,7 @@ public class Graph extends mxEventSource
 	/**
 	 * Sets the new terminal for the given edge and resets the edge points if
 	 * isResetEdgesOnConnect returns true. This method fires
-	 * <mxEvent.CELL_CONNECTED> while the transaction is in progress.
+	 * <Event.CELL_CONNECTED> while the transaction is in progress.
 	 * 
 	 * @param edge Edge whose terminal should be updated.
 	 * @param terminal New terminal to be used.
@@ -4289,8 +4278,8 @@ public class Graph extends mxEventSource
 					}
 
 					// Sets or resets all previous information for connecting to a child port
-					String key = (source) ? mxConstants.STYLE_SOURCE_PORT
-							: mxConstants.STYLE_TARGET_PORT;
+					String key = (source) ? Constants.STYLE_SOURCE_PORT
+							: Constants.STYLE_TARGET_PORT;
 					setCellStyles(key, id, new Object[] { edge });
 				}
 
@@ -4301,7 +4290,7 @@ public class Graph extends mxEventSource
 					resetEdge(edge);
 				}
 
-				fireEvent(new mxEventObject(mxEvent.CELL_CONNECTED, "edge",
+				fireEvent(new EventObject(Event.CELL_CONNECTED, "edge",
 						edge, "terminal", terminal, "source", source,
 						"previous", previous));
 			}
@@ -4326,7 +4315,7 @@ public class Graph extends mxEventSource
 			try
 			{
 				double scale = view.getScale();
-				mxPoint tr = view.getTranslate();
+				Point tr = view.getTranslate();
 
 				// Prepares a hashtable for faster cell lookups
 				Set<Object> hash = new HashSet<Object>();
@@ -4368,9 +4357,9 @@ public class Graph extends mxEventSource
 
 									if (src == null)
 									{
-										mxPoint pt = state.getAbsolutePoint(0);
+										Point pt = state.getAbsolutePoint(0);
 										geo.setTerminalPoint(
-												new mxPoint(pt.getX() / scale
+												new Point(pt.getX() / scale
 														- tr.getX() + dx, pt
 														.getY()
 														/ scale
@@ -4393,9 +4382,9 @@ public class Graph extends mxEventSource
 									if (trg == null)
 									{
 										int n = state.getAbsolutePointCount() - 1;
-										mxPoint pt = state.getAbsolutePoint(n);
+										Point pt = state.getAbsolutePoint(n);
 										geo.setTerminalPoint(
-												new mxPoint(pt.getX() / scale
+												new Point(pt.getX() / scale
 														- tr.getX() + dx, pt
 														.getY()
 														/ scale
@@ -4435,12 +4424,12 @@ public class Graph extends mxEventSource
 
 	/**
 	 * Returns the translation to be used if the given cell is the root cell as
-	 * an <mxPoint>. This implementation returns null.
+	 * an <Point>. This implementation returns null.
 	 * 
 	 * @param cell Cell that represents the root of the view.
 	 * @return Returns the translation of the graph for the given root cell.
 	 */
-	public mxPoint getTranslateForRoot(Object cell)
+	public Point getTranslateForRoot(Object cell)
 	{
 		return null;
 	}
@@ -4449,8 +4438,8 @@ public class Graph extends mxEventSource
 	 * Returns true if the given cell is a "port", that is, when connecting to
 	 * it, the cell returned by getTerminalForPort should be used as the
 	 * terminal and the port should be referenced by the ID in either the
-	 * mxConstants.STYLE_SOURCE_PORT or the or the
-	 * mxConstants.STYLE_TARGET_PORT. Note that a port should not be movable.
+	 * Constants.STYLE_SOURCE_PORT or the or the
+	 * Constants.STYLE_TARGET_PORT. Note that a port should not be movable.
 	 * This implementation always returns false.
 	 * 
 	 * A typical implementation of this method looks as follows:
@@ -4493,7 +4482,7 @@ public class Graph extends mxEventSource
 	 * @param cell Cell whose offset should be returned.
 	 * @return Returns the child offset for the given cell.
 	 */
-	public mxPoint getChildOffsetForCell(Object cell)
+	public Point getChildOffsetForCell(Object cell)
 	{
 		return null;
 	}
@@ -4607,7 +4596,7 @@ public class Graph extends mxEventSource
 	/**
 	 * Returns the bounds of the visible graph.
 	 */
-	public mxRectangle getGraphBounds()
+	public Rectangle getGraphBounds()
 	{
 		return view.getGraphBounds();
 	}
@@ -4615,7 +4604,7 @@ public class Graph extends mxEventSource
 	/**
 	 * Returns the bounds of the given cell.
 	 */
-	public mxRectangle getCellBounds(Object cell)
+	public Rectangle getCellBounds(Object cell)
 	{
 		return getCellBounds(cell, false);
 	}
@@ -4624,7 +4613,7 @@ public class Graph extends mxEventSource
 	 * Returns the bounds of the given cell including all connected edges
 	 * if includeEdge is true.
 	 */
-	public mxRectangle getCellBounds(Object cell, boolean includeEdges)
+	public Rectangle getCellBounds(Object cell, boolean includeEdges)
 	{
 		return getCellBounds(cell, includeEdges, false);
 	}
@@ -4633,8 +4622,8 @@ public class Graph extends mxEventSource
 	 * Returns the bounds of the given cell including all connected edges
 	 * if includeEdge is true.
 	 */
-	public mxRectangle getCellBounds(Object cell, boolean includeEdges,
-			boolean includeDescendants)
+	public Rectangle getCellBounds(Object cell, boolean includeEdges,
+								   boolean includeDescendants)
 	{
 		return getCellBounds(cell, includeEdges, includeDescendants, false);
 	}
@@ -4643,9 +4632,9 @@ public class Graph extends mxEventSource
 	 * Returns the bounding box for the geometries of the vertices in the
 	 * given array of cells.
 	 */
-	public mxRectangle getBoundingBoxFromGeometry(Object[] cells)
+	public Rectangle getBoundingBoxFromGeometry(Object[] cells)
 	{
-		mxRectangle result = null;
+		Rectangle result = null;
 
 		if (cells != null)
 		{
@@ -4657,7 +4646,7 @@ public class Graph extends mxEventSource
 
 					if (result == null)
 					{
-						result = new mxRectangle(geo);
+						result = new Rectangle(geo);
 					}
 					else
 					{
@@ -4673,7 +4662,7 @@ public class Graph extends mxEventSource
 	/**
 	 * Returns the bounds of the given cell.
 	 */
-	public mxRectangle getBoundingBox(Object cell)
+	public Rectangle getBoundingBox(Object cell)
 	{
 		return getBoundingBox(cell, false);
 	}
@@ -4682,7 +4671,7 @@ public class Graph extends mxEventSource
 	 * Returns the bounding box of the given cell including all connected edges
 	 * if includeEdge is true.
 	 */
-	public mxRectangle getBoundingBox(Object cell, boolean includeEdges)
+	public Rectangle getBoundingBox(Object cell, boolean includeEdges)
 	{
 		return getBoundingBox(cell, includeEdges, false);
 	}
@@ -4691,8 +4680,8 @@ public class Graph extends mxEventSource
 	 * Returns the bounding box of the given cell including all connected edges
 	 * if includeEdge is true.
 	 */
-	public mxRectangle getBoundingBox(Object cell, boolean includeEdges,
-			boolean includeDescendants)
+	public Rectangle getBoundingBox(Object cell, boolean includeEdges,
+									boolean includeDescendants)
 	{
 		return getCellBounds(cell, includeEdges, includeDescendants, true);
 	}
@@ -4700,7 +4689,7 @@ public class Graph extends mxEventSource
 	/**
 	 * Returns the bounding box of the given cells and their descendants.
 	 */
-	public mxRectangle getPaintBounds(Object[] cells)
+	public Rectangle getPaintBounds(Object[] cells)
 	{
 		return getBoundsForCells(cells, false, true, true);
 	}
@@ -4708,23 +4697,23 @@ public class Graph extends mxEventSource
 	/**
 	 * Returns the bounds for the given cells.
 	 */
-	public mxRectangle getBoundsForCells(Object[] cells, boolean includeEdges,
-			boolean includeDescendants, boolean boundingBox)
+	public Rectangle getBoundsForCells(Object[] cells, boolean includeEdges,
+									   boolean includeDescendants, boolean boundingBox)
 	{
-		mxRectangle result = null;
+		Rectangle result = null;
 
 		if (cells != null && cells.length > 0)
 		{
 			for (int i = 0; i < cells.length; i++)
 			{
-				mxRectangle tmp = getCellBounds(cells[i], includeEdges,
+				Rectangle tmp = getCellBounds(cells[i], includeEdges,
 						includeDescendants, boundingBox);
 
 				if (tmp != null)
 				{
 					if (result == null)
 					{
-						result = new mxRectangle(tmp);
+						result = new Rectangle(tmp);
 					}
 					else
 					{
@@ -4741,8 +4730,8 @@ public class Graph extends mxEventSource
 	 * Returns the bounds of the given cell including all connected edges
 	 * if includeEdge is true.
 	 */
-	public mxRectangle getCellBounds(Object cell, boolean includeEdges,
-			boolean includeDescendants, boolean boundingBox)
+	public Rectangle getCellBounds(Object cell, boolean includeEdges,
+								   boolean includeDescendants, boolean boundingBox)
 	{
 		Object[] cells;
 
@@ -4778,7 +4767,7 @@ public class Graph extends mxEventSource
 			cells = new Object[] { cell };
 		}
 
-		mxRectangle result = view.getBounds(cells, boundingBox);
+		Rectangle result = view.getBounds(cells, boundingBox);
 
 		// Recursively includes the bounds of the children
 		if (includeDescendants)
@@ -4789,7 +4778,7 @@ public class Graph extends mxEventSource
 
 				for (int j = 0; j < childCount; j++)
 				{
-					mxRectangle tmp = getCellBounds(
+					Rectangle tmp = getCellBounds(
 							model.getChildAt(cells[i], j), includeEdges, true,
 							boundingBox);
 
@@ -4830,9 +4819,9 @@ public class Graph extends mxEventSource
 	 * Fires a repaint event. The optional region is the rectangle that needs
 	 * to be repainted.
 	 */
-	public void repaint(mxRectangle region)
+	public void repaint(Rectangle region)
 	{
-		fireEvent(new mxEventObject(mxEvent.REPAINT, "region", region));
+		fireEvent(new EventObject(Event.REPAINT, "region", region));
 	}
 
 	/**
@@ -4918,10 +4907,10 @@ public class Graph extends mxEventSource
 	 */
 	public boolean isOrthogonal(CellState edge)
 	{
-		if (edge.getStyle().containsKey(mxConstants.STYLE_ORTHOGONAL))
+		if (edge.getStyle().containsKey(Constants.STYLE_ORTHOGONAL))
 		{
-			return mxUtils
-					.isTrue(edge.getStyle(), mxConstants.STYLE_ORTHOGONAL);
+			return Utils
+					.isTrue(edge.getStyle(), Constants.STYLE_ORTHOGONAL);
 		}
 
 		EdgeStyle.mxEdgeStyleFunction tmp = view.getEdgeStyle(edge, null,
@@ -5041,7 +5030,7 @@ public class Graph extends mxEventSource
 				// Checks if the source and target are not connected by another edge
 				if (tmp.length > 1 || (tmp.length == 1 && tmp[0] != edge))
 				{
-					error.append(mxResources.get("alreadyConnected",
+					error.append(Resources.get("alreadyConnected",
 							"Already Connected") + "\n");
 				}
 			}
@@ -5118,7 +5107,7 @@ public class Graph extends mxEventSource
 				int max = rule.getMaxValue();
 
 				if (rule.source
-						&& mxUtils.isNode(value, rule.type, rule.attr,
+						&& Utils.isNode(value, rule.type, rule.attr,
 								rule.value)
 						&& ((max == 0 && outCount > 0)
 								|| (rule.min == 1 && outCount == 0) || (max == 1 && outCount > 1)))
@@ -5126,7 +5115,7 @@ public class Graph extends mxEventSource
 					error.append(rule.countError + '\n');
 				}
 				else if (!rule.source
-						&& mxUtils.isNode(value, rule.type, rule.attr,
+						&& Utils.isNode(value, rule.type, rule.attr,
 								rule.value)
 						&& ((max == 0 && inCount > 0)
 								|| (rule.min == 1 && inCount == 0) || (max == 1 && inCount > 1)))
@@ -5226,7 +5215,7 @@ public class Graph extends mxEventSource
 					: getCellStyle(cell);
 
 			if (labelsVisible
-					&& !mxUtils.isTrue(style, mxConstants.STYLE_NOLABEL, false))
+					&& !Utils.isTrue(style, Constants.STYLE_NOLABEL, false))
 			{
 				result = convertValueToString(cell);
 			}
@@ -5284,25 +5273,25 @@ public class Graph extends mxEventSource
 	/**
 	 * Returns the start size of the given swimlane, that is, the width or
 	 * height of the part that contains the title, depending on the
-	 * horizontal style. The return value is an <mxRectangle> with either
+	 * horizontal style. The return value is an <Rectangle> with either
 	 * width or height set as appropriate.
 	 * 
 	 * @param swimlane <Cell> whose start size should be returned.
 	 * @return Returns the startsize for the given swimlane.
 	 */
-	public mxRectangle getStartSize(Object swimlane)
+	public Rectangle getStartSize(Object swimlane)
 	{
-		mxRectangle result = new mxRectangle();
+		Rectangle result = new Rectangle();
 		CellState state = view.getState(swimlane);
 		Map<String, Object> style = (state != null) ? state.getStyle()
 				: getCellStyle(swimlane);
 
 		if (style != null)
 		{
-			double size = mxUtils.getDouble(style, mxConstants.STYLE_STARTSIZE,
-					mxConstants.DEFAULT_STARTSIZE);
+			double size = Utils.getDouble(style, Constants.STYLE_STARTSIZE,
+					Constants.DEFAULT_STARTSIZE);
 
-			if (mxUtils.isTrue(style, mxConstants.STYLE_HORIZONTAL, true))
+			if (Utils.isTrue(style, Constants.STYLE_HORIZONTAL, true))
 			{
 				result.setHeight(size);
 			}
@@ -5317,7 +5306,7 @@ public class Graph extends mxEventSource
 
 	/**
 	 * Returns the image URL for the given cell state. This implementation
-	 * returns the value stored under <mxConstants.STYLE_IMAGE> in the cell
+	 * returns the value stored under <Constants.STYLE_IMAGE> in the cell
 	 * style.
 	 * 
 	 * @param state
@@ -5325,8 +5314,8 @@ public class Graph extends mxEventSource
 	 */
 	public String getImage(CellState state)
 	{
-		return (state != null && state.getStyle() != null) ? mxUtils.getString(
-				state.getStyle(), mxConstants.STYLE_IMAGE) : null;
+		return (state != null && state.getStyle() != null) ? Utils.getString(
+				state.getStyle(), Constants.STYLE_IMAGE) : null;
 	}
 
 	/**
@@ -5392,9 +5381,9 @@ public class Graph extends mxEventSource
 
 				if (style != null && !model.isEdge(cell))
 				{
-					return mxUtils
-							.getString(style, mxConstants.STYLE_SHAPE, "")
-							.equals(mxConstants.SHAPE_SWIMLANE);
+					return Utils
+							.getString(style, Constants.STYLE_SHAPE, "")
+							.equals(Constants.SHAPE_SWIMLANE);
 				}
 			}
 		}
@@ -5456,7 +5445,7 @@ public class Graph extends mxEventSource
 				: getCellStyle(cell);
 
 		return isCellsEditable() && !isCellLocked(cell)
-				&& mxUtils.isTrue(style, mxConstants.STYLE_EDITABLE, true);
+				&& Utils.isTrue(style, Constants.STYLE_EDITABLE, true);
 	}
 
 	/**
@@ -5495,7 +5484,7 @@ public class Graph extends mxEventSource
 				: getCellStyle(cell);
 
 		return isCellsResizable() && !isCellLocked(cell)
-				&& mxUtils.isTrue(style, mxConstants.STYLE_RESIZABLE, true);
+				&& Utils.isTrue(style, Constants.STYLE_RESIZABLE, true);
 	}
 
 	/**
@@ -5546,7 +5535,7 @@ public class Graph extends mxEventSource
 				: getCellStyle(cell);
 
 		return isCellsMovable() && !isCellLocked(cell)
-				&& mxUtils.isTrue(style, mxConstants.STYLE_MOVABLE, true);
+				&& Utils.isTrue(style, Constants.STYLE_MOVABLE, true);
 	}
 
 	/**
@@ -5601,7 +5590,7 @@ public class Graph extends mxEventSource
 				: getCellStyle(cell);
 
 		return isCellsBendable() && !isCellLocked(cell)
-				&& mxUtils.isTrue(style, mxConstants.STYLE_BENDABLE, true);
+				&& Utils.isTrue(style, Constants.STYLE_BENDABLE, true);
 	}
 
 	/**
@@ -5684,7 +5673,7 @@ public class Graph extends mxEventSource
 				: getCellStyle(cell);
 
 		return isCellsDeletable()
-				&& mxUtils.isTrue(style, mxConstants.STYLE_DELETABLE, true);
+				&& Utils.isTrue(style, Constants.STYLE_DELETABLE, true);
 	}
 
 	/**
@@ -5733,7 +5722,7 @@ public class Graph extends mxEventSource
 				: getCellStyle(cell);
 
 		return isCellsCloneable()
-				&& mxUtils.isTrue(style, mxConstants.STYLE_CLONEABLE, true);
+				&& Utils.isTrue(style, Constants.STYLE_CLONEABLE, true);
 	}
 
 	/**
@@ -5804,7 +5793,7 @@ public class Graph extends mxEventSource
 	/**
 	 * Returns true if the overflow portion of labels should be hidden. If this
 	 * returns true then vertex labels will be clipped to the size of the vertices.
-	 * This implementation returns true if <mxConstants.STYLE_OVERFLOW> in the
+	 * This implementation returns true if <Constants.STYLE_OVERFLOW> in the
 	 * style of the given cell is "hidden".
 	 * 
 	 * @param cell Cell whose label should be clipped.
@@ -5818,8 +5807,8 @@ public class Graph extends mxEventSource
 			Map<String, Object> style = (state != null) ? state.getStyle()
 					: getCellStyle(cell);
 
-			return (style != null) ? mxUtils.getString(style,
-					mxConstants.STYLE_OVERFLOW, "").equals("hidden") : false;
+			return (style != null) ? Utils.getString(style,
+					Constants.STYLE_OVERFLOW, "").equals("hidden") : false;
 		}
 
 		return isLabelsClipped();
@@ -6189,7 +6178,7 @@ public class Graph extends mxEventSource
 	 * Returns true if the size of the given cell should automatically be
 	 * updated after a change of the label. This implementation returns
 	 * autoSize for all given cells or checks if the cell style does specify
-	 * mxConstants.STYLE_AUTOSIZE to be 1.
+	 * Constants.STYLE_AUTOSIZE to be 1.
 	 * 
 	 * @param cell Cell that should be resized.
 	 * @return Returns true if the size of the given cell should be updated.
@@ -6201,7 +6190,7 @@ public class Graph extends mxEventSource
 				: getCellStyle(cell);
 
 		return isAutoSizeCells()
-				|| mxUtils.isTrue(style, mxConstants.STYLE_AUTOSIZE, false);
+				|| Utils.isTrue(style, Constants.STYLE_AUTOSIZE, false);
 	}
 
 	/**
@@ -6338,7 +6327,7 @@ public class Graph extends mxEventSource
 	/**
 	 * Returns origin.
 	 */
-	public mxPoint getOrigin()
+	public Point getOrigin()
 	{
 		return origin;
 	}
@@ -6346,9 +6335,9 @@ public class Graph extends mxEventSource
 	/**
 	 * @param value the origin to set
 	 */
-	public void setOrigin(mxPoint value)
+	public void setOrigin(Point value)
 	{
-		mxPoint oldValue = origin;
+		Point oldValue = origin;
 		origin = value;
 
 		changeSupport.firePropertyChange("origin", oldValue, origin);
@@ -6508,7 +6497,7 @@ public class Graph extends mxEventSource
 	 * 
 	 * @return Returns the minimum container size.
 	 */
-	public mxRectangle getMinimumGraphSize()
+	public Rectangle getMinimumGraphSize()
 	{
 		return minimumGraphSize;
 	}
@@ -6516,9 +6505,9 @@ public class Graph extends mxEventSource
 	/**
 	 * @param value the minimumGraphSize to set
 	 */
-	public void setMinimumGraphSize(mxRectangle value)
+	public void setMinimumGraphSize(Rectangle value)
 	{
-		mxRectangle oldValue = minimumGraphSize;
+		Rectangle oldValue = minimumGraphSize;
 		minimumGraphSize = value;
 
 		changeSupport.firePropertyChange("minimumGraphSize", oldValue, value);
@@ -6589,7 +6578,7 @@ public class Graph extends mxEventSource
 	/**
 	 * Returns true if the given cell is expandable. This implementation
 	 * returns true if the cell has at least one child and its style
-	 * does not specify mxConstants.STYLE_FOLDABLE to be 0.
+	 * does not specify Constants.STYLE_FOLDABLE to be 0.
 	 *
 	 * @param cell <Cell> whose expandable state should be returned.
 	 * @return Returns true if the given cell is expandable.
@@ -6601,7 +6590,7 @@ public class Graph extends mxEventSource
 				: getCellStyle(cell);
 
 		return model.getChildCount(cell) > 0
-				&& mxUtils.isTrue(style, mxConstants.STYLE_FOLDABLE, true);
+				&& Utils.isTrue(style, Constants.STYLE_FOLDABLE, true);
 	}
 
 	/**
@@ -6749,7 +6738,7 @@ public class Graph extends mxEventSource
 	 * 
 	 * This function should only be used if isDropEnabled returns true.
 	 */
-	public Object getDropTarget(Object[] cells, Point pt, Object cell)
+	public Object getDropTarget(Object[] cells, java.awt.Point pt, Object cell)
 	{
 		if (!isSwimlaneNesting())
 		{
@@ -6792,7 +6781,7 @@ public class Graph extends mxEventSource
 			cell = model.getParent(cell);
 		}
 
-		return (model.getParent(cell) != model.getRoot() && !mxUtils.contains(
+		return (model.getParent(cell) != model.getRoot() && !Utils.contains(
 				cells, cell)) ? cell : null;
 	};
 
@@ -7857,7 +7846,7 @@ public class Graph extends mxEventSource
 			// Holds the current clipping region in case the label will
 			// be clipped
 			Shape clip = null;
-			Rectangle newClip = state.getRectangle();
+			java.awt.Rectangle newClip = state.getRectangle();
 
 			// Indirection for image canvas that contains a graphics canvas
 			ICanvas clippedCanvas = (isLabelClipped(state.getCell())) ? canvas
@@ -7878,9 +7867,9 @@ public class Graph extends mxEventSource
 				clip = g.getClip();
 
 				// Ensure that our new clip resides within our old clip
-				if (clip instanceof Rectangle)
+				if (clip instanceof java.awt.Rectangle)
 				{
-					g.setClip(newClip.intersection((Rectangle) clip));
+					g.setClip(newClip.intersection((java.awt.Rectangle) clip));
 				}
 				// Otherwise, default to original implementation
 				else

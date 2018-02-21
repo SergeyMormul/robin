@@ -7,8 +7,8 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
-import com.sciforce.robin.graph.util.mxUtils;
-import com.sciforce.robin.graph.util.mxPoint;
+import com.sciforce.robin.graph.util.Point;
+import com.sciforce.robin.graph.util.Utils;
 import com.sciforce.robin.graph.view.CellState;
 
 /**
@@ -16,7 +16,7 @@ import com.sciforce.robin.graph.view.CellState;
  * image canvas for an existing graphics canvas and create an image the
  * following code is used:
  * 
- * <code>BufferedImage image = mxCellRenderer.createBufferedImage(graph, cells, 1, Color.white, true, null, canvas);</code> 
+ * <code>BufferedImage image = CellRenderer.createBufferedImage(graph, cells, 1, Color.white, true, null, canvas);</code>
  */
 public class ImageCanvas implements ICanvas
 {
@@ -53,12 +53,12 @@ public class ImageCanvas implements ICanvas
 	{
 		this.canvas = canvas;
 		previousGraphics = canvas.getGraphics();
-		image = mxUtils.createBufferedImage(width, height, background);
+		image = Utils.createBufferedImage(width, height, background);
 
 		if (image != null)
 		{
 			Graphics2D g = image.createGraphics();
-			mxUtils.setAntiAlias(g, antiAlias, textAntiAlias);
+			Utils.setAntiAlias(g, antiAlias, textAntiAlias);
 			canvas.setGraphics(g);
 		}
 	}
@@ -106,7 +106,7 @@ public class ImageCanvas implements ICanvas
 	/**
 	 * 
 	 */
-	public mxPoint getTranslate()
+	public Point getTranslate()
 	{
 		return canvas.getTranslate();
 	}

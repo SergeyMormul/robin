@@ -11,7 +11,7 @@ import java.util.logging.Logger;
 import com.sciforce.robin.graph.model.Cell;
 import com.sciforce.robin.graph.model.CellPath;
 import com.sciforce.robin.graph.model.ICell;
-import com.sciforce.robin.graph.util.mxDomUtils;
+import com.sciforce.robin.graph.util.DomUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -51,20 +51,20 @@ public class Codec
 	 */
 	public Codec()
 	{
-		this(mxDomUtils.createDocument());
+		this(DomUtils.createDocument());
 	}
 
 	/**
 	 * Constructs an XML encoder/decoder for the specified owner document.
 	 * 
 	 * @param document Optional XML document that contains the data. If no document
-	 * is specified then a new document is created using mxUtils.createDocument
+	 * is specified then a new document is created using Utils.createDocument
 	 */
 	public Codec(Document document)
 	{
 		if (document == null)
 		{
-			document = mxDomUtils.createDocument();
+			document = DomUtils.createDocument();
 		}
 
 		this.document = document;

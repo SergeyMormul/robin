@@ -6,8 +6,8 @@ package com.sciforce.robin.graph.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.sciforce.robin.graph.util.mxPoint;
-import com.sciforce.robin.graph.util.mxRectangle;
+import com.sciforce.robin.graph.util.Point;
+import com.sciforce.robin.graph.util.Rectangle;
 
 /**
  * Represents the geometry of a cell. For vertices, the geometry consists
@@ -22,7 +22,7 @@ import com.sciforce.robin.graph.util.mxRectangle;
  * pixels from that point. In addition, the offset is used as an absolute
  * offset vector from the resulting point. 
  */
-public class Geometry extends mxRectangle
+public class Geometry extends Rectangle
 {
 
 	/**
@@ -39,14 +39,14 @@ public class Geometry extends mxRectangle
 	 * Stores alternate values for x, y, width and height in a rectangle.
 	 * Default is null.
 	 */
-	protected mxRectangle alternateBounds;
+	protected Rectangle alternateBounds;
 
 	/**
 	 * Defines the source- and target-point of the edge. This is used if the
 	 * corresponding edge does not have a source vertex. Otherwise it is
 	 * ignored. Default is null.
 	 */
-	protected mxPoint sourcePoint, targetPoint;
+	protected Point sourcePoint, targetPoint;
 
 	/**
 	 * List of mxPoints which specifies the control points along the edge.
@@ -54,14 +54,14 @@ public class Geometry extends mxRectangle
 	 * use targetPoint and sourcePoint or set the terminals of the edge to
 	 * a non-null value. Default is null.
 	 */
-	protected List<mxPoint> points;
+	protected List<Point> points;
 
 	/**
 	 * Holds the offset of the label for edges. This is the absolute vector
 	 * between the center of the edge and the top, left point of the label.
 	 * Default is null.
 	 */
-	protected mxPoint offset;
+	protected Point offset;
 
 	/**
 	 * Specifies if the coordinates in the geometry are to be interpreted as
@@ -96,7 +96,7 @@ public class Geometry extends mxRectangle
 	/**
 	 * Returns the alternate bounds.
 	 */
-	public mxRectangle getAlternateBounds()
+	public Rectangle getAlternateBounds()
 	{
 		return alternateBounds;
 	}
@@ -106,7 +106,7 @@ public class Geometry extends mxRectangle
 	 * 
 	 * @param rect Rectangle to be used for the alternate bounds.
 	 */
-	public void setAlternateBounds(mxRectangle rect)
+	public void setAlternateBounds(Rectangle rect)
 	{
 		alternateBounds = rect;
 	}
@@ -116,7 +116,7 @@ public class Geometry extends mxRectangle
 	 * 
 	 * @return Returns the source point.
 	 */
-	public mxPoint getSourcePoint()
+	public Point getSourcePoint()
 	{
 		return sourcePoint;
 	}
@@ -126,7 +126,7 @@ public class Geometry extends mxRectangle
 	 * 
 	 * @param sourcePoint Source point to be used.
 	 */
-	public void setSourcePoint(mxPoint sourcePoint)
+	public void setSourcePoint(Point sourcePoint)
 	{
 		this.sourcePoint = sourcePoint;
 	}
@@ -136,7 +136,7 @@ public class Geometry extends mxRectangle
 	 * 
 	 * @return Returns the target point.
 	 */
-	public mxPoint getTargetPoint()
+	public Point getTargetPoint()
 	{
 		return targetPoint;
 	}
@@ -146,7 +146,7 @@ public class Geometry extends mxRectangle
 	 * 
 	 * @param targetPoint Target point to be used.
 	 */
-	public void setTargetPoint(mxPoint targetPoint)
+	public void setTargetPoint(Point targetPoint)
 	{
 		this.targetPoint = targetPoint;
 	}
@@ -154,7 +154,7 @@ public class Geometry extends mxRectangle
 	/**
 	 * Returns the list of control points.
 	 */
-	public List<mxPoint> getPoints()
+	public List<Point> getPoints()
 	{
 		return points;
 	}
@@ -164,7 +164,7 @@ public class Geometry extends mxRectangle
 	 * 
 	 * @param value List that contains the new control points.
 	 */
-	public void setPoints(List<mxPoint> value)
+	public void setPoints(List<Point> value)
 	{
 		points = value;
 	}
@@ -172,7 +172,7 @@ public class Geometry extends mxRectangle
 	/**
 	 * Returns the offset.
 	 */
-	public mxPoint getOffset()
+	public Point getOffset()
 	{
 		return offset;
 	}
@@ -182,7 +182,7 @@ public class Geometry extends mxRectangle
 	 * 
 	 * @param offset Point to be used for the offset.
 	 */
-	public void setOffset(mxPoint offset)
+	public void setOffset(Point offset)
 	{
 		this.offset = offset;
 	}
@@ -218,7 +218,7 @@ public class Geometry extends mxRectangle
 	{
 		if (alternateBounds != null)
 		{
-			mxRectangle old = new mxRectangle(getX(), getY(), getWidth(),
+			Rectangle old = new Rectangle(getX(), getY(), getWidth(),
 					getHeight());
 
 			x = alternateBounds.getX();
@@ -238,7 +238,7 @@ public class Geometry extends mxRectangle
 	 * should be returned.
 	 * @return Returns the source or target point.
 	 */
-	public mxPoint getTerminalPoint(boolean isSource)
+	public Point getTerminalPoint(boolean isSource)
 	{
 		return (isSource) ? sourcePoint : targetPoint;
 	}
@@ -252,7 +252,7 @@ public class Geometry extends mxRectangle
 	 * should be set.
 	 * @return Returns the new point.
 	 */
-	public mxPoint setTerminalPoint(mxPoint point, boolean isSource)
+	public Point setTerminalPoint(Point point, boolean isSource)
 	{
 		if (isSource)
 		{
@@ -306,7 +306,7 @@ public class Geometry extends mxRectangle
 
 			for (int i = 0; i < count; i++)
 			{
-				mxPoint pt = points.get(i);
+				Point pt = points.get(i);
 
 				pt.setX(pt.getX() + dx);
 				pt.setY(pt.getY() + dy);
@@ -327,44 +327,44 @@ public class Geometry extends mxRectangle
 		clone.setHeight(getHeight());
 		clone.setRelative(isRelative());
 
-		List<mxPoint> pts = getPoints();
+		List<Point> pts = getPoints();
 
 		if (pts != null)
 		{
-			clone.points = new ArrayList<mxPoint>(pts.size());
+			clone.points = new ArrayList<Point>(pts.size());
 
 			for (int i = 0; i < pts.size(); i++)
 			{
-				clone.points.add((mxPoint) pts.get(i).clone());
+				clone.points.add((Point) pts.get(i).clone());
 			}
 		}
 
-		mxPoint tp = getTargetPoint();
+		Point tp = getTargetPoint();
 
 		if (tp != null)
 		{
-			clone.setTargetPoint((mxPoint) tp.clone());
+			clone.setTargetPoint((Point) tp.clone());
 		}
 
-		mxPoint sp = getSourcePoint();
+		Point sp = getSourcePoint();
 
 		if (sp != null)
 		{
-			setSourcePoint((mxPoint) sp.clone());
+			setSourcePoint((Point) sp.clone());
 		}
 
-		mxPoint off = getOffset();
+		Point off = getOffset();
 
 		if (off != null)
 		{
-			clone.setOffset((mxPoint) off.clone());
+			clone.setOffset((Point) off.clone());
 		}
 
-		mxRectangle alt = getAlternateBounds();
+		Rectangle alt = getAlternateBounds();
 
 		if (alt != null)
 		{
-			setAlternateBounds((mxRectangle) alt.clone());
+			setAlternateBounds((Rectangle) alt.clone());
 		}
 
 		return clone;

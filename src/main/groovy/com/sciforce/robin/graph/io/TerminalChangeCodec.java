@@ -21,7 +21,7 @@ public class TerminalChangeCodec extends ObjectCodec
 	 */
 	public TerminalChangeCodec()
 	{
-		this(new GraphModel.mxTerminalChange(), new String[] { "model", "previous" },
+		this(new GraphModel.TerminalChange(), new String[] { "model", "previous" },
 				new String[] { "cell", "terminal" }, null);
 	}
 
@@ -40,9 +40,9 @@ public class TerminalChangeCodec extends ObjectCodec
 	@Override
 	public Object afterDecode(Codec dec, Node node, Object obj)
 	{
-		if (obj instanceof GraphModel.mxTerminalChange)
+		if (obj instanceof GraphModel.TerminalChange)
 		{
-			GraphModel.mxTerminalChange change = (GraphModel.mxTerminalChange) obj;
+			GraphModel.TerminalChange change = (GraphModel.TerminalChange) obj;
 
 			change.setPrevious(change.getTerminal());
 		}

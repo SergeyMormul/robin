@@ -7,12 +7,8 @@ import java.util.Map;
 
 import com.sciforce.robin.graph.model.Geometry;
 import com.sciforce.robin.graph.model.IGraphModel;
-import com.sciforce.robin.graph.util.mxConstants;
-import com.sciforce.robin.graph.util.mxEvent;
-import com.sciforce.robin.graph.util.mxEventObject;
-import com.sciforce.robin.graph.util.mxEventSource;
-import com.sciforce.robin.graph.util.mxRectangle;
-import com.sciforce.robin.graph.util.mxUtils;
+import com.sciforce.robin.graph.util.*;
+import com.sciforce.robin.graph.util.Event;
 
 /**
  * Manager for swimlanes and nested swimlanes that sets the size of newly added
@@ -20,7 +16,7 @@ import com.sciforce.robin.graph.util.mxUtils;
  * swimlane to its siblings, if siblings is true, and its ancestors, if
  * bubbling is true.
  */
-public class SwimlaneManager extends mxEventSource
+public class SwimlaneManager extends EventSource
 {
 
 	/**
@@ -57,7 +53,7 @@ public class SwimlaneManager extends mxEventSource
 	 */
 	protected mxIEventListener addHandler = new mxIEventListener()
 	{
-		public void invoke(Object source, mxEventObject evt)
+		public void invoke(Object source, EventObject evt)
 		{
 			if (isEnabled() && isAddEnabled())
 			{
@@ -71,7 +67,7 @@ public class SwimlaneManager extends mxEventSource
 	 */
 	protected mxIEventListener resizeHandler = new mxIEventListener()
 	{
-		public void invoke(Object source, mxEventObject evt)
+		public void invoke(Object source, EventObject evt)
 		{
 			if (isEnabled() && isResizeEnabled())
 			{
@@ -175,8 +171,8 @@ public class SwimlaneManager extends mxEventSource
 
 		if (this.graph != null)
 		{
-			this.graph.addListener(mxEvent.ADD_CELLS, addHandler);
-			this.graph.addListener(mxEvent.CELLS_RESIZED, resizeHandler);
+			this.graph.addListener(Event.ADD_CELLS, addHandler);
+			this.graph.addListener(Event.CELLS_RESIZED, resizeHandler);
 		}
 	}
 
@@ -200,7 +196,7 @@ public class SwimlaneManager extends mxEventSource
 			Map<String, Object> style = (state != null) ? state.getStyle()
 					: graph.getCellStyle(cell);
 
-			return mxUtils.isTrue(style, mxConstants.STYLE_HORIZONTAL, true);
+			return Utils.isTrue(style, Constants.STYLE_HORIZONTAL, true);
 		}
 
 		return !isHorizontal();
@@ -293,7 +289,7 @@ public class SwimlaneManager extends mxEventSource
 						
 						if (geo != null)
 						{
-							mxRectangle size = new mxRectangle(0, 0, geo.getWidth(), geo.getHeight());
+							Rectangle size = new Rectangle(0, 0, geo.getWidth(), geo.getHeight());
 							Object top = cells[i];
 							Object current = top;
 							
@@ -301,9 +297,9 @@ public class SwimlaneManager extends mxEventSource
 							{
 								top = current;
 								current = model.getParent(current);
-								mxRectangle tmp = (graph.isSwimlane(current)) ?
+								Rectangle tmp = (graph.isSwimlane(current)) ?
 										graph.getStartSize(current) :
-										new mxRectangle();
+										new Rectangle();
 								size.setWidth(size.getWidth() + tmp.getWidth());
 								size.setHeight(size.getHeight() + tmp.getHeight());
 							}
@@ -361,8 +357,8 @@ public class SwimlaneManager extends mxEventSource
 				}
 			}
 
-			mxRectangle tmp = (graph.isSwimlane(swimlane)) ? graph
-					.getStartSize(swimlane) : new mxRectangle();
+			Rectangle tmp = (graph.isSwimlane(swimlane)) ? graph
+					.getStartSize(swimlane) : new Rectangle();
 			w -= tmp.getWidth();
 			h -= tmp.getHeight();
 

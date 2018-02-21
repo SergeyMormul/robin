@@ -56,11 +56,11 @@ public class CodecRegistry
 		register(new RootChangeCodec());
 		register(new ChildChangeCodec());
 		register(new TerminalChangeCodec());
-		register(new GenericChangeCodec(new GraphModel.mxValueChange(), "value"));
-		register(new GenericChangeCodec(new GraphModel.mxStyleChange(), "style"));
-		register(new GenericChangeCodec(new GraphModel.mxGeometryChange(), "geometry"));
-		register(new GenericChangeCodec(new GraphModel.mxCollapseChange(), "collapsed"));
-		register(new GenericChangeCodec(new GraphModel.mxVisibleChange(), "visible"));
+		register(new GenericChangeCodec(new GraphModel.VlueChange(), "value"));
+		register(new GenericChangeCodec(new GraphModel.StyleChange(), "style"));
+		register(new GenericChangeCodec(new GraphModel.GeometryChange(), "geometry"));
+		register(new GenericChangeCodec(new GraphModel.CollapseChange(), "collapsed"));
+		register(new GenericChangeCodec(new GraphModel.VisibleChange(), "visible"));
 	}
 
 	/**
