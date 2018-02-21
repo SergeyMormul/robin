@@ -11,7 +11,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import com.sciforce.robin.graph.layout.mxIGraphLayout;
+import com.sciforce.robin.graph.layout.IGraphLayout;
 import com.sciforce.robin.graph.model.GraphModel;
 import com.sciforce.robin.graph.model.IGraphModel;
 import com.sciforce.robin.graph.util.*;
@@ -24,9 +24,9 @@ import com.sciforce.robin.graph.util.Event;
  * <code>
  * new LayoutManager(graph) {
  * 
- *   mxCompactTreeLayout layout = new mxCompactTreeLayout(graph);
+ *   CompactTreeLayout layout = new CompactTreeLayout(graph);
  *   
- *   public mxIGraphLayout getLayout(Object parent)
+ *   public IGraphLayout getLayout(Object parent)
  *   {
  *     if (graph.getModel().getChildCount(parent) > 0) {
  *       return layout;
@@ -165,7 +165,7 @@ public class LayoutManager extends EventSource
 	/**
 	 * 
 	 */
-	protected mxIGraphLayout getLayout(Object parent)
+	protected IGraphLayout getLayout(Object parent)
 	{
 		return null;
 	}
@@ -182,7 +182,7 @@ public class LayoutManager extends EventSource
 			// Checks if a layout exists to take care of the moving
 			for (int i = 0; i < cells.length; i++)
 			{
-				mxIGraphLayout layout = getLayout(model.getParent(cells[i]));
+				IGraphLayout layout = getLayout(model.getParent(cells[i]));
 
 				if (layout != null)
 				{
@@ -324,7 +324,7 @@ public class LayoutManager extends EventSource
 	/**
 	 * 
 	 */
-	protected void executeLayout(mxIGraphLayout layout, Object parent)
+	protected void executeLayout(IGraphLayout layout, Object parent)
 	{
 		if (layout != null && parent != null)
 		{
