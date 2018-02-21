@@ -22,30 +22,10 @@ import java.util.logging.Logger;
 
 import javax.swing.CellRendererPane;
 
-import com.sciforce.robin.graph.shape.mxDoubleRectangleShape;
-import com.sciforce.robin.graph.shape.mxRectangleShape;
+import com.sciforce.robin.graph.shape.*;
 import com.sciforce.robin.graph.util.Constants;
 import com.sciforce.robin.graph.util.Utils;
-import com.sciforce.robin.graph.shape.mxActorShape;
-import com.sciforce.robin.graph.shape.mxArrowShape;
-import com.sciforce.robin.graph.shape.mxCloudShape;
-import com.sciforce.robin.graph.shape.mxConnectorShape;
-import com.sciforce.robin.graph.shape.mxCurveShape;
-import com.sciforce.robin.graph.shape.mxCylinderShape;
-import com.sciforce.robin.graph.shape.mxDefaultTextShape;
-import com.sciforce.robin.graph.shape.mxDoubleEllipseShape;
-import com.sciforce.robin.graph.shape.mxEllipseShape;
-import com.sciforce.robin.graph.shape.mxHexagonShape;
-import com.sciforce.robin.graph.shape.mxHtmlTextShape;
-import com.sciforce.robin.graph.shape.mxIShape;
-import com.sciforce.robin.graph.shape.mxITextShape;
-import com.sciforce.robin.graph.shape.mxImageShape;
-import com.sciforce.robin.graph.shape.mxLabelShape;
-import com.sciforce.robin.graph.shape.mxLineShape;
-import com.sciforce.robin.graph.shape.mxRhombusShape;
-import com.sciforce.robin.graph.shape.mxStencilRegistry;
-import com.sciforce.robin.graph.shape.mxSwimlaneShape;
-import com.sciforce.robin.graph.shape.mxTriangleShape;
+import com.sciforce.robin.graph.shape.ITextShape;
 import com.sciforce.robin.graph.swing.util.mxSwingConstants;
 import com.sciforce.robin.graph.util.Point;
 import com.sciforce.robin.graph.util.Rectangle;
@@ -77,38 +57,38 @@ public class Graphics2DCanvas extends BasicCanvas
 	/**
 	 * Maps from names to mxIVertexShape instances.
 	 */
-	protected static Map<String, mxIShape> shapes = new HashMap<String, mxIShape>();
+	protected static Map<String, IShape> shapes = new HashMap<String, IShape>();
 
 	/**
-	 * Maps from names to mxITextShape instances. There are currently three different
+	 * Maps from names to ITextShape instances. There are currently three different
 	 * hardcoded text shapes available here: default, html and wrapped.
 	 */
-	protected static Map<String, mxITextShape> textShapes = new HashMap<String, mxITextShape>();
+	protected static Map<String, ITextShape> textShapes = new HashMap<String, ITextShape>();
 
 	/**
 	 * Static initializer.
 	 */
 	static
 	{
-		putShape(Constants.SHAPE_ACTOR, new mxActorShape());
-		putShape(Constants.SHAPE_ARROW, new mxArrowShape());
-		putShape(Constants.SHAPE_CLOUD, new mxCloudShape());
-		putShape(Constants.SHAPE_CONNECTOR, new mxConnectorShape());
-		putShape(Constants.SHAPE_CYLINDER, new mxCylinderShape());
-		putShape(Constants.SHAPE_CURVE, new mxCurveShape());
-		putShape(Constants.SHAPE_DOUBLE_RECTANGLE, new mxDoubleRectangleShape());
-		putShape(Constants.SHAPE_DOUBLE_ELLIPSE, new mxDoubleEllipseShape());
-		putShape(Constants.SHAPE_ELLIPSE, new mxEllipseShape());
-		putShape(Constants.SHAPE_HEXAGON, new mxHexagonShape());
-		putShape(Constants.SHAPE_IMAGE, new mxImageShape());
-		putShape(Constants.SHAPE_LABEL, new mxLabelShape());
-		putShape(Constants.SHAPE_LINE, new mxLineShape());
-		putShape(Constants.SHAPE_RECTANGLE, new mxRectangleShape());
-		putShape(Constants.SHAPE_RHOMBUS, new mxRhombusShape());
-		putShape(Constants.SHAPE_SWIMLANE, new mxSwimlaneShape());
-		putShape(Constants.SHAPE_TRIANGLE, new mxTriangleShape());
-		putTextShape(TEXT_SHAPE_DEFAULT, new mxDefaultTextShape());
-		putTextShape(TEXT_SHAPE_HTML, new mxHtmlTextShape());
+		putShape(Constants.SHAPE_ACTOR, new ActorShape());
+		putShape(Constants.SHAPE_ARROW, new ArrowShape());
+		putShape(Constants.SHAPE_CLOUD, new CloudShape());
+		putShape(Constants.SHAPE_CONNECTOR, new ConnectorShape());
+		putShape(Constants.SHAPE_CYLINDER, new CylinderShape());
+		putShape(Constants.SHAPE_CURVE, new CurveShape());
+		putShape(Constants.SHAPE_DOUBLE_RECTANGLE, new DoubleRectangleShape());
+		putShape(Constants.SHAPE_DOUBLE_ELLIPSE, new DoubleEllipseShape());
+		putShape(Constants.SHAPE_ELLIPSE, new EllipseShape());
+		putShape(Constants.SHAPE_HEXAGON, new HexagonShape());
+		putShape(Constants.SHAPE_IMAGE, new ImageShape());
+		putShape(Constants.SHAPE_LABEL, new LabelShape());
+		putShape(Constants.SHAPE_LINE, new LineShape());
+		putShape(Constants.SHAPE_RECTANGLE, new RectangleShape());
+		putShape(Constants.SHAPE_RHOMBUS, new RhombusShape());
+		putShape(Constants.SHAPE_SWIMLANE, new SwimlaneShape());
+		putShape(Constants.SHAPE_TRIANGLE, new TriangleShape());
+		putTextShape(TEXT_SHAPE_DEFAULT, new DefaultTextShape());
+		putTextShape(TEXT_SHAPE_HTML, new HtmlTextShape());
 	}
 
 	/**
@@ -150,7 +130,7 @@ public class Graphics2DCanvas extends BasicCanvas
 	/**
 	 * 
 	 */
-	public static void putShape(String name, mxIShape shape)
+	public static void putShape(String name, IShape shape)
 	{
 		shapes.put(name, shape);
 	}
@@ -158,14 +138,14 @@ public class Graphics2DCanvas extends BasicCanvas
 	/**
 	 * 
 	 */
-	public mxIShape getShape(Map<String, Object> style)
+	public IShape getShape(Map<String, Object> style)
 	{
 		String name = Utils.getString(style, Constants.STYLE_SHAPE, null);
-		mxIShape shape = shapes.get(name);
+		IShape shape = shapes.get(name);
 
 		if (shape == null && name != null)
 		{
-			shape = mxStencilRegistry.getStencil(name);
+			shape = StencilRegistry.getStencil(name);
 		}
 
 		return shape;
@@ -174,7 +154,7 @@ public class Graphics2DCanvas extends BasicCanvas
 	/**
 	 * 
 	 */
-	public static void putTextShape(String name, mxITextShape shape)
+	public static void putTextShape(String name, ITextShape shape)
 	{
 		textShapes.put(name, shape);
 	}
@@ -182,7 +162,7 @@ public class Graphics2DCanvas extends BasicCanvas
 	/**
 	 * 
 	 */
-	public mxITextShape getTextShape(Map<String, Object> style, boolean html)
+	public ITextShape getTextShape(Map<String, Object> style, boolean html)
 	{
 		String name;
 
@@ -229,7 +209,7 @@ public class Graphics2DCanvas extends BasicCanvas
 	public Object drawCell(CellState state)
 	{
 		Map<String, Object> style = state.getStyle();
-		mxIShape shape = getShape(style);
+		IShape shape = getShape(style);
 
 		if (g != null && shape != null)
 		{
@@ -255,7 +235,7 @@ public class Graphics2DCanvas extends BasicCanvas
 	public Object drawLabel(String text, CellState state, boolean html)
 	{
 		Map<String, Object> style = state.getStyle();
-		mxITextShape shape = getTextShape(style, html);
+		ITextShape shape = getTextShape(style, html);
 
 		if (g != null && shape != null && drawLabels && text != null
 				&& text.length() > 0)

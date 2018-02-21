@@ -546,32 +546,32 @@ public class Constants
 
 	/**
 	 * Defines the key for the horizontal image flip. This style is only used
-	 * in mxImageShape. Possible values are 0 and 1. Default is 0.
+	 * in ImageShape. Possible values are 0 and 1. Default is 0.
 	 */
 	public static String STYLE_IMAGE_FLIPH = "imageFlipH";
 
 	/**
 	 * Defines the key for the vertical image flip. This style is only used
-	 * in mxImageShape. Possible values are 0 and 1. Default is 0.
+	 * in ImageShape. Possible values are 0 and 1. Default is 0.
 	 */
 	public static String STYLE_IMAGE_FLIPV = "imageFlipV";
 
 	/**
 	 * Defines the key for the horizontal stencil flip. This style is only used
-	 * for <mxStencilShape>. Possible values are 0 and 1. Default is 0.
+	 * for <StencilShape>. Possible values are 0 and 1. Default is 0.
 	 */
 	public static String STYLE_STENCIL_FLIPH = "stencilFlipH";
 
 	/**
 	 * Defines the key for the vertical stencil flip. This style is only used
-	 * for <mxStencilShape>. Possible values are 0 and 1. Default is 0.
+	 * for <StencilShape>. Possible values are 0 and 1. Default is 0.
 	 */
 	public static String STYLE_STENCIL_FLIPV = "stencilFlipV";
 
 
 	/**
 	 * Defines the key for the horizontal image flip. This style is only used
-	 * in <mxImageShape>. Possible values are 0 and 1. Default is 0.
+	 * in <ImageShape>. Possible values are 0 and 1. Default is 0.
 	 */
 	public static String STYLE_FLIPH = "flipH";
 
